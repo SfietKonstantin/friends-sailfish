@@ -1,0 +1,3 @@
+[submodule "social"]
+	path = social
+	url = git@github.com:SfietKonstantin/nemo-qml-plugin-social.git
