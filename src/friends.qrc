@@ -1,0 +1,14 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/CoverPage.qml</file>
+        <file>qml/friends.qml</file>
+        <file>qml/MenuPage.qml</file>
+        <file>qml/NewsPage.qml</file>
+        <file>qml/LoginDialog.qml</file>
+        <file>qml/CoverHeader.qml</file>
+        <file>qml/FacebookImage.qml</file>
+        <file>qml/FacebookPicture.qml</file>
+        <file>qml/UiConstants.js</file>
+        <file>qml/FriendsPage.qml</file>
+    </qresource>
+</RCC>

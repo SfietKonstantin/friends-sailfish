@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Friends
+Icon=harbour-friends
+Exec=invoker --type=qt5 -s /usr/bin/harbour-friends
+Comment=Friends Facebook client
