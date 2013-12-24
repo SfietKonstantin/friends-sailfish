@@ -31,10 +31,18 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.friends.social 1.0
 
 Page {
+    StateIndicator {
+        busy: me.status == SocialNetwork.Busy
+        error: me.status == SocialNetwork.Error
+        onReload: me.load()
+    }
+
     SilicaListView {
         anchors.fill: parent
+        visible: me.status == SocialNetwork.Idle
         model: ListModel {
             ListElement {
                 text: QT_TR_NOOP("Home")
@@ -47,6 +55,10 @@ Page {
             ListElement {
                 text: QT_TR_NOOP("Friends")
                 page: "FriendsPage.qml"
+            }
+            ListElement {
+                text: QT_TR_NOOP("Albums")
+                page: "AlbumsPage.qml"
             }
             ListElement {
                 text: QT_TR_NOOP("Photos")
@@ -79,10 +91,19 @@ Page {
                     return
                 }
 
+                // Give the illusion that we changed the root page, but that
+                // we are still in the menu
                 pageStack.clear()
-                pageStack.push(Qt.resolvedUrl(model.page))
+                var page = pageStack.push(Qt.resolvedUrl(model.page), {"identifier": facebook.currentUserIdentifier})
+                page.load()
                 pageStack.navigateForward(PageStackAction.Immediate)
                 pageStack.navigateBack()
+            }
+        }
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("About Friends")
             }
         }
     }

@@ -29,7 +29,9 @@ OTHER_FILES += qml/friends.qml \
     qml/LoginDialog.qml \
     qml/FacebookImage.qml \
     qml/FacebookPicture.qml \
-    qml/FriendsPage.qml
+    qml/FriendsPage.qml \
+    qml/StateIndicator.qml \
+    qml/AlbumsPage.qml
 
 target.path = $$TARGETPATH
 

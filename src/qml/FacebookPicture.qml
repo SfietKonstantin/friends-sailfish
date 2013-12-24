@@ -37,17 +37,30 @@ import harbour.friends 1.0
 Image {
     id: picture
     property string identifier
-    onIdentifierChanged: {
-        if (identifier == "") {
+    property int imageWidth: Theme.iconSizeLarge
+    property int imageHeight: Theme.iconSizeLarge
+
+    function load() {
+        if (identifier == "" || imageWidth <= 0 || imageHeight <= 0) {
             return
         }
-        ImageLoader.load(ImageLoader.pictureUrl(identifier, facebook.accessToken))
+        ImageLoader.load(ImageLoader.pictureUrl(identifier, facebook.accessToken, imageWidth,
+                                                imageHeight))
     }
+
+    onIdentifierChanged: load()
+    onImageWidthChanged: load()
+    onImageHeightChanged: load()
+    Component.onCompleted: load()
     property bool loading: state != "visible"
+
+
     width: Theme.iconSizeLarge
     height: Theme.iconSizeLarge
     smooth: true
     asynchronous: true
+    fillMode: Image.PreserveAspectCrop
+    clip: true
     opacity: 0
     states: State {
         name: "visible"; when: picture.status == Image.Ready
@@ -58,14 +71,14 @@ Image {
     }
 
     Behavior on opacity {
-        enabled: picture.visible
         NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
     }
 
     Connections {
         target: ImageLoader
         onLoaded: {
-            if (url == ImageLoader.pictureUrl(picture.identifier, facebook.accessToken)) {
+            if (url == ImageLoader.pictureUrl(identifier, facebook.accessToken, imageWidth,
+                                              imageHeight)) {
                 picture.source = path
             }
         }

@@ -48,7 +48,6 @@ Image {
         }
     }
     Behavior on opacity {
-        enabled: image.visible
         NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
     }
 

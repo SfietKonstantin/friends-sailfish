@@ -153,6 +153,9 @@ void ImageLoaderPrivate::slotFinished()
 
     QString imagePath = dir.absoluteFilePath(fileName);
     image.save(imagePath, "JPG");
+#ifdef DESKTOP
+    imagePath.prepend("file://");
+#endif
     emit q->loaded(url, imagePath);
 
     while (replyToUrl.count() < MAX_COUNT && !stack.isEmpty()) {
@@ -256,7 +259,11 @@ void ImageLoader::load(const QUrl &url)
     QString fileName = d->imageName(url);
 
     if (dir.exists(fileName)) {
-        d->eventImages.append(UrlImage(url, dir.absoluteFilePath(fileName)));
+        QString imagePath = dir.absoluteFilePath(fileName);
+#ifdef DESKTOP
+        imagePath.prepend("file://");
+#endif
+        d->eventImages.append(UrlImage(url, imagePath));
         QCoreApplication::postEvent(this, new QEvent(QEvent::User));
         return;
     }

@@ -52,26 +52,24 @@ Item {
             url: coverUrl
         }
 
-//        Rectangle {
-//            anchors.bottom: parent.bottom
-//            anchors.left: parent.left; anchors.right: parent.right
-//            height: Ui.MARGIN_DEFAULT + Ui.FONT_SIZE_XXLARGE + Ui.MARGIN_DEFAULT
-//            opacity: 0.8
-//            gradient: Gradient {
-//                GradientStop {position: 0; color: "#00000000"}
-//                GradientStop {position: 1; color: "black"}
-//            }
-//        }
+        Rectangle {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left; anchors.right: parent.right
+            height: Theme.paddingLarge + Theme.fontSizeHuge + Theme.paddingMedium
+            opacity: 0.8
+            gradient: Gradient {
+                GradientStop {position: 0; color: "#00000000"}
+                GradientStop {position: 1; color: "black"}
+            }
+        }
 
-        Text {
+        Label {
             id: nameText
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-            color: Theme.primaryColor
             opacity: 0
-            elide: Text.ElideRight
-            wrapMode: Text.NoWrap
+            truncationMode: TruncationMode.Fade
             font.pixelSize: Theme.fontSizeHuge
             states: [
                 State {

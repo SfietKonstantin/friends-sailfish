@@ -37,16 +37,27 @@ import harbour.friends.social.extra 1.0
 
 Page {
     id: container
+    property string identifier // Compatibility
+    function load() {
+        model.load()
+    }
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
         }
     }
 
+    StateIndicator {
+        busy: model.status == SocialNetwork.Busy
+        error: model.status == SocialNetwork.Error
+        onReload: container.load()
+    }
+
     SilicaListView {
         anchors.fill: parent
-        cacheBuffer: Theme.itemSizeLarge * 2
+        visible: model.status == SocialNetwork.Idle
         model: SocialNetworkModel {
+            id: model
             socialNetwork: facebook
             filter: FacebookRelatedDataFilter {
                 identifier: facebook.currentUserIdentifier
@@ -54,9 +65,6 @@ Page {
                 limit: 500
             }
             sorters: AlphabeticalSorterInterface {field: "name"}
-            Component.onCompleted: {
-                load()
-            }
             onStatusChanged: {
                 if (status == Facebook.Idle && hasNext) {
                     loadNext()
@@ -68,8 +76,23 @@ Page {
             title: qsTr("Friends")
         }
 
+        // BUG: not working: criteria FirstCharacter is not taken in account
+//        section {
+//            criteria: ViewSection.FirstCharacter
+//            property: "contentItem.name"
+//            delegate: SectionHeader {
+//                text: section
+//                height: Theme.itemSizeExtraSmall
+//            }
+//        }
+
         delegate: BackgroundItem {
             height: Theme.itemSizeLarge
+            Rectangle {
+                anchors.fill: icon
+                color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+            }
+
             FacebookPicture {
                 id: icon
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
@@ -81,9 +104,11 @@ Page {
                 anchors.left: icon.right; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr(model.contentItem.name)
+                text: model.contentItem.name
                 truncationMode: TruncationMode.Fade
             }
         }
+
+        VerticalScrollDecorator {}
     }
 }

@@ -10,5 +10,7 @@
         <file>qml/FacebookPicture.qml</file>
         <file>qml/UiConstants.js</file>
         <file>qml/FriendsPage.qml</file>
+        <file>qml/StateIndicator.qml</file>
+        <file>qml/AlbumsPage.qml</file>
     </qresource>
 </RCC>
