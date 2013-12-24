@@ -3,23 +3,24 @@ Summary: Friends
 Version: 0.1
 Release: 1
 Group: Qt/Qt
-URL: http://example.org/
-License: LICENSE
+URL: https://github.com/SfietKonstantin/friends-sailfish
+License: BSD
 Sources:
 - '%{name}-%{version}.tar.bz2'
 Description: |
-  Short description of my SailfishOS Application
+  Friends is a simple Facebook client
 Configure: none
 Builder: qtc5
 PkgConfigBR:
 - Qt5Quick
 - Qt5Qml
 - Qt5Core
+NoAutoReqProv: true
 Requires:
 - sailfishsilica-qt5 >= 0.10.9
 Files:
 - '%{_bindir}/harbour-friends'
-- '%{_datadir}/%{name}/clientid'
+- '%{_datadir}/%{name}/lib'
 - '%{_datadir}/%{name}/qml'
 - '%{_datadir}/applications/%{name}.desktop'
 - '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'

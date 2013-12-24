@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
-SUBDIRS = src clientid-plugin
+SUBDIRS = src
 
 OTHER_FILES += rpm/friends.yaml \
     rpm/friends.spec

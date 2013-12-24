@@ -2,5 +2,6 @@
 Type=Application
 Name=Friends
 Icon=harbour-friends
-Exec=invoker --type=qt5 -s /usr/bin/harbour-friends
+Exec=harbour-friends
+X-Nemo-Application-Type=silica-qt5
 Comment=Friends Facebook client

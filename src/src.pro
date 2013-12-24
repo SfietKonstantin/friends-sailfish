@@ -8,7 +8,7 @@ TARGET = harbour-friends
 TARGETPATH = /usr/bin
 
 DEPLOYMENT_PATH = /usr/share/$$TARGET
-DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/clientid/libharbour-friends-clientidplugin.so\"\''
+DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clientidplugin.so\"\''
 include(data/data.pri)
 
 QT += qml quick
