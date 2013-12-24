@@ -35,9 +35,23 @@ import harbour.friends 1.0
 
 Page {
     id: container
+    property string identifier
+    function load() {}
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
+        }
+    }
+
+    SilicaListView {
+        anchors.fill: parent
+        header: PageHeader {
+            title: qsTr("News")
+        }
+
+        ViewPlaceholder {
+            enabled: true
+            text: qsTr("Not available")
         }
     }
 

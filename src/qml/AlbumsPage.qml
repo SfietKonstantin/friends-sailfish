@@ -93,10 +93,9 @@ Page {
                     }
                     FacebookPicture {
                         identifier: model.contentItem.coverPhoto
-                        anchors.left: parent.left; anchors.right: parent.right
+                        anchors.horizontalCenter: parent.horizontalCenter
                         imageWidth: Screen.width - 2 * Theme.paddingMedium
                         imageHeight: 2 * Theme.itemSizeExtraLarge
-                        height: imageHeight
                     }
                 }
 
@@ -119,11 +118,6 @@ Page {
                     truncationMode: TruncationMode.Fade
                 }
             }
-
-            MouseArea {
-                id: mouseArea
-                anchors.fill: parent
-            }
         }
 
         onAtYEndChanged: {
@@ -133,5 +127,10 @@ Page {
         }
 
         VerticalScrollDecorator {}
+
+        ViewPlaceholder {
+            enabled: model.status == SocialNetwork.Idle && model.count == 0
+            text: qsTr("No albums")
+        }
     }
 }

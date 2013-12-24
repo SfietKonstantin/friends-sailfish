@@ -53,10 +53,11 @@ Item {
         }
 
         Rectangle {
+            id: gradient
             anchors.bottom: parent.bottom
             anchors.left: parent.left; anchors.right: parent.right
-            height: Theme.paddingLarge + Theme.fontSizeHuge + Theme.paddingMedium
-            opacity: 0.8
+            height: Theme.paddingLarge + Theme.fontSizeLarge + Theme.paddingMedium
+            opacity: 0
             gradient: Gradient {
                 GradientStop {position: 0; color: "#00000000"}
                 GradientStop {position: 1; color: "black"}
@@ -70,7 +71,7 @@ Item {
             anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
             opacity: 0
             truncationMode: TruncationMode.Fade
-            font.pixelSize: Theme.fontSizeHuge
+            font.pixelSize: Theme.fontSizeLarge
             states: [
                 State {
                     name: "visible"; when: container.name != ""
@@ -78,6 +79,10 @@ Item {
                         target: nameText
                         opacity: 1
                         text: container.name
+                    }
+                    PropertyChanges {
+                        target: gradient
+                        opacity: 0.8
                     }
                 }
             ]

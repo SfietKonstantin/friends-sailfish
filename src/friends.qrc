@@ -12,5 +12,6 @@
         <file>qml/FriendsPage.qml</file>
         <file>qml/StateIndicator.qml</file>
         <file>qml/AlbumsPage.qml</file>
+        <file>qml/UserPage.qml</file>
     </qresource>
 </RCC>

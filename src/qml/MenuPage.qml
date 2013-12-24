@@ -50,7 +50,7 @@ Page {
             }
             ListElement {
                 text: QT_TR_NOOP("Me")
-                page: ""
+                page: "UserPage.qml"
             }
             ListElement {
                 text: QT_TR_NOOP("Friends")
@@ -80,11 +80,13 @@ Page {
         }
 
         delegate: BackgroundItem {
+            enabled: model.page != ""
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr(model.text)
+                color: model.page != "" ? Theme.primaryColor : Theme.secondaryColor
             }
             onClicked: {
                 if (model.page == "") {
@@ -102,6 +104,7 @@ Page {
         }
 
         PullDownMenu {
+            z: 1000
             MenuItem {
                 text: qsTr("About Friends")
             }

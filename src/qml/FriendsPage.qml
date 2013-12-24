@@ -107,8 +107,19 @@ Page {
                 text: model.contentItem.name
                 truncationMode: TruncationMode.Fade
             }
+
+            onClicked: {
+                var page = pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                                          {"identifier": model.contentItem.identifier})
+                page.load()
+            }
         }
 
         VerticalScrollDecorator {}
+
+        ViewPlaceholder {
+            enabled: model.status == SocialNetwork.Idle && model.count == 0
+            text: qsTr("No friends")
+        }
     }
 }

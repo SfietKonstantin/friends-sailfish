@@ -52,11 +52,9 @@ Image {
     onImageWidthChanged: load()
     onImageHeightChanged: load()
     Component.onCompleted: load()
-    property bool loading: state != "visible"
 
-
-    width: Theme.iconSizeLarge
-    height: Theme.iconSizeLarge
+    width: imageWidth
+    height: imageHeight
     smooth: true
     asynchronous: true
     fillMode: Image.PreserveAspectCrop
