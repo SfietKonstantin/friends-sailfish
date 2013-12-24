@@ -16,6 +16,9 @@ PkgConfigBR:
 - Qt5Qml
 - Qt5Core
 NoAutoReqProv: true
+PkgBR:
+- qt5-qttools
+- qt5-qttools-linguist
 Requires:
 - sailfishsilica-qt5 >= 0.10.9
 Files:
