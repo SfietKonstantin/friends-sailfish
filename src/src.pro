@@ -16,9 +16,11 @@ QT += qml quick
 CONFIG += link_pkgconfig
 
 HEADERS += tokenmanager.h \
-    clientidplugininterface.h
+    clientidplugininterface.h \
+    posthelper.h
 SOURCES += main.cpp \
-    tokenmanager.cpp
+    tokenmanager.cpp \
+    posthelper.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -32,7 +34,8 @@ OTHER_FILES += qml/friends.qml \
     qml/FriendsPage.qml \
     qml/StateIndicator.qml \
     qml/AlbumsPage.qml \
-    qml/UserPage.qml
+    qml/UserPage.qml \
+    qml/PostDelegate.qml
 
 target.path = $$TARGETPATH
 

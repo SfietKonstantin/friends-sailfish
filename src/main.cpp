@@ -46,6 +46,7 @@
 #endif
 
 #include "tokenmanager.h"
+#include "posthelper.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -77,6 +78,7 @@
 
 // Social extra features
 #include "socialextra/alphabeticalsorterinterface.h"
+#include "socialextra/newsfeedfilterinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -96,6 +98,7 @@ void importMisc()
     qmlRegisterType<TokenManager>(URI, 1, 0, "TokenManager");
     qmlRegisterType<QFB::LoginManager>(URI, 1, 0, "LoginManager");
     qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
+    qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
 }
 
 void importSocial()
@@ -135,7 +138,8 @@ void importSocial()
 void importSocialExtra()
 {
     // @uri harbour.friends.social.extra
-    qmlRegisterType<AlphabeticalSorterInterface>(URI_SOCIAL_EXTRA, 1, 0, "AlphabeticalSorterInterface");
+    qmlRegisterType<AlphabeticalSorterInterface>(URI_SOCIAL_EXTRA, 1, 0, "AlphabeticalSorter");
+    qmlRegisterType<NewsFeedFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "NewsFeedFilter");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

@@ -39,7 +39,9 @@ Page {
     id: container
     property string identifier // Compatibility
     function load() {
-        model.load()
+        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+            model.load()
+        }
     }
     onStatusChanged: {
         if (status == PageStatus.Active) {
@@ -64,7 +66,7 @@ Page {
                 connection: Facebook.Friends
                 limit: 500
             }
-            sorters: AlphabeticalSorterInterface {field: "name"}
+            sorters: AlphabeticalSorter {field: "name"}
             onStatusChanged: {
                 if (status == Facebook.Idle && hasNext) {
                     loadNext()

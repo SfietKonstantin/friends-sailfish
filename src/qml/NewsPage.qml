@@ -32,28 +32,75 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
+import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 
 Page {
     id: container
     property string identifier
-    function load() {}
+    function load() {
+        if (!view.ready) {
+            view.queued = true
+            return
+        }
+        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+            model.load()
+        }
+    }
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
         }
     }
 
+    StateIndicator {
+        busy: !view.ready || model.status == SocialNetwork.Busy
+        error: model.status == SocialNetwork.Error
+        onReload: container.load()
+    }
+
     SilicaListView {
+        id: view
         anchors.fill: parent
+        property bool ready: facebook.currentUserIdentifier != "me"
+        property bool queued: false
+        visible: (model.status == SocialNetwork.Idle && view.ready) || model.count > 0
+        onReadyChanged: {
+            if (ready && queued) {
+                queued = false
+                load()
+            }
+        }
+
+        model: SocialNetworkModel {
+            id: model
+            socialNetwork: facebook
+            filter: NewsFeedFilter {
+                type: NewsFeedFilter.Home
+            }
+        }
         header: PageHeader {
             title: qsTr("News")
         }
 
+        delegate: PostDelegate {
+            post: model.contentItem
+            from: model.contentItem.from
+            to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
+            fancy: false
+        }
+
+        onAtYEndChanged: {
+            if (atYEnd && model.hasNext) {
+                model.loadNext()
+            }
+        }
+
+        VerticalScrollDecorator {}
+
         ViewPlaceholder {
-            enabled: true
-            text: qsTr("Not available")
+            enabled: model.status == SocialNetwork.Idle && model.count == 0
+            text: qsTr("No news")
         }
     }
-
-
 }

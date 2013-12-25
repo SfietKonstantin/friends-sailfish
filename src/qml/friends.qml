@@ -36,9 +36,7 @@ import harbour.friends.social 1.0
 
 ApplicationWindow {
     id: app
-    initialPage: tokenManager.token.length > 0 ? Qt.resolvedUrl("NewsPage.qml") : loginDialogComponent
-//    initialPage: loginDialogComponent
-//    cover: Qt.resolvedUrl("cover/CoverPage.qml")
+    cover: Qt.resolvedUrl("CoverPage.qml")
 
     MenuPage {
         id: menuPage
@@ -82,7 +80,20 @@ ApplicationWindow {
     Component {
         id: loginDialogComponent
         LoginDialog {
-            onConnected: pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
+            onConnected: {
+                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
+                page.load()
+            }
+        }
+    }
+
+    Component.onCompleted: {
+        if (tokenManager.token.length > 0) {
+            var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
+            page.load()
+
+        } else {
+            pageStack.push(loginDialogComponent)
         }
     }
 }

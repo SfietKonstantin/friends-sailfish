@@ -32,13 +32,19 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 import "UiConstants.js" as Ui
 
 Page {
     id: container
     property string identifier
     function load() {
-        user.load()
+        if (user.status == SocialNetwork.Idle || user.status == SocialNetwork.Error) {
+            user.load()
+        }
+        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+            model.load()
+        }
     }
 
     onStatusChanged: {
@@ -48,8 +54,8 @@ Page {
     }
 
     StateIndicator {
-        busy: user.status == SocialNetwork.Busy
-        error: user.status == SocialNetwork.Error
+        busy: (user.status == SocialNetwork.Busy || model.status == SocialNetwork.Busy) && model.count == 0
+        error: (user.status == SocialNetwork.Error || model.status == SocialNetwork.Error) && model.count == 0
         onReload: container.load()
     }
 
@@ -65,6 +71,7 @@ Page {
     SilicaListView {
         id: view
         anchors.fill: parent
+        visible: (model.status == SocialNetwork.Idle) || model.count > 0
         header: Item {
             width: view.width
             height: childrenRect.height
@@ -160,7 +167,34 @@ Page {
             }
         }
 
+        model: SocialNetworkModel {
+            id: model
+            socialNetwork: facebook
+            filter: NewsFeedFilter {
+                type: NewsFeedFilter.Feed
+                identifier: container.identifier
+            }
+        }
 
+        delegate: PostDelegate {
+            post: model.contentItem
+            from: model.contentItem.from
+            to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
+            fancy: false
+        }
+
+        onAtYEndChanged: {
+            if (atYEnd && model.hasNext) {
+                model.loadNext()
+            }
+        }
+
+        VerticalScrollDecorator {}
+
+        ViewPlaceholder {
+            enabled: model.status == SocialNetwork.Idle && model.count == 0
+            text: qsTr("No posts")
+        }
 
         PullDownMenu {
             z: 1000

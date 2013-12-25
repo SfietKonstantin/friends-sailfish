@@ -38,7 +38,9 @@ Page {
     id: container
     property string identifier
     function load() {
-        model.load()
+        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+            model.load()
+        }
     }
 
     onStatusChanged: {

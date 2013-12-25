@@ -39,6 +39,7 @@ Image {
     onUrlChanged: ImageLoader.load(url)
     smooth: true
     asynchronous: true
+    fillMode: Image.PreserveAspectCrop
     opacity: 0
     states: State {
         name: "visible"; when: image.status == Image.Ready

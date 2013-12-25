@@ -33,22 +33,17 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
-    Label {
-        id: label
-        anchors.centerIn: parent
-        text: "My Cover"
+    FacebookImage {
+        anchors.fill: parent
+        url: me.cover.source
     }
 
-    CoverActionList {
-        id: coverAction
-
-        CoverAction {
-            iconSource: "image://theme/icon-cover-next"
-        }
-
-        CoverAction {
-            iconSource: "image://theme/icon-cover-pause"
-        }
+    Label {
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
+        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+        horizontalAlignment: Text.AlignHCenter
+        text: me.name
     }
 }
 

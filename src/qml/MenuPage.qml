@@ -96,7 +96,8 @@ Page {
                 // Give the illusion that we changed the root page, but that
                 // we are still in the menu
                 pageStack.clear()
-                var page = pageStack.push(Qt.resolvedUrl(model.page), {"identifier": facebook.currentUserIdentifier})
+                var page = pageStack.push(Qt.resolvedUrl(model.page),
+                                          {"identifier": facebook.currentUserIdentifier})
                 page.load()
                 pageStack.navigateForward(PageStackAction.Immediate)
                 pageStack.navigateBack()
