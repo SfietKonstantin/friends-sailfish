@@ -294,6 +294,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
                 // Skip those media that do not have URL (someone went to an event)
                 if (mediaUrlString.isEmpty()) {
+                    wrongMediaFound = true;
                     continue;
                 }
 
@@ -322,6 +323,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
                 continue;
             }
         }
+
 
         // Discard stories without attachments
         if (!hasMedia && !story.isEmpty() && message.isEmpty()) {
