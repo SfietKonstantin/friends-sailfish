@@ -15,6 +15,7 @@ PkgConfigBR:
 - Qt5Quick
 - Qt5Qml
 - Qt5Core
+- qdeclarative5-boostable
 NoAutoReqProv: true
 PkgBR:
 - qt5-qttools
