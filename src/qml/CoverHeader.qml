@@ -52,16 +52,27 @@ Item {
             url: coverUrl
         }
 
-        Rectangle {
+        ShaderEffect {
             id: gradient
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left; anchors.right: parent.right
-            height: Theme.paddingLarge + Theme.fontSizeLarge + Theme.paddingMedium
-            opacity: 0
-            gradient: Gradient {
-                GradientStop {position: 0; color: "#00000000"}
-                GradientStop {position: 1; color: "black"}
+            property variant source: ShaderEffectSource {
+                hideSource: true
+                sourceItem: image
             }
+
+            property real _boundary: 1 - (Theme.paddingLarge + Theme.fontSizeLarge + Theme.paddingMedium) / height;
+            anchors.fill: image
+
+            fragmentShader: "
+            varying highp vec2 qt_TexCoord0;
+            uniform float qt_Opacity;
+            uniform float _boundary;
+            uniform sampler2D source;
+            void main(void)
+            {
+                lowp vec4 textureColor = texture2D(source, qt_TexCoord0.st);
+                gl_FragColor = (1. - smoothstep(_boundary, 1., qt_TexCoord0.y)) * textureColor * qt_Opacity;
+            }
+            "
         }
 
         Label {

@@ -54,7 +54,7 @@ Page {
     }
 
     StateIndicator {
-        busy: !view.ready || model.status == SocialNetwork.Busy
+        busy: (!view.ready || model.status == SocialNetwork.Busy) && model.count == 0
         error: model.status == SocialNetwork.Error
         onReload: container.load()
     }

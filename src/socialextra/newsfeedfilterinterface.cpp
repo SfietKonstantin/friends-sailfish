@@ -4,7 +4,7 @@
 #include "socialnetworkmodelinterface.h"
 #include "facebook/facebookontology_p.h"
 #include "identifiablecontentiteminterface_p.h"
-#include "facebook/facebookpostinterface.h"
+#include "facebookextrapostinterface.h"
 
 // TODO: add place, privacy, source_id,with_location
 static const char *QUERY = "{"
@@ -273,6 +273,8 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         QVariantMap attachment = postMap.value("attachment").toMap();
 
         bool hasMedia = false;
+        bool isVideo = false;
+        QStringList mediaList;
         // If media was provided, we need to ensure that it's valid, else discard the post.
         if (attachment.keys().contains("media") && !attachment.value("media").isNull()) {
             hasMedia = true;
@@ -286,9 +288,8 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
             foreach (QVariant medium, media) {
                 QVariantMap mediumMap = medium.toMap();
-                // <type> type = <photo>; TODO handle
                 if (mediumMap.contains("video")) {
-                    // type = <video>; TODO: handle
+                    isVideo = true;
                 }
                 QString mediaUrlString = mediumMap.value("src").toString();
 
@@ -315,15 +316,14 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
                     mediaUrlString.prepend("https://facebook.com/");
                 }
 
-                // TODO: do something sensitive with this
                 QString urlString = QUrl::fromEncoded(mediaUrlString.toLocal8Bit()).toString();
+                mediaList.append(urlString);
             }
 
             if (wrongMediaFound) {
                 continue;
             }
         }
-
 
         // Discard stories without attachments
         if (!hasMedia && !story.isEmpty() && message.isEmpty()) {
@@ -333,6 +333,10 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         QVariantMap postData;
         postData.insert(NEMOQMLPLUGINS_SOCIAL_CONTENTITEMID, postId);
         postData.insert(FACEBOOK_ONTOLOGY_METADATA_ID, postId);
+
+        // Extra fields
+        postData.insert(MEDIA_KEY, mediaList);
+        postData.insert(IS_VIDEO_KEY, isVideo);
 
         // From
         QString fromId = postMap.value("actor_id").toString();
@@ -445,7 +449,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         commentData.insert(FACEBOOK_ONTOLOGY_METADATA_SUMMARY, commentSummary);
         postData.insert(FACEBOOK_ONTOLOGY_CONNECTIONS_COMMENTS, commentData);
 
-        FacebookPostInterface *post = new FacebookPostInterface(model);
+        FacebookExtraPostInterface *post = new FacebookExtraPostInterface(model);
         post->setSocialNetwork(socialNetwork);
         post->setData(postData);
         post->classBegin();

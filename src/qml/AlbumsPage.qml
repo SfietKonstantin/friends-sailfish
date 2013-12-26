@@ -101,24 +101,37 @@ Page {
                     }
                 }
 
-                Rectangle {
-                    anchors.bottom: image.bottom
-                    anchors.left: image.left; anchors.right: image.right
-                    height: Theme.paddingLarge + Theme.fontSizeMedium + Theme.paddingMedium
-                    opacity: 0.8
-                    gradient: Gradient {
-                        GradientStop {position: 0; color: "#00000000"}
-                        GradientStop {position: 1; color: "black"}
-                    }
+            }
+
+            ShaderEffect {
+                id: gradient
+                property variant source: ShaderEffectSource {
+                    hideSource: true
+                    sourceItem: background
                 }
 
-                Label {
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    anchors.bottom: image.bottom; anchors.bottomMargin: Theme.paddingMedium
-                    text: model.contentItem.name
-                    truncationMode: TruncationMode.Fade
+                property real _boundary: 1 - (Theme.paddingLarge + Theme.fontSizeMedium + Theme.paddingMedium) / height;
+                anchors.fill: background
+
+                fragmentShader: "
+                varying highp vec2 qt_TexCoord0;
+                uniform float qt_Opacity;
+                uniform float _boundary;
+                uniform sampler2D source;
+                void main(void)
+                {
+                    lowp vec4 textureColor = texture2D(source, qt_TexCoord0.st);
+                    gl_FragColor = (1. - smoothstep(_boundary, 1., qt_TexCoord0.y)) * textureColor * qt_Opacity;
                 }
+                "
+            }
+
+            Label {
+                anchors.left: gradient.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: gradient.right; anchors.rightMargin: Theme.paddingMedium
+                anchors.bottom: gradient.bottom; anchors.bottomMargin: Theme.paddingMedium
+                text: model.contentItem.name
+                truncationMode: TruncationMode.Fade
             }
         }
 

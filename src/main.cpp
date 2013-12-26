@@ -79,6 +79,7 @@
 // Social extra features
 #include "socialextra/alphabeticalsorterinterface.h"
 #include "socialextra/newsfeedfilterinterface.h"
+#include "socialextra/facebookextrapostinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -140,6 +141,7 @@ void importSocialExtra()
     // @uri harbour.friends.social.extra
     qmlRegisterType<AlphabeticalSorterInterface>(URI_SOCIAL_EXTRA, 1, 0, "AlphabeticalSorter");
     qmlRegisterType<NewsFeedFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "NewsFeedFilter");
+    qmlRegisterType<FacebookExtraPostInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraPostInterface");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

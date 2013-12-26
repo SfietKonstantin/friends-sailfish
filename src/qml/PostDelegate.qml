@@ -55,7 +55,6 @@ Item {
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         anchors.verticalCenter: parent.verticalCenter
         height: column.height + 2 * Theme.paddingMedium
-
     }
 
     Column {
@@ -111,6 +110,73 @@ Item {
             text: helper.message
             wrapMode: Text.WordWrap
             font.pixelSize: Theme.fontSizeSmall
+        }
+
+
+        //Images (an attempt)
+        Rectangle {
+            id: imagesContainer
+
+            function preprocess(text) {
+                return text.replace(/\n/g, " ")
+            }
+
+            visible: post.media.length > 0
+            property real cellSize: post.media.length <= 1 ? width : width / 3
+            anchors.left: parent.left; anchors.right: parent.right
+            color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+            height: grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
+
+            Grid {
+                id: grid
+                columns: post.media.length <= 1 ? 1 : 3
+                rows: post.media.length <= 1 ? 1 : 2
+                anchors.left: parent.left; anchors.right: parent.right
+                Repeater {
+                    model: post.media
+                    delegate: FacebookImage {
+                        url: modelData
+                        width: imagesContainer.cellSize
+                        height: post.media.length <= 1 ? 2 / 3 * imagesContainer.cellSize
+                                                       : imagesContainer.cellSize
+                    }
+                }
+            }
+
+            Column {
+                id: attachment
+                anchors.top: grid.bottom; anchors.topMargin: Theme.paddingMedium
+                anchors.left: parent.left; anchors.right: parent.right
+                spacing: Theme.paddingSmall
+                visible: post.name.length > 0 || post.caption.length > 0 || post.description.length > 0
+                Label {
+                    text: imagesContainer.preprocess(post.name)
+                    visible: post.name.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeSmall
+                    truncationMode: TruncationMode.Fade
+                }
+
+                Label {
+                    text: imagesContainer.preprocess(post.description)
+                    visible: post.description.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    truncationMode: TruncationMode.Fade
+                }
+
+                Label {
+                    text: imagesContainer.preprocess(post.caption)
+                    visible: post.caption.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    truncationMode: TruncationMode.Fade
+                    color: Theme.secondaryColor
+                }
+            }
         }
     }
 }
