@@ -165,6 +165,11 @@ QString PostHelper::header() const
     return m_header;
 }
 
+QString PostHelper::footer() const
+{
+    return m_footer;
+}
+
 QString PostHelper::message() const
 {
     return m_message;
@@ -294,6 +299,16 @@ void PostHelper::performPostCreation()
     if (m_hasContent != newHasContent) {
         m_hasContent = newHasContent;
         emit hasContentChanged();
+    }
+
+    // Footer
+    int likesCount = get(m_post, "likesCount").toInt();
+    int commentsCount = get(m_post, "commentsCount").toInt();
+    QString footer = tr("%1 and %2").arg(tr("%n likes", "", likesCount),
+                                         tr("%n comments", "", commentsCount));
+    if (m_footer != footer) {
+        m_footer = footer;
+        emit footerChanged();
     }
 
     // Name / description / content

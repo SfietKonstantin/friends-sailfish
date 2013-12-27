@@ -1,6 +1,6 @@
 Name: harbour-friends
 Summary: Friends
-Version: 0.1
+Version: 0.0.0
 Release: 1
 Group: Qt/Qt
 URL: https://github.com/SfietKonstantin/friends-sailfish
@@ -26,5 +26,6 @@ Files:
 - '%{_bindir}/harbour-friends'
 - '%{_datadir}/%{name}/lib'
 - '%{_datadir}/%{name}/qml'
+- '%{_datadir}/%{name}/data'
 - '%{_datadir}/applications/%{name}.desktop'
 - '%{_datadir}/icons/hicolor/86x86/apps/%{name}.png'

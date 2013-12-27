@@ -14,5 +14,8 @@
         <file>qml/AlbumsPage.qml</file>
         <file>qml/UserPage.qml</file>
         <file>qml/PostDelegate.qml</file>
+        <file>qml/AboutPage.qml</file>
+        <file>qml/DevelopersPage.qml</file>
+        <file>data/sfiet_konstantin.jpg</file>
     </qresource>
 </RCC>

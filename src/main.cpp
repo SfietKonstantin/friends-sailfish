@@ -85,6 +85,9 @@ static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
 static const char *URI_SOCIAL_EXTRA = "harbour.friends.social.extra";
 static const char *REASON = "Cannot be created";
+static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsforn9";
+static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
+                                   "hosted_button_id=RZ2A2ZB93827Y";
 
 static QObject *imageloader_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -178,6 +181,9 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
 
     view->engine()->rootContext()->setContextProperty("CLIENT_ID", clientId);
+    view->engine()->rootContext()->setContextProperty("VERSION", VERSION);
+    view->engine()->rootContext()->setContextProperty("FACEBOOK_PAGE", FACEBOOK_PAGE);
+    view->engine()->rootContext()->setContextProperty("PAYPAL_DONATE", PAYPAL_DONATE);
 
     importMisc();
     importSocial();

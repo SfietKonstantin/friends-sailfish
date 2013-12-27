@@ -69,6 +69,7 @@ desktop-file-install --delete-original       \
 %{_bindir}/harbour-friends
 %{_datadir}/%{name}/lib
 %{_datadir}/%{name}/qml
+%{_datadir}/%{name}/data
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files

@@ -48,6 +48,7 @@ class PostHelper : public QObject
                NOTIFY highlightColorChanged)
 
     Q_PROPERTY(QString header READ header NOTIFY headerChanged)
+    Q_PROPERTY(QString footer READ footer NOTIFY footerChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString via READ via NOTIFY viaChanged)
     Q_PROPERTY(bool story READ isStory NOTIFY storyChanged)
@@ -73,6 +74,7 @@ public:
     void setHighlightColor(const QString &highlightColor);
 
     QString header() const;
+    QString footer() const;
     QString message() const;
     QString via() const;
     bool isStory() const;
@@ -91,6 +93,7 @@ signals:
     void fancyChanged();
     void userIdentifierChanged();
     void highlightColorChanged();
+    void footerChanged();
     void headerChanged();
     void messageChanged();
     void viaChanged();
@@ -115,6 +118,7 @@ private:
     QString m_highlightColor;
     QList<QObject *> m_messageTags;
     QString m_header;
+    QString m_footer;
     QString m_message;
     QString m_via;
     bool m_story;

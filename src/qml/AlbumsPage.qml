@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>
  *

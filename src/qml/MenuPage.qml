@@ -108,6 +108,7 @@ Page {
             z: 1000
             MenuItem {
                 text: qsTr("About Friends")
+                onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
         }
     }

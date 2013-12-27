@@ -199,21 +199,6 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         }
     }
 
-    if (!mainData.size()) {
-        switch (loadType) {
-        case LoadNext:
-            // If we don't have any result returned and we are loading more results
-            // we need to set pagination to false
-            model->setPagination(false, false);
-            model->setExtraData(QVariantMap());
-            model->appendModelData(QList<ContentItemInterface *>());
-            return true;
-            break;
-        default:
-            return false;
-        }
-    }
-
     // We will use an algorithm to filter out bad stories (stories without
     // meaningful (meta)data)
     //
@@ -244,10 +229,13 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
     QList<ContentItemInterface *> modelData;
 
-    uint lastTimestamp = -1;
+    uint lastTimestamp = 0;
+    if (!postObjects.isEmpty()) {
+        QVariantMap last = postObjects.last();
+        lastTimestamp = last.value("created_time").toUInt();
+    }
 
-    foreach (const QVariant &postVariant, postObjects) {
-        QVariantMap postMap = postVariant.toMap();
+    foreach (const QVariantMap &postMap, postObjects) {
         // Any post with a parent_post_id will be discarded if that parent_post_id
         // is contained in the list of primary post ids, as we already cache that parent post,
         // unless the post_id is the same as the parent_post_id.
@@ -407,7 +395,6 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         uint createdTimestamp = postMap.value("created_time").toUInt();
         QDateTime createdTime = QDateTime::fromTime_t(createdTimestamp);
         postData.insert(FACEBOOK_ONTOLOGY_POST_CREATEDTIME, createdTime.toString(Qt::ISODate));
-        lastTimestamp = createdTimestamp;
 
         // UpdatedTime
         uint updatedTimestamp = postMap.value("updated_time").toUInt();
@@ -459,7 +446,9 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
 
     QVariantMap extraData;
-    extraData.insert(LAST_TIMESTAMP_KEY, lastTimestamp);
+    if (lastTimestamp > 0) {
+        extraData.insert(LAST_TIMESTAMP_KEY, lastTimestamp);
+    }
 
     // Populate model depending on the type of load
     switch (loadType) {
@@ -477,7 +466,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
     }
 
 
-    model->setPagination(false, true);
+    model->setPagination(false, lastTimestamp > 0 ? true : false);
     model->setExtraData(extraData);
 
     return true;

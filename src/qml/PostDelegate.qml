@@ -178,6 +178,14 @@ Item {
                 }
             }
         }
+
+        // Likes comments
+        Label {
+            anchors.left: parent.left; anchors.right: parent.right
+            font.pixelSize: Theme.fontSizeExtraSmall
+            color: Theme.secondaryColor
+            text: helper.footer
+        }
     }
 }
 

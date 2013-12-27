@@ -2,12 +2,14 @@ include(social.pri)
 include(socialextra/socialextra.pri)
 include(login/login.pri)
 include(imageloader/imageloader.pri)
+include(../version.pri)
 
 TEMPLATE = app
 TARGET = harbour-friends
 TARGETPATH = /usr/bin
 
 DEPLOYMENT_PATH = /usr/share/$$TARGET
+DEFINES *= 'VERSION=\'\"$${VERSION}\"\''
 DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clientidplugin.so\"\''
 include(data/data.pri)
 
@@ -35,7 +37,9 @@ OTHER_FILES += qml/friends.qml \
     qml/StateIndicator.qml \
     qml/AlbumsPage.qml \
     qml/UserPage.qml \
-    qml/PostDelegate.qml
+    qml/PostDelegate.qml \
+    qml/AboutPage.qml \
+    qml/DevelopersPage.qml \
 
 target.path = $$TARGETPATH
 
