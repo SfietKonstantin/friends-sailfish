@@ -69,7 +69,7 @@ ApplicationWindow {
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: "me"
-            fields: "name,cover"
+            fields: "name,first_name,cover"
         }
 
         onStatusChanged: {

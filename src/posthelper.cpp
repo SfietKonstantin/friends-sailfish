@@ -190,11 +190,6 @@ bool PostHelper::hasContent() const
     return m_hasContent;
 }
 
-QDateTime PostHelper::createdTime() const
-{
-    return m_createdTime;
-}
-
 QString PostHelper::name() const
 {
     return m_name;
@@ -346,14 +341,6 @@ void PostHelper::performPostCreation()
         emit viaChanged();
     }
 
-    // Created time
-    QString createdTimeString = get(m_post, "createdTime").toString();
-    QDateTime createdTime = QDateTime::fromString(createdTimeString, Qt::ISODate);
-
-    if (m_createdTime != createdTime) {
-        m_createdTime = createdTime;
-        emit createdTimeChanged();
-    }
 }
 
 void PostHelper::performHeaderAndMessageCreation()

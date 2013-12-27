@@ -64,7 +64,7 @@ Page {
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
-            fields: "name,cover"
+            fields: "name,first_name,cover"
         }
     }
 
@@ -212,7 +212,13 @@ Page {
 
             MenuItem {
                 text: qsTr("Photos")
-                enabled: false
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
+                                              {"identifier": user.identifier,
+                                               "name": qsTr("Photos of %1").arg(user.firstName),
+                                               "isUser": true})
+                    page.load()
+                }
             }
 
             MenuItem {
@@ -226,7 +232,7 @@ Page {
 
             MenuItem {
                 text: user.identifier == me.identifier ? qsTr("Personnal informations")
-                                                       : qsTr("About %1").arg(user.name)
+                                                       : qsTr("About %1").arg(user.firstName)
                 enabled: false
             }
         }

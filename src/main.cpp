@@ -89,11 +89,38 @@ static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsforn9";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
                                    "hosted_button_id=RZ2A2ZB93827Y";
 
+class DateHelper : public QObject
+{
+    Q_OBJECT
+public:
+    explicit DateHelper(QObject *parent = 0);
+    Q_INVOKABLE static QDateTime fromString(const QString &date);
+};
+
+DateHelper::DateHelper(QObject *parent)
+    : QObject(parent)
+{
+}
+
+QDateTime DateHelper::fromString(const QString &date)
+{
+    return QDateTime::fromString(date, Qt::ISODate);
+}
+
+
+
 static QObject *imageloader_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
     return new ImageLoader();
+}
+
+static QObject * datehelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+    return new DateHelper();
 }
 
 void importMisc()
@@ -102,6 +129,7 @@ void importMisc()
     qmlRegisterType<TokenManager>(URI, 1, 0, "TokenManager");
     qmlRegisterType<QFB::LoginManager>(URI, 1, 0, "LoginManager");
     qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
+    qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
     qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
 }
 
@@ -216,5 +244,4 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     return result;
 }
 
-
-
+#include "main.moc"

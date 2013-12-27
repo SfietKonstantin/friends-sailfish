@@ -53,7 +53,6 @@ class PostHelper : public QObject
     Q_PROPERTY(QString via READ via NOTIFY viaChanged)
     Q_PROPERTY(bool story READ isStory NOTIFY storyChanged)
     Q_PROPERTY(bool hasContent READ hasContent NOTIFY hasContentChanged)
-    Q_PROPERTY(QDateTime createdTime READ createdTime NOTIFY createdTimeChanged)
 
     Q_PROPERTY(QString name READ name NOTIFY nameChanged)
     Q_PROPERTY(QString caption READ caption NOTIFY captionChanged)
@@ -79,7 +78,6 @@ public:
     QString via() const;
     bool isStory() const;
     bool hasContent() const;
-    QDateTime createdTime() const;
     QString name() const;
     QString caption() const;
     QString description() const;
@@ -99,7 +97,6 @@ signals:
     void viaChanged();
     void storyChanged();
     void hasContentChanged();
-    void createdTimeChanged();
     void nameChanged();
     void captionChanged();
     void descriptionChanged();
@@ -123,7 +120,6 @@ private:
     QString m_via;
     bool m_story;
     bool m_hasContent;
-    QDateTime m_createdTime;
     QString m_name;
     QString m_caption;
     QString m_description;

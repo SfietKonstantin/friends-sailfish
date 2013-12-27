@@ -40,6 +40,7 @@ OTHER_FILES += qml/friends.qml \
     qml/PostDelegate.qml \
     qml/AboutPage.qml \
     qml/DevelopersPage.qml \
+    qml/PhotosPage.qml
 
 target.path = $$TARGETPATH
 

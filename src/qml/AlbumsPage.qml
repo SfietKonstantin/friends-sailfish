@@ -81,6 +81,12 @@ Page {
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium / 2
                 anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium / 2
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
+                                              {"identifier": model.contentItem.identifier,
+                                               "name": model.contentItem.name})
+                    page.load()
+                }
 
                 Item {
                     id: image

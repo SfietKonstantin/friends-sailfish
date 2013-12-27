@@ -62,7 +62,7 @@ Page {
             }
             ListElement {
                 text: QT_TR_NOOP("Photos")
-                page: ""
+                page: "PhotosPage.qml"
             }
             ListElement {
                 text: QT_TR_NOOP("Events")
@@ -96,8 +96,13 @@ Page {
                 // Give the illusion that we changed the root page, but that
                 // we are still in the menu
                 pageStack.clear()
-                var page = pageStack.push(Qt.resolvedUrl(model.page),
-                                          {"identifier": facebook.currentUserIdentifier})
+                var properties = {"identifier": facebook.currentUserIdentifier}
+                if (model.page = "PhotosPage.qml") {
+                    properties.name = qsTr("Photos of %1").arg(me.firstName)
+                    properties.isUser = true
+                }
+
+                var page = pageStack.push(Qt.resolvedUrl(model.page), properties)
                 page.load()
                 pageStack.navigateForward(PageStackAction.Immediate)
                 pageStack.navigateBack()

@@ -97,7 +97,8 @@ Item {
                 Label {
                     anchors.top: header.bottom; anchors.topMargin: Theme.paddingSmall
                     anchors.left: parent.left; anchors.right: parent.right
-                    text: Format.formatDate(helper.createdTime, Formatter.DurationElapsed)
+                    text: Format.formatDate(DateHelper.fromString(container.post.createdTime),
+                                            Formatter.DurationElapsed)
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                 }
