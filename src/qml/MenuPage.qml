@@ -99,7 +99,7 @@ Page {
                 var properties = {"identifier": facebook.currentUserIdentifier}
                 if (model.page = "PhotosPage.qml") {
                     properties.name = qsTr("Photos of %1").arg(me.firstName)
-                    properties.isUser = true
+                    properties.isUserPhotos = true
                 }
 
                 var page = pageStack.push(Qt.resolvedUrl(model.page), properties)

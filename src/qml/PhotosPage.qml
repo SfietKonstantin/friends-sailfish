@@ -38,13 +38,15 @@ Page {
     id: container
     property string identifier
     property string name
-    property bool isUser: false
+    property bool isUserPhotos: false
+    Component.onCompleted: menu.visible = !isUserPhotos
+    onIsUserPhotosChanged: menu.visible = !isUserPhotos
     function load() {
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
         }
 
-        if (isUser) {
+        if (isUserPhotos) {
             return
         }
 
@@ -270,7 +272,8 @@ Page {
                 }
 
                 PullDownMenu {
-                    visible: !container.isUser
+                    id: menu
+                    visible: !container.isUserPhotos
                     MenuItem {
                         text: qsTr("Album informations")
                         onClicked: !drawer.open ? drawer.show() : drawer.hide()

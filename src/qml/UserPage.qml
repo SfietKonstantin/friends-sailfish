@@ -216,7 +216,7 @@ Page {
                     var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
                                               {"identifier": user.identifier,
                                                "name": qsTr("Photos of %1").arg(user.firstName),
-                                               "isUser": true})
+                                               "isUserPhotos": true})
                     page.load()
                 }
             }
