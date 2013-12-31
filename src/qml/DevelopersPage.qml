@@ -56,15 +56,6 @@ Page {
             twitter: "https://twitter.com/SfietKonstantin"
             website: "https://github.com/SfietKonstantin"
         }
-//        ListElement {
-//            icon: ""
-//            category: "Developers of Nemo Social QML plugin"
-//            name: "Other "
-//            nickname: ""
-//            description: "Contributor"
-//            twitter: "https://twitter.com/zchydem"
-//            website: "https://github.com/zchydem"
-//        }
         ListElement {
             icon: "../data/sfiet_konstantin.jpg"
             category: "Developers of Friends"
@@ -74,15 +65,15 @@ Page {
             twitter: "https://twitter.com/SfietKonstantin"
             website: "https://github.com/SfietKonstantin"
         }
-//        ListElement {
-//            icon: "aniket.jpg"
-//            category: "Thanks to"
-//            name: "Aniket Vasishth"
-//            nickname: ""
-//            description: "Icons master"
-//            twitter: "https://twitter.com/LogonAniket"
-//            website: ""
-//        }
+        ListElement {
+            icon: "../data/morpog.jpeg"
+            category: "Thanks to"
+            name: "Stephan Beyerle"
+            nickname: "Morpog"
+            description: "Icons master"
+            twitter: "https://twitter.com/Morpog"
+            website: ""
+        }
     }
 
 
