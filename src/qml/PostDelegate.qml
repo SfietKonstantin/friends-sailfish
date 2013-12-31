@@ -41,6 +41,7 @@ Item {
     property alias from: helper.from
     property alias to: helper.to
     property alias fancy: helper.fancy
+    signal clicked()
     width: parent.width
     height: background.height + Theme.paddingMedium
 
@@ -55,6 +56,8 @@ Item {
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         anchors.verticalCenter: parent.verticalCenter
         height: column.height + 2 * Theme.paddingMedium
+        onClicked: container.clicked()
+        enabled: !container.fancy
     }
 
     Column {
@@ -75,7 +78,7 @@ Item {
             height: childrenRect.height
             FacebookPicture {
                 id: picture
-                identifier: model.contentItem.from.objectIdentifier
+                identifier: container.from.objectIdentifier
                 imageWidth: Theme.iconSizeMedium
                 imageHeight: Theme.iconSizeMedium
             }
@@ -114,7 +117,7 @@ Item {
         }
 
 
-        //Images (an attempt)
+        //Images
         Rectangle {
             id: imagesContainer
 

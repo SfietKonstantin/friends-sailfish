@@ -18,5 +18,9 @@
         <file>qml/DevelopersPage.qml</file>
         <file>data/sfiet_konstantin.jpg</file>
         <file>qml/PhotosPage.qml</file>
+        <file>qml/PhotoPage.qml</file>
+        <file>qml/SplitSocialPanel.qml</file>
+        <file>qml/CommentsPage.qml</file>
+        <file>qml/PostCommentHeaderComponent.qml</file>
     </qresource>
 </RCC>

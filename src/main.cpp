@@ -47,6 +47,7 @@
 
 #include "tokenmanager.h"
 #include "posthelper.h"
+#include "footerhelper.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -123,6 +124,13 @@ static QObject * datehelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine
     return new DateHelper();
 }
 
+static QObject * footerhelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+    return new FooterHelper();
+}
+
 void importMisc()
 {
     // @uri harbour.friends
@@ -130,6 +138,7 @@ void importMisc()
     qmlRegisterType<QFB::LoginManager>(URI, 1, 0, "LoginManager");
     qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
     qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
+    qmlRegisterSingletonType<FooterHelper>(URI, 1, 0, "FooterHelper", footerhelper_provider);
     qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
 }
 

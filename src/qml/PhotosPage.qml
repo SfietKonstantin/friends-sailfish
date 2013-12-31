@@ -60,7 +60,7 @@ Page {
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
-            fields: "id,description,likes,comments,updated_time"
+            fields: "id,name,description,likes,comments,updated_time"
         }
     }
 
@@ -72,135 +72,25 @@ Page {
 
     Drawer {
         id: drawer
-        property bool loading: album.status != SocialNetwork.Idle
-                               || album.actionStatus != SocialNetwork.Idle
+        property int imageSize: Math.max(Screen.width, Screen.height)
         anchors.fill: parent
         dock: container.orientation == Orientation.Portrait ? Dock.Bottom: Dock.Left
-        background: Rectangle {
-            anchors.fill: parent
-            color: Theme.rgba(Theme.highlightBackgroundColor, 0.1)
-
-            Column {
-                anchors.left: parent.left; anchors.right: parent.right
-                spacing: Theme.paddingMedium
-
-                Row {
-                    spacing: Theme.paddingLarge
-                    height: Theme.itemSizeLarge
-                    anchors.right: parent.right
-                    anchors.rightMargin: Theme.paddingLarge
-
-                    Image {
-                        opacity: drawer.loading ? 0.5 : 1
-                        source: "image://theme/icon-s-like" + "?" + Theme.highlightColor
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Label {
-                        opacity: drawer.loading ? 0.5 : 1
-                        color: Theme.highlightColor
-                        text: album.likesCount
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: Theme.paddingLarge
-                    }
-
-                    Image {
-                        opacity: drawer.loading ? 0.5 : 1
-                        source: "image://theme/icon-s-chat" + "?" + Theme.highlightColor
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Label {
-                        opacity: drawer.loading ? 0.5 : 1
-                        color: Theme.highlightColor
-                        text: album.commentsCount
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: Theme.paddingLarge
-                    }
-                }
-
-                Label {
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    wrapMode: Text.WordWrap
-                    text: album.description
-                    visible: album.description.length > 0
-                }
-
-                Label {
-
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: Theme.fontSizeSmall
-                    color: Theme.secondaryColor
-                    text: qsTr("Last update %1").arg(Format.formatDate(DateHelper.fromString(album.updatedTime),
-                                                                       Formatter.DurationElapsed))
-                }
-            }
-
-            Item {
-                anchors.left: parent.left; anchors.right: parent.right
-                anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-                height: childrenRect.height
-
-                BackgroundItem {
-                    id: likeItem
-                    opacity: drawer.loading ? 0.5 : 1
-                    enabled: !drawer.loading
-                    Behavior on opacity { FadeAnimation {} }
-
-                    anchors.left: parent.left; anchors.right: parent.horizontalCenter
-
-                    Image {
-                        id: likeIcon
-                        source: "image://theme/icon-s-like"
-                                + (likeItem.highlighted ? "?" + Theme.highlightColor : "")
-                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Label {
-                        text: album.liked ? qsTr("Unlike") : qsTr("Like")
-                        anchors.left: likeIcon.right; anchors.leftMargin: Theme.paddingLarge
-                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
-                        anchors.verticalCenter: parent.verticalCenter
-                        truncationMode: TruncationMode.Fade
-                        font.pixelSize: Theme.fontSizeExtraSmall
-                        color: likeItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    }
-                    onClicked: album.liked ? album.unlike() : album.like()
-                }
-
-                BackgroundItem {
-                    id: commentItem
-                    opacity: drawer.loading ? 0.5 : 1
-                    enabled: !drawer.loading
-                    Behavior on opacity { FadeAnimation {} }
-
-                    anchors.left: parent.horizontalCenter; anchors.right: parent.right
-
-                    Image {
-                        id: commentsIcon
-                        source: "image://theme/icon-s-chat"
-                                + (commentItem.highlighted ? "?" + Theme.highlightColor : "")
-                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
-                        anchors.verticalCenter: parent.verticalCenter
-                    }
-
-                    Label {
-                        text: qsTr("Comment")
-                        anchors.left: commentsIcon.right; anchors.leftMargin: Theme.paddingLarge
-                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
-                        anchors.verticalCenter: parent.verticalCenter
-                        truncationMode: TruncationMode.Fade
-                        font.pixelSize: Theme.fontSizeExtraSmall
-                        color: commentItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-                    }
-                    // onClicked: <do something>
-                }
+        background: SplitSocialPanel {
+            loading: album.status != SocialNetwork.Idle
+                     || album.actionStatus != SocialNetwork.Idle
+            item: album
+            description: album.description
+            onShowComments: {
+                var headerProperties = {"model": model, "album": item}
+                var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
+                                          {"identifier": item.identifier,
+                                           "item": item,
+                                           "headerComponent": headerComponent,
+                                           "headerProperties": headerProperties})
+                page.load()
             }
         }
+
         foreground: Item {
             anchors.fill: parent
             StateIndicator {
@@ -222,6 +112,7 @@ Page {
                     filter: FacebookRelatedDataFilter {
                         identifier: container.identifier
                         connection: Facebook.Photos
+                        fields: "id,name,updated_time,likes,comments"
                         limit: 21
                     }
                 }
@@ -237,6 +128,8 @@ Page {
                     BackgroundItem {
                         id: background
                         anchors.fill: parent
+                        onClicked: pageStack.push(Qt.resolvedUrl("PhotoPage.qml"),
+                                                  {"model": view.model, "currentIndex": model.index})
 
                         Item {
                             id: image
@@ -250,8 +143,10 @@ Page {
                             FacebookPicture {
                                 identifier: model.contentItem.identifier
                                 anchors.centerIn: parent
-                                imageWidth: parent.width
-                                imageHeight: parent.height
+                                width: parent.width
+                                height: parent.height
+                                imageWidth: drawer.imageSize
+                                imageHeight: drawer.imageSize
                             }
                         }
 
@@ -278,6 +173,78 @@ Page {
                         text: qsTr("Album informations")
                         onClicked: !drawer.open ? drawer.show() : drawer.hide()
                     }
+                }
+            }
+        }
+    }
+
+    // Used to comment an album
+    Component {
+        id: headerComponent
+        Item {
+            property alias model: repeater.model
+            property FacebookAlbum album
+            anchors.left: parent.left; anchors.right: parent.right
+            height: columnContainer.height + 2 * Theme.paddingMedium
+
+            Rectangle {
+                id: columnContainer
+                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                anchors.verticalCenter: parent.verticalCenter
+                height: childrenRect.height + 2 * Theme.paddingMedium
+                color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+
+                Rectangle {
+                    id: albumContainer
+                    anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+                    height: column.height + (label.visible ? Theme.paddingMedium : 0)
+
+                    Column {
+                        id: column
+                        property int imageSize: Math.max(Screen.width, Screen.height)
+                        spacing: Theme.paddingMedium
+                        anchors.left: parent.left; anchors.right: parent.right
+
+                        Grid {
+                            id: grid
+                            columns: 3
+                            rows: repeater.count < 3 ? 1 : 2
+                            anchors.left: parent.left; anchors.right: parent.right
+                            Repeater {
+                                id: repeater
+                                delegate: FacebookPicture {
+                                    identifier: model.contentItem.identifier
+                                    width: grid.width / 3
+                                    height: grid.width / 3
+                                    imageWidth: column.imageSize
+                                    imageHeight: column.imageSize
+                                }
+                            }
+                        }
+
+                        Label {
+                            id: label
+                            anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                            anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                            font.pixelSize: Theme.fontSizeSmall
+                            text: album.name
+                            visible: album.name.length > 0
+                            wrapMode: Text.Wrap
+                        }
+                    }
+                }
+                Label {
+                    id: footer
+                    anchors.top: albumContainer.bottom; anchors.topMargin: Theme.paddingMedium
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    color: Theme.secondaryColor
+                    text: FooterHelper.makeFooter(album.likesCount, album.commentsCount)
                 }
             }
         }

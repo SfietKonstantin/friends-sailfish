@@ -19,10 +19,12 @@ CONFIG += link_pkgconfig
 
 HEADERS += tokenmanager.h \
     clientidplugininterface.h \
-    posthelper.h
+    posthelper.h \
+    footerhelper.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
-    posthelper.cpp
+    posthelper.cpp \
+    footerhelper.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -40,7 +42,11 @@ OTHER_FILES += qml/friends.qml \
     qml/PostDelegate.qml \
     qml/AboutPage.qml \
     qml/DevelopersPage.qml \
-    qml/PhotosPage.qml
+    qml/PhotosPage.qml \
+    qml/PhotoPage.qml \
+    qml/SplitSocialPanel.qml \
+    qml/CommentsPage.qml \
+    qml/PostCommentHeaderComponent.qml
 
 target.path = $$TARGETPATH
 

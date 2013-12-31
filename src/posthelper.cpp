@@ -30,6 +30,7 @@
  */
 
 #include "posthelper.h"
+#include "footerhelper.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -299,8 +300,8 @@ void PostHelper::performPostCreation()
     // Footer
     int likesCount = get(m_post, "likesCount").toInt();
     int commentsCount = get(m_post, "commentsCount").toInt();
-    QString footer = tr("%1 and %2").arg(tr("%n likes", "", likesCount),
-                                         tr("%n comments", "", commentsCount));
+    QString footer = FooterHelper::makeFooter(likesCount, commentsCount);
+
     if (m_footer != footer) {
         m_footer = footer;
         emit footerChanged();

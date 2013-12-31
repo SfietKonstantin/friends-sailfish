@@ -88,6 +88,15 @@ Page {
             from: model.contentItem.from
             to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
             fancy: false
+            onClicked: {
+                var headerProperties = {"post": post, "to": to, "from": from }
+                var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
+                                          {"identifier": post.identifier,
+                                           "item": post,
+                                           "headerComponent": headerComponent,
+                                           "headerProperties": headerProperties})
+                page.load()
+            }
         }
 
         onAtYEndChanged: {
@@ -102,5 +111,9 @@ Page {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
             text: qsTr("No news")
         }
+    }
+
+    PostCommentHeaderComponent {
+        id: headerComponent
     }
 }
