@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 SUBDIRS = src
 
-OTHER_FILES += rpm/friends.yaml \
-    rpm/friends.spec
+OTHER_FILES += rpm/harbour-friends.yaml \
+    rpm/harbour-friends.spec

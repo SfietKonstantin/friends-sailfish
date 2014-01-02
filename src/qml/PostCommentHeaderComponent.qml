@@ -33,18 +33,36 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Component {
-    Item {
+    Column {
+        id: container
         property alias post: delegate.post
         property alias from: delegate.from
         property alias to: delegate.to
         anchors.left: parent.left; anchors.right: parent.right
-        height: delegate.height + Theme.paddingMedium
 
-        PostDelegate {
-            id: delegate
-            fancy: true
+        Item {
+            // Just for padding (because the delegate have half padding)
             anchors.left: parent.left; anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
+            height: delegate.height + Theme.paddingMedium
+
+            PostDelegate {
+                id: delegate
+                fancy: true
+                anchors.left: parent.left; anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+            }
+        }
+
+        SocialButtons {
+            item: container.post
+            anchors.leftMargin: Theme.paddingMedium; anchors.rightMargin: Theme.paddingMedium
+            onShowComments: container.parent.focusCommentField()
+        }
+
+        Item {
+            // For margins
+            anchors.left: parent.left; anchors.right: parent.right
+            height: Theme.paddingMedium
         }
     }
 

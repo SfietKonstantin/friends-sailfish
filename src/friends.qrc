@@ -25,5 +25,6 @@
         <file>data/morpog.jpeg</file>
         <file>qml/WelcomeDialog.qml</file>
         <file>data/logo.png</file>
+        <file>qml/SocialButtons.qml</file>
     </qresource>
 </RCC>

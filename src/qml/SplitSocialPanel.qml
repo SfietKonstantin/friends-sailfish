@@ -100,71 +100,10 @@ Rectangle {
         }
     }
 
-    Item {
-        anchors.left: parent.left; anchors.right: parent.right
+    SocialButtons {
         anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-        height: childrenRect.height
-
-        BackgroundItem {
-            id: likeItem
-            opacity: container.loading ? 0.5 : 1
-            enabled: !container.loading
-            Behavior on opacity { FadeAnimation {} }
-
-            anchors.left: parent.left; anchors.right: parent.horizontalCenter
-
-            Image {
-                id: likeIcon
-                source: "image://theme/icon-s-like"
-                        + (likeItem.highlighted ? "?" + Theme.highlightColor : "")
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            Label {
-                text: item === null ? "" : (item.liked ? qsTr("Unlike") : qsTr("Like"))
-                anchors.left: likeIcon.right; anchors.leftMargin: Theme.paddingLarge
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
-                anchors.verticalCenter: parent.verticalCenter
-                truncationMode: TruncationMode.Fade
-                font.pixelSize: Theme.fontSizeExtraSmall
-                color: likeItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-            }
-            onClicked: {
-                if (item === null) {
-                    return
-                }
-
-                item.liked ? item.unlike() : item.like()
-            }
-        }
-
-        BackgroundItem {
-            id: commentItem
-            opacity: container.loading ? 0.5 : 1
-            enabled: !container.loading
-            Behavior on opacity { FadeAnimation {} }
-
-            anchors.left: parent.horizontalCenter; anchors.right: parent.right
-
-            Image {
-                id: commentsIcon
-                source: "image://theme/icon-s-chat"
-                        + (commentItem.highlighted ? "?" + Theme.highlightColor : "")
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
-                anchors.verticalCenter: parent.verticalCenter
-            }
-
-            Label {
-                text: qsTr("Comment")
-                anchors.left: commentsIcon.right; anchors.leftMargin: Theme.paddingLarge
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
-                anchors.verticalCenter: parent.verticalCenter
-                truncationMode: TruncationMode.Fade
-                font.pixelSize: Theme.fontSizeExtraSmall
-                color: commentItem.highlighted ? Theme.highlightColor : Theme.primaryColor
-            }
-            onClicked: container.showComments()
-        }
+        item: container.item
+        loading: container.loading
+        onShowComments: container.showComments()
     }
 }

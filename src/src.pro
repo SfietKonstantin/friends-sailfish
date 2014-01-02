@@ -49,7 +49,8 @@ OTHER_FILES += qml/friends.qml \
     qml/SplitSocialPanel.qml \
     qml/CommentsPage.qml \
     qml/PostCommentHeaderComponent.qml \
-    qml/WelcomeDialog.qml
+    qml/WelcomeDialog.qml \
+    qml/SocialButtons.qml
 
 target.path = $$TARGETPATH
 

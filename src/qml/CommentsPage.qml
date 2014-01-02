@@ -54,6 +54,8 @@ Page {
 
     SocialNetworkModel {
         id: model
+        signal performFocusCommentField()
+
         socialNetwork: facebook
         filter: FacebookRelatedDataFilter {
             identifier: container.identifier
@@ -76,6 +78,11 @@ Page {
             Item {
                 id: header
                 property Item object
+
+                function focusCommentField() {
+                    model.performFocusCommentField()
+                }
+
                 width: parent.width
                 height: childrenRect.height
 
@@ -125,6 +132,11 @@ Page {
                     topMargin: footer.displayMargins ? Theme.paddingLarge : 0
                     left: commentAvatar.right
                     right: parent.right
+                }
+
+                Connections {
+                    target: model
+                    onPerformFocusCommentField: textField.forceActiveFocus()
                 }
 
                 EnterKey.highlighted: text.length > 0
