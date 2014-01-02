@@ -43,7 +43,10 @@ Page {
                 title: qsTr("About")
             }
 
-            // Icon here
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "../data/logo.png"
+            }
 
             Column {
                 anchors.left: parent.left; anchors.right: parent.right

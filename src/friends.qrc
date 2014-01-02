@@ -23,5 +23,7 @@
         <file>qml/CommentsPage.qml</file>
         <file>qml/PostCommentHeaderComponent.qml</file>
         <file>data/morpog.jpeg</file>
+        <file>qml/WelcomeDialog.qml</file>
+        <file>data/logo.png</file>
     </qresource>
 </RCC>

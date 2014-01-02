@@ -50,6 +50,10 @@ Page {
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
+            if (!settingsManager.welcomeDone) {
+                settingsManager.welcomeDone = true
+                pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
+            }
         }
     }
 

@@ -17,12 +17,14 @@ QT += qml quick
 
 CONFIG += link_pkgconfig
 
-HEADERS += tokenmanager.h \
-    clientidplugininterface.h \
+HEADERS += clientidplugininterface.h \
+    tokenmanager.h \
+    settingsmanager.h \
     posthelper.h \
     footerhelper.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
+    settingsmanager.cpp \
     posthelper.cpp \
     footerhelper.cpp
 
@@ -46,7 +48,8 @@ OTHER_FILES += qml/friends.qml \
     qml/PhotoPage.qml \
     qml/SplitSocialPanel.qml \
     qml/CommentsPage.qml \
-    qml/PostCommentHeaderComponent.qml
+    qml/PostCommentHeaderComponent.qml \
+    qml/WelcomeDialog.qml
 
 target.path = $$TARGETPATH
 

@@ -29,77 +29,23 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import harbour.friends 1.0
-import harbour.friends.social 1.0
+#ifndef SETTINGSMANAGER_H
+#define SETTINGSMANAGER_H
 
-ApplicationWindow {
-    id: app
-    cover: Qt.resolvedUrl("CoverPage.qml")
+#include <QtCore/QObject>
 
-    MenuPage {
-        id: menuPage
-    }
+class SettingsManager : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(bool welcomeDone READ welcomeDone WRITE setWelcomeDone NOTIFY welcomeDoneChanged)
+public:
+    explicit SettingsManager(QObject *parent = 0);
+    bool welcomeDone() const;
+    void setWelcomeDone(bool welcomeDone);
+signals:
+    void welcomeDoneChanged();
+private:
+    bool m_welcomeDone;
+};
 
-    TokenManager {
-        id: tokenManager
-    }
-
-    SettingsManager {
-        id: settingsManager
-    }
-
-    Facebook {
-        id: facebook
-        accessToken: tokenManager.token
-        onAccessTokenChanged: {
-            if (accessToken.length > 0) {
-                me.loadMe()
-            }
-        }
-    }
-
-    FacebookUser {
-        id: me
-        property bool loaded: false
-        function loadMe() {
-            if (status == SocialNetwork.Idle && !loaded) {
-                load()
-                loaded = true
-            }
-        }
-
-        socialNetwork: facebook
-        filter: FacebookItemFilter {
-            identifier: "me"
-            fields: "name,first_name,cover"
-        }
-
-        onStatusChanged: {
-            loadMe()
-        }
-    }
-
-    Component {
-        id: loginDialogComponent
-        LoginDialog {
-            onConnected: {
-                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
-                page.load()
-            }
-        }
-    }
-
-    Component.onCompleted: {
-        if (tokenManager.token.length > 0) {
-            var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
-            page.load()
-
-        } else {
-            pageStack.push(loginDialogComponent)
-        }
-    }
-}
-
-
+#endif // SETTINGSMANAGER_H

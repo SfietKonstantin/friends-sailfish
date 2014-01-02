@@ -29,77 +29,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 2.0
-import Sailfish.Silica 1.0
-import harbour.friends 1.0
-import harbour.friends.social 1.0
+#include "settingsmanager.h"
+#include <QtCore/QSettings>
 
-ApplicationWindow {
-    id: app
-    cover: Qt.resolvedUrl("CoverPage.qml")
+static const char *WELCOME_DONE_KEY = "welcome/done";
 
-    MenuPage {
-        id: menuPage
-    }
-
-    TokenManager {
-        id: tokenManager
-    }
-
-    SettingsManager {
-        id: settingsManager
-    }
-
-    Facebook {
-        id: facebook
-        accessToken: tokenManager.token
-        onAccessTokenChanged: {
-            if (accessToken.length > 0) {
-                me.loadMe()
-            }
-        }
-    }
-
-    FacebookUser {
-        id: me
-        property bool loaded: false
-        function loadMe() {
-            if (status == SocialNetwork.Idle && !loaded) {
-                load()
-                loaded = true
-            }
-        }
-
-        socialNetwork: facebook
-        filter: FacebookItemFilter {
-            identifier: "me"
-            fields: "name,first_name,cover"
-        }
-
-        onStatusChanged: {
-            loadMe()
-        }
-    }
-
-    Component {
-        id: loginDialogComponent
-        LoginDialog {
-            onConnected: {
-                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
-                page.load()
-            }
-        }
-    }
-
-    Component.onCompleted: {
-        if (tokenManager.token.length > 0) {
-            var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
-            page.load()
-
-        } else {
-            pageStack.push(loginDialogComponent)
-        }
-    }
+SettingsManager::SettingsManager(QObject *parent) :
+    QObject(parent), m_welcomeDone(false)
+{
+    QSettings settings;
+    setWelcomeDone(settings.value(WELCOME_DONE_KEY, false).toBool());
 }
 
+bool SettingsManager::welcomeDone() const
+{
+    return m_welcomeDone;
+}
 
+void SettingsManager::setWelcomeDone(bool welcomeDone)
+{
+    if (m_welcomeDone != welcomeDone) {
+        m_welcomeDone = welcomeDone;
+        emit welcomeDoneChanged();
+        QSettings settings;
+        settings.setValue(WELCOME_DONE_KEY, welcomeDone);
+    }
+}

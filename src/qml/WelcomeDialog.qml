@@ -31,75 +31,51 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.friends 1.0
-import harbour.friends.social 1.0
 
-ApplicationWindow {
-    id: app
-    cover: Qt.resolvedUrl("CoverPage.qml")
+Dialog {
+    SilicaFlickable {
+        anchors.fill: parent
 
-    MenuPage {
-        id: menuPage
-    }
-
-    TokenManager {
-        id: tokenManager
-    }
-
-    SettingsManager {
-        id: settingsManager
-    }
-
-    Facebook {
-        id: facebook
-        accessToken: tokenManager.token
-        onAccessTokenChanged: {
-            if (accessToken.length > 0) {
-                me.loadMe()
+        Column {
+            anchors.fill: parent
+            spacing: Theme.paddingLarge
+            DialogHeader {
+                cancelText: qsTr("Close")
+                acceptText: qsTr("Close")
             }
-        }
-    }
 
-    FacebookUser {
-        id: me
-        property bool loaded: false
-        function loadMe() {
-            if (status == SocialNetwork.Idle && !loaded) {
-                load()
-                loaded = true
+            Image {
+                anchors.horizontalCenter: parent.horizontalCenter
+                source: "../data/logo.png"
             }
-        }
 
-        socialNetwork: facebook
-        filter: FacebookItemFilter {
-            identifier: "me"
-            fields: "name,first_name,cover"
-        }
-
-        onStatusChanged: {
-            loadMe()
-        }
-    }
-
-    Component {
-        id: loginDialogComponent
-        LoginDialog {
-            onConnected: {
-                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
-                page.load()
+            Label {
+                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                text: qsTr("Friends is a nice Facebook client, with awesome features like \
+the global menu that can be accessed by flicking from the right. It is still incomplete but you \
+can already enjoy browsing news feed and photos.")
+                wrapMode: Text.WordWrap
+                font.pixelSize: Theme.fontSizeSmall
             }
+
+            Label {
+                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                text: qsTr("Please consider a donation to keep Friends free and open-source.")
+                wrapMode: Text.WordWrap
+                font.pixelSize: Theme.fontSizeSmall
+            }
+
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                text: qsTr("Donate")
+                onClicked: Qt.openUrlExternally(PAYPAL_DONATE)
+            }
+
         }
+
     }
 
-    Component.onCompleted: {
-        if (tokenManager.token.length > 0) {
-            var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
-            page.load()
 
-        } else {
-            pageStack.push(loginDialogComponent)
-        }
-    }
 }
-
-

@@ -41,6 +41,12 @@ Page {
         model.load()
     }
 
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            pageStack.pushAttached(menuPage)
+        }
+    }
+
     property string identifier
     property Component headerComponent
     property var headerProperties
@@ -61,16 +67,23 @@ Page {
         anchors.fill: parent
         model: model
         spacing: Theme.paddingLarge
-        header: Item {
-            id: header
-            property Item object
+        header: Column {
             width: view.width
-            height: childrenRect.height
-
-            Component.onCompleted: {
-                header.object = container.headerComponent.createObject(header, headerProperties)
+            PageHeader {
+                title: qsTr("Comments")
             }
-            Component.onDestruction: object.destroy()
+
+            Item {
+                id: header
+                property Item object
+                width: parent.width
+                height: childrenRect.height
+
+                Component.onCompleted: {
+                    header.object = container.headerComponent.createObject(header, headerProperties)
+                }
+                Component.onDestruction: object.destroy()
+            }
         }
         footer: Item {
             id: footer
