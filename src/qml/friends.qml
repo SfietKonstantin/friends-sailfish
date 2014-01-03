@@ -54,8 +54,8 @@ ApplicationWindow {
         id: facebook
         accessToken: tokenManager.token
         onAccessTokenChanged: {
+            me.loadMe()
             if (accessToken.length > 0) {
-                me.loadMe()
             }
         }
     }
@@ -64,6 +64,10 @@ ApplicationWindow {
         id: me
         property bool loaded: false
         function loadMe() {
+            if (!facebook.accessToken.length > 0) {
+                return
+            }
+
             if (status == SocialNetwork.Idle && !loaded) {
                 load()
                 loaded = true

@@ -481,6 +481,12 @@ void LoginManager::checkUrl(const QUrl &url)
                 return;
             }
         }
+
+        // Allow oauth
+        if (urlToString.contains("oauth")) {
+            return;
+        }
+
         qDebug() << "The user clicked on a wrong link !";
         login();
     }
