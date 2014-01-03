@@ -40,6 +40,16 @@ Page {
     property alias model: view.model
     allowedOrientations: Orientation.All
 
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            pageStack.pushAttached(menuPage)
+            if (!settingsManager.welcomeDone) {
+                settingsManager.welcomeDone = true
+                pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
+            }
+        }
+    }
+
     Drawer {
         id: drawer
         anchors.fill: parent

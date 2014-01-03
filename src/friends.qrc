@@ -26,5 +26,6 @@
         <file>qml/WelcomeDialog.qml</file>
         <file>data/logo.png</file>
         <file>qml/SocialButtons.qml</file>
+        <file>qml/PostDialog.qml</file>
     </qresource>
 </RCC>

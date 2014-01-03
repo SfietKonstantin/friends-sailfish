@@ -33,6 +33,7 @@ static const char *QUERY_PAGEID_KEY = "page_id";
 static const char *QUERY_GID_KEY = "gid";
 static const char *QUERY_EID_KEY = "eid";
 
+static const char *FIRST_TIMESTAMP_KEY = "first_timestamp";
 static const char *LAST_TIMESTAMP_KEY = "last_timestamp";
 
 static const char *WALL_WHERE = "WHERE filter_key in "
@@ -131,13 +132,20 @@ bool NewsFeedFilterInterface::performLoadRequestImpl(QObject *item,
 
     QMap<QString, QString> arguments;
     QString query (QUERY);
-    if (model->extraData().contains(LAST_TIMESTAMP_KEY)) {
-        QString lastTimestamp = model->extraData().value(LAST_TIMESTAMP_KEY).toString();
-        query = query.arg(where, QString("AND created_time < %1").arg(lastTimestamp));
-    } else {
-        query = query.arg(where, QString());
-    }
+    QString firstTimestamp = model->extraData().value(FIRST_TIMESTAMP_KEY).toString();
+    QString lastTimestamp = model->extraData().value(LAST_TIMESTAMP_KEY).toString();
 
+    switch (loadType) {
+    case FilterInterface::Load:
+        query = query.arg(where, QString());
+        break;
+    case FilterInterface::LoadNext:
+        query = query.arg(where, QString("AND created_time < %1").arg(lastTimestamp));
+        break;
+    case FilterInterface::LoadPrevious:
+        query = query.arg(where, QString("AND created_time > %1").arg(firstTimestamp));
+        break;
+    }
     arguments.insert("q", query);
 
     QObject *handle = facebook->get(this, QLatin1String("fql"), QString(), QString(), arguments);
@@ -229,8 +237,12 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
     QList<ContentItemInterface *> modelData;
 
+    uint firstTimestamp = 0;
     uint lastTimestamp = 0;
     if (!postObjects.isEmpty()) {
+        QVariantMap first = postObjects.first();
+        firstTimestamp = first.value("created_time").toUInt();
+
         QVariantMap last = postObjects.last();
         lastTimestamp = last.value("created_time").toUInt();
     }
@@ -445,10 +457,9 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
     }
 
 
-    QVariantMap extraData;
-    if (lastTimestamp > 0) {
-        extraData.insert(LAST_TIMESTAMP_KEY, lastTimestamp);
-    }
+    // We update only the correct timestamps
+    uint oldFirstTimestamp = model->extraData().value(FIRST_TIMESTAMP_KEY, 0).toUInt();
+    uint oldLastTimestamp = model->extraData().value(LAST_TIMESTAMP_KEY, 0).toUInt();
 
     // Populate model depending on the type of load
     switch (loadType) {
@@ -456,17 +467,29 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         model->setModelData(modelData);
         break;
     case FilterInterface::LoadPrevious:
+        if (firstTimestamp == 0) {
+            firstTimestamp = oldFirstTimestamp;
+        }
+        lastTimestamp = oldLastTimestamp;
         model->prependModelData(modelData);
         break;
     case FilterInterface::LoadNext:
+        if (lastTimestamp == 0) {
+            lastTimestamp = oldLastTimestamp;
+        }
+        firstTimestamp = oldFirstTimestamp;
         model->appendModelData(modelData);
         break;
     default:
         break;
     }
 
+    QVariantMap extraData;
+    extraData.insert(FIRST_TIMESTAMP_KEY, firstTimestamp);
+    extraData.insert(LAST_TIMESTAMP_KEY, lastTimestamp);
 
-    model->setPagination(false, lastTimestamp > 0 ? true : false);
+
+    model->setPagination(true, lastTimestamp > 0 ? true : false);
     model->setExtraData(extraData);
 
     return true;

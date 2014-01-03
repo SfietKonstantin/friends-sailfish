@@ -62,6 +62,7 @@ Page {
     FacebookUser {
         id: user
         socialNetwork: facebook
+        onErrorMessageChanged: console.debug("Error: " + errorMessage)
         filter: FacebookItemFilter {
             identifier: container.identifier
             fields: "name,first_name,cover"
@@ -243,6 +244,11 @@ Page {
                 text: user.identifier == me.identifier ? qsTr("Personnal informations")
                                                        : qsTr("About %1").arg(user.firstName)
                 enabled: false
+            }
+
+            MenuItem {
+                text: qsTr("Refresh")
+                onClicked: model.loadPrevious()
             }
         }
     }

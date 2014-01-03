@@ -85,8 +85,16 @@ QObject * PostHelper::post() const
 void PostHelper::setPost(QObject *post)
 {
     if (m_post != post) {
+        if (m_post) {
+            m_post->disconnect(this);
+        }
+
         m_post = post;
         emit postChanged();
+
+        connect(m_post, SIGNAL(likesCountChanged()), this, SLOT(createPost()));
+        connect(m_post, SIGNAL(commentsCountChanged()), this, SLOT(createPost()));
+
         createPost();
     }
 }

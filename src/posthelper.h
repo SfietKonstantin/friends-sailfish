@@ -102,8 +102,9 @@ signals:
     void descriptionChanged();
 protected:
     bool event(QEvent *e);
-private:
+private slots:
     void createPost();
+private:
     void performPostCreation();
     void performHeaderAndMessageCreation();
     static QString elideText(const QString &text, int count);

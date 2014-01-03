@@ -79,6 +79,7 @@ Page {
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
+            onErrorMessageChanged: console.debug("Error: " + errorMessage)
             filter: NewsFeedFilter {
                 type: NewsFeedFilter.Home
             }
@@ -114,6 +115,19 @@ Page {
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
             text: qsTr("No news")
+        }
+
+        PullDownMenu {
+            MenuItem {
+                enabled: false
+                text: qsTr("Post something")
+                // onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
+            }
+
+            MenuItem {
+                text: qsTr("Refresh")
+                onClicked: model.loadPrevious()
+            }
         }
     }
 

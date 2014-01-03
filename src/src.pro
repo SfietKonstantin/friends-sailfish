@@ -50,7 +50,8 @@ OTHER_FILES += qml/friends.qml \
     qml/CommentsPage.qml \
     qml/PostCommentHeaderComponent.qml \
     qml/WelcomeDialog.qml \
-    qml/SocialButtons.qml
+    qml/SocialButtons.qml \
+    qml/PostDialog.qml
 
 target.path = $$TARGETPATH
 

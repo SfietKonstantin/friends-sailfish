@@ -71,7 +71,7 @@ Page {
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Theme.fontSizeSmall
                 text: qsTr("Friends is a simple and elegant Facebook client for Sailfish OS.\
-It is an Open Source software, meaning that it can me modified and enhanced by \
+It is an Open Source software, meaning that it can be modified and enhanced by \
 anybody. If you like Friends, please consider a donation. It will help maintaining the software, \
 and keeping it status of Open Source software.")
             }

@@ -60,6 +60,7 @@ Page {
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
+            onErrorMessageChanged: console.debug("Error: " + errorMessage)
             filter: FacebookRelatedDataFilter {
                 identifier: container.identifier
                 connection: Facebook.Albums
