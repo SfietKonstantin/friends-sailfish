@@ -33,5 +33,27 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
+    id: container
+    onAccepted: {
+        me.uploadPost(message.text.trim())
+    }
 
+    SilicaFlickable {
+        anchors.fill: parent
+        Column {
+            anchors.left: parent.left; anchors.right: parent.right
+            DialogHeader {
+                acceptText: qsTr("Post")
+                cancelText: qsTr("Cancel")
+            }
+
+            TextArea {
+                id: message
+                label: qsTr("Message")
+                placeholderText: qsTr("Message")
+                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+            }
+        }
+    }
 }

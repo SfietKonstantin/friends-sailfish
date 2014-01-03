@@ -119,9 +119,27 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                enabled: false
+                id: postMenu
+                property bool loading: false
+                function posted() {
+                    loading = true
+                }
+
                 text: qsTr("Post something")
-                // onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
+                onClicked: {
+                    var dialog = pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
+                    dialog.accepted.connect(posted)
+                }
+
+                Connections {
+                    target: me
+                    onActionStatusChanged: {
+                        if (me.actionStatus == SocialNetwork.Idle && postMenu.loading) {
+                            postMenu.loading = false
+                            model.loadPrevious()
+                        }
+                    }
+                }
             }
 
             MenuItem {
