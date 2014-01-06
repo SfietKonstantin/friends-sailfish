@@ -49,9 +49,7 @@ Page {
     }
 
     StateIndicator {
-        busy: model.status == SocialNetwork.Busy && model.count == 0
-        error: model.status == SocialNetwork.Error && model.count == 0
-        onReload: container.load()
+        model: model
     }
 
     SilicaListView {
@@ -60,7 +58,6 @@ Page {
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            onErrorMessageChanged: console.debug("Error: " + errorMessage)
             filter: FacebookRelatedDataFilter {
                 identifier: container.identifier
                 connection: Facebook.Albums

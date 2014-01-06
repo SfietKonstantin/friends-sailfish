@@ -161,9 +161,14 @@ Item {
                 Repeater {
                     model: post.media
                     delegate: FacebookImage {
+                        id: delegate
                         function checkSize() {
-                            if (sourceSize.width < width / 3 || sourceSize.height < height / 3) {
-                                if (post.media.length <= 1) {
+                            if (status != Image.Ready) {
+                                return
+                            }
+
+                            if (post.media.length <= 1) {
+                                if (sourceSize.width < column.width / 2 || sourceSize.height < column.width / 3) {
                                     imagesContainer.small = true
                                 }
                             }
@@ -173,6 +178,11 @@ Item {
                         onSourceSizeChanged: checkSize()
                         width: imagesContainer.cellWidth
                         height: imagesContainer.cellHeight
+
+                        Connections {
+                            target: column
+                            onWidthChanged: delegate.checkSize()
+                        }
                     }
                 }
             }

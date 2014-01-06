@@ -31,6 +31,10 @@
 
 #include "tokenmanager.h"
 #include <QtCore/QSettings>
+#include <QtCore/QDebug>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QDir>
+#include <QtCore/QCoreApplication>
 
 static const char *TOKEN_KEY = "login/token";
 
@@ -44,6 +48,25 @@ TokenManager::TokenManager(QObject *parent) :
 QString TokenManager::token() const
 {
     return m_token;
+}
+
+void TokenManager::disconnect()
+{
+    setToken(QString());
+
+    // We need to remove the cache
+    QString sharePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+    if (!sharePath.contains(QCoreApplication::instance()->applicationName())) {
+        return;
+    }
+
+    if (!sharePath.contains(QCoreApplication::instance()->organizationName())) {
+        return;
+    }
+
+    QDir dataDir (sharePath);
+    dataDir.removeRecursively();
+
 }
 
 void TokenManager::setToken(const QString &token)

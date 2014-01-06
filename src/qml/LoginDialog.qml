@@ -36,7 +36,7 @@ import harbour.friends 1.0
 Dialog {
     id: container
     onRejected: Qt.quit()
-    onAccepted: Qt.quit()
+    canAccept: false
     signal connected()
 
     DialogHeader {

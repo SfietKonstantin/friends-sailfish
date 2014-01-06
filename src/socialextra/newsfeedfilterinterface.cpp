@@ -163,7 +163,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
     if (!ok || !parsed.contains(QUERY_DATA_KEY)) {
         QString errorMessage = QString(QLatin1String("Unable to parse downloaded data. "\
                                                      "Downloaded data: %1")).arg(QString(data));
-        model->setError(SocialNetworkInterface::DataUpdateError, errorMessage);
+        model->setError(SocialNetworkInterface::DataError, errorMessage);
         return false;
     }
 

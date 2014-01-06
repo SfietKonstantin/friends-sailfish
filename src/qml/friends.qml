@@ -38,6 +38,11 @@ ApplicationWindow {
     id: app
     cover: Qt.resolvedUrl("CoverPage.qml")
 
+    function performLogin() {
+        me.loaded = false
+        pageStack.push(loginDialogComponent)
+    }
+
     MenuPage {
         id: menuPage
     }
@@ -55,8 +60,6 @@ ApplicationWindow {
         accessToken: tokenManager.token
         onAccessTokenChanged: {
             me.loadMe()
-            if (accessToken.length > 0) {
-            }
         }
     }
 
@@ -68,12 +71,12 @@ ApplicationWindow {
                 return
             }
 
-            if (status == SocialNetwork.Idle && !loaded) {
+            if ((status == SocialNetwork.Idle || status == SocialNetwork.Error) && !loaded) {
                 load()
                 loaded = true
             }
         }
-        onErrorMessageChanged: console.debug("Error: " + errorMessage)
+        onErrorMessageChanged: console.debug("==== Error ====\n" + errorMessage + "\n===============")
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: "me"
@@ -89,7 +92,8 @@ ApplicationWindow {
         id: loginDialogComponent
         LoginDialog {
             onConnected: {
-                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
+                pageStack.clear()
+                var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
                 page.load()
             }
         }
@@ -101,7 +105,7 @@ ApplicationWindow {
             page.load()
 
         } else {
-            pageStack.push(loginDialogComponent)
+            app.performLogin()
         }
     }
 }

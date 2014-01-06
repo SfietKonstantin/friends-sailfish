@@ -35,9 +35,7 @@ import harbour.friends.social 1.0
 
 Page {
     StateIndicator {
-        busy: me.status == SocialNetwork.Busy
-        error: me.status == SocialNetwork.Error
-        onReload: me.load()
+        item: me
     }
 
     SilicaListView {
@@ -111,6 +109,14 @@ Page {
 
         PullDownMenu {
             z: 1000
+            MenuItem {
+                text: qsTr("Logout")
+                onClicked: {
+                    tokenManager.disconnect()
+                    app.performLogin()
+                }
+            }
+
             MenuItem {
                 text: qsTr("About Friends")
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))

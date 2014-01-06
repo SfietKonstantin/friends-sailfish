@@ -58,9 +58,8 @@ Page {
     }
 
     StateIndicator {
-        busy: (!view.ready || model.status == SocialNetwork.Busy) && model.count == 0
-        error: model.status == SocialNetwork.Error
-        onReload: container.load()
+        busy: !view.ready
+        model: model
     }
 
     SilicaListView {
@@ -79,7 +78,6 @@ Page {
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            onErrorMessageChanged: console.debug("Error: " + errorMessage)
             filter: NewsFeedFilter {
                 type: NewsFeedFilter.Home
             }

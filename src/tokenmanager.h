@@ -43,6 +43,7 @@ public:
     QString token() const;
 public slots:
     void setToken(const QString &token);
+    void disconnect();
 signals:
     void tokenChanged();
 private:

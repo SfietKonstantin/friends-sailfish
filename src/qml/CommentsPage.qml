@@ -55,7 +55,6 @@ Page {
     SocialNetworkModel {
         id: model
         signal performFocusCommentField()
-        onErrorMessageChanged: console.debug("Error: " + errorMessage)
 
         socialNetwork: facebook
         filter: FacebookRelatedDataFilter {
@@ -66,9 +65,7 @@ Page {
     }
 
     StateIndicator {
-        busy: model.status == SocialNetwork.Busy && model.count == 0
-        error: model.status == SocialNetwork.Error && model.count == 0
-        onReload: container.load()
+        model: model
     }
 
     SilicaListView {

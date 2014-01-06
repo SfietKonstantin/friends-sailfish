@@ -58,7 +58,6 @@ Page {
     FacebookAlbum {
         id: album
         socialNetwork: facebook
-        onErrorMessageChanged: console.debug("Error: " + errorMessage)
         filter: FacebookItemFilter {
             identifier: container.identifier
             fields: "id,name,description,likes,comments,updated_time"
@@ -95,9 +94,8 @@ Page {
         foreground: Item {
             anchors.fill: parent
             StateIndicator {
-                busy: model.status == SocialNetwork.Busy && model.count == 0
-                error: model.status == SocialNetwork.Error && model.count == 0
-                onReload: container.load()
+                item: album
+                model: model
             }
 
             SilicaGridView {
@@ -110,7 +108,6 @@ Page {
                 model: SocialNetworkModel {
                     id: model
                     socialNetwork: facebook
-                    onErrorMessageChanged: console.debug("Error: " + errorMessage)
                     filter: FacebookRelatedDataFilter {
                         identifier: container.identifier
                         connection: Facebook.Photos

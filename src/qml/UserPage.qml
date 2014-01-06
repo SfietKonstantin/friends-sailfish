@@ -54,15 +54,13 @@ Page {
     }
 
     StateIndicator {
-        busy: (user.status == SocialNetwork.Busy || model.status == SocialNetwork.Busy) && model.count == 0
-        error: (user.status == SocialNetwork.Error || model.status == SocialNetwork.Error) && model.count == 0
-        onReload: container.load()
+        model: model
+        item: user
     }
 
     FacebookUser {
         id: user
         socialNetwork: facebook
-        onErrorMessageChanged: console.debug("Error: " + errorMessage)
         filter: FacebookItemFilter {
             identifier: container.identifier
             fields: "name,first_name,cover"
