@@ -239,7 +239,7 @@ Page {
             }
 
             MenuItem {
-                text: user.identifier == me.identifier ? qsTr("Personnal informations")
+                text: user.identifier == me.identifier ? qsTr("Personal information")
                                                        : qsTr("About %1").arg(user.firstName)
                 enabled: false
             }

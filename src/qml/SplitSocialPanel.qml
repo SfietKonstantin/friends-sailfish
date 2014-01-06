@@ -32,10 +32,10 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
+import harbour.friends.social 1.0
 
 Rectangle {
     id: container
-    property bool loading: true
     property variant item
     property alias description: description.text
     signal showComments()
@@ -43,6 +43,9 @@ Rectangle {
     color: Theme.rgba(Theme.highlightBackgroundColor, 0.1)
 
     Column {
+        id: column
+        property bool loading: container.item.status != SocialNetwork.Idle
+                               || container.item.actionStatus != SocialNetwork.Idle
         anchors.left: parent.left; anchors.right: parent.right
         spacing: Theme.paddingMedium
 
@@ -53,13 +56,13 @@ Rectangle {
             anchors.rightMargin: Theme.paddingLarge
 
             Image {
-                opacity: container.loading ? 0.5 : 1
+                opacity: column.loading ? 0.5 : 1
                 source: "image://theme/icon-s-like" + "?" + Theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             Label {
-                opacity: container.loading ? 0.5 : 1
+                opacity: column.loading ? 0.5 : 1
                 color: Theme.highlightColor
                 text: item === null ? "" : item.likesCount
                 anchors.verticalCenter: parent.verticalCenter
@@ -67,13 +70,13 @@ Rectangle {
             }
 
             Image {
-                opacity: container.loading ? 0.5 : 1
+                opacity: column.loading ? 0.5 : 1
                 source: "image://theme/icon-s-chat" + "?" + Theme.highlightColor
                 anchors.verticalCenter: parent.verticalCenter
             }
 
             Label {
-                opacity: container.loading ? 0.5 : 1
+                opacity: column.loading ? 0.5 : 1
                 color: Theme.highlightColor
                 text: item === null ? "" : item.commentsCount
                 anchors.verticalCenter: parent.verticalCenter
@@ -103,7 +106,6 @@ Rectangle {
     SocialButtons {
         anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
         item: container.item
-        loading: container.loading
         onShowComments: container.showComments()
     }
 }

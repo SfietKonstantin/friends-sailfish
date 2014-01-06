@@ -58,7 +58,6 @@ Page {
         background: SplitSocialPanel {
             item: model.relatedItem(view.currentIndex)
             description: item.name
-            loading: item.status != SocialNetwork.Idle || item.actionStatus != SocialNetwork.Idle
             onShowComments: {
                 var headerProperties = {"identifier": item.identifier,
                                         "photo": item}

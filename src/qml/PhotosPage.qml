@@ -76,8 +76,6 @@ Page {
         anchors.fill: parent
         dock: container.orientation == Orientation.Portrait ? Dock.Bottom: Dock.Left
         background: SplitSocialPanel {
-            loading: album.status != SocialNetwork.Idle
-                     || album.actionStatus != SocialNetwork.Idle
             item: album
             description: album.description
             onShowComments: {

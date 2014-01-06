@@ -111,7 +111,7 @@ Item {
                 case "reload_internet":
                     return qsTr("Something wrong happened. Check your Internet connection and try again.")
                 case "reload_facebook":
-                    return qsTr("Facebook has returned an error code. The operation might not be permitted.")
+                    return qsTr("Facebook has returned an error. The operation might not be permitted.")
                 case "reconnect":
                     return qsTr("Session expired. Please reconnect to Facebook.")
                 case "bad":

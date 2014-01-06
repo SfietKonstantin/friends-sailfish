@@ -31,19 +31,26 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.friends.social 1.0
 
 Item {
     id: container
     property var item
-    property bool loading: false
     signal showComments()
     anchors.left: parent.left; anchors.right: parent.right
     height: childrenRect.height
 
+    QtObject {
+        id: privateObject
+        property bool loading: container.item.status != SocialNetwork.Idle
+                               || container.item.actionStatus != SocialNetwork.Idle
+    }
+
+
     BackgroundItem {
         id: likeItem
-        opacity: container.loading ? 0.5 : 1
-        enabled: !container.loading
+        opacity: privateObject.loading ? 0.5 : 1
+        enabled: !privateObject.loading
         Behavior on opacity { FadeAnimation {} }
 
         anchors.left: parent.left; anchors.right: parent.horizontalCenter
@@ -76,8 +83,8 @@ Item {
 
     BackgroundItem {
         id: commentItem
-        opacity: container.loading ? 0.5 : 1
-        enabled: !container.loading
+        opacity: privateObject.loading ? 0.5 : 1
+        enabled: !privateObject.loading
         Behavior on opacity { FadeAnimation {} }
 
         anchors.left: parent.horizontalCenter; anchors.right: parent.right
