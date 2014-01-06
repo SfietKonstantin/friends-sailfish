@@ -71,11 +71,20 @@ Page {
             }
         }
 
-        foreground: SlideshowView {
+        foreground: ListView {
             id: view
             property int imageSize: Math.max(Screen.width, Screen.height)
             anchors.fill: parent
             interactive: model.count > 1
+            orientation: Qt.Horizontal
+            highlightRangeMode: ListView.StrictlyEnforceRange
+            snapMode: ListView.SnapOneItem
+            onAtXEndChanged: {
+                if (atXEnd && view.model.hasNext) {
+                    view.model.loadNext()
+                }
+            }
+
             delegate: Item {
                 width: view.width
                 height: view.height

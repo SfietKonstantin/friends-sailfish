@@ -52,7 +52,6 @@ Item {
         contentHeight: height
 
         ViewPlaceholder {
-            anchors.centerIn: parent
             enabled: container.error
             text: qsTr("Something wrong happened. Check your Internet connection and try again")
         }

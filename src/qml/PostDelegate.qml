@@ -131,7 +131,8 @@ Item {
                                                              : grid.width / 3
             property bool small: false
 
-            anchors.left: parent.left; anchors.right: parent.right
+            anchors.left: parent.left
+            width: !(small && !attachment.visible) ? parent.width : grid.width + 2 * Theme.paddingMedium
             color: !imagesContainerMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
                                                      : Theme.rgba(Theme.highlightBackgroundColor,
                                                                   Theme.highlightBackgroundOpacity)

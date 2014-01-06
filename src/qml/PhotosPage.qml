@@ -165,7 +165,7 @@ Page {
 
                 ViewPlaceholder {
                     enabled: model.status == SocialNetwork.Idle && model.count == 0
-                    text: qsTr("No pictures")
+                    text: qsTr("No photos")
                 }
 
                 PullDownMenu {

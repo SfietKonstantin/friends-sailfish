@@ -203,5 +203,16 @@ Page {
         }
 
         ScrollDecorator {}
+
+        PullDownMenu {
+            MenuItem {
+                text: qsTr("Show likes")
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("LikesPage.qml"),
+                                              {"identifier": container.identifier})
+                    page.load()
+                }
+            }
+        }
     }
 }
