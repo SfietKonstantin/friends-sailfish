@@ -126,31 +126,63 @@ Item {
             }
 
             visible: post.media.length > 0
-            property real cellSize: post.media.length <= 1 ? width : width / 3
+            property real cellWidth: post.media.length <= 1 ? grid.width : grid.width / 3
+            property real cellHeight: post.media.length <= 1 ? grid.width * (small ? 1 : 2 / 3)
+                                                             : grid.width / 3
+            property bool small: false
+
             anchors.left: parent.left; anchors.right: parent.right
-            color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
-            height: grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
+            color: !imagesContainerMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+                                                     : Theme.rgba(Theme.highlightBackgroundColor,
+                                                                  Theme.highlightBackgroundOpacity)
+            height: !small ? grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
+                           : Math.max(grid.height, attachment.height) + 2 * Theme.paddingMedium
+
+            MouseArea {
+                id: imagesContainerMouseArea
+                enabled: post.source != ""
+                anchors.fill: parent
+                onClicked: {
+                    Qt.openUrlExternally(post.source)
+                }
+            }
+
 
             Grid {
                 id: grid
                 columns: post.media.length <= 1 ? 1 : 3
                 rows: post.media.length <= 1 ? 1 : 2
-                anchors.left: parent.left; anchors.right: parent.right
+                anchors.left: parent.left
+                anchors.leftMargin: !imagesContainer.small ? 0 : Theme.paddingMedium
+                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
+                width: !imagesContainer.small ? imagesContainer.width : Theme.iconSizeLarge
+
                 Repeater {
                     model: post.media
                     delegate: FacebookImage {
+                        function checkSize() {
+                            if (sourceSize.width < width / 3 || sourceSize.height < height / 3) {
+                                if (post.media.length <= 1) {
+                                    imagesContainer.small = true
+                                }
+                            }
+                        }
+
                         url: modelData
-                        width: imagesContainer.cellSize
-                        height: post.media.length <= 1 ? 2 / 3 * imagesContainer.cellSize
-                                                       : imagesContainer.cellSize
+                        onSourceSizeChanged: checkSize()
+                        width: imagesContainer.cellWidth
+                        height: imagesContainer.cellHeight
                     }
                 }
             }
 
             Column {
                 id: attachment
-                anchors.top: grid.bottom; anchors.topMargin: Theme.paddingMedium
-                anchors.left: parent.left; anchors.right: parent.right
+                anchors.top: !imagesContainer.small ? grid.bottom : undefined
+                anchors.topMargin: !imagesContainer.small ? Theme.paddingMedium : 0
+                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
+                anchors.left: !imagesContainer.small ? parent.left : grid.right
+                anchors.right: parent.right
                 spacing: Theme.paddingSmall
                 visible: post.name.length > 0 || post.caption.length > 0 || post.description.length > 0
                 Label {

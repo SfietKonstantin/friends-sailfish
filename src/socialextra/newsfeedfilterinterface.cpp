@@ -274,6 +274,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
 
         bool hasMedia = false;
         bool isVideo = false;
+
         QStringList mediaList;
         // If media was provided, we need to ensure that it's valid, else discard the post.
         if (attachment.keys().contains("media") && !attachment.value("media").isNull()) {
@@ -328,6 +329,11 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         // Discard stories without attachments
         if (!hasMedia && !story.isEmpty() && message.isEmpty()) {
             continue;
+        }
+
+        QUrl source;
+        if (attachment.contains("href")) {
+            source = attachment.value("href").toUrl();
         }
 
         QVariantMap postData;
@@ -386,6 +392,13 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         // Story
         postData.insert(FACEBOOK_ONTOLOGY_POST_DESCRIPTION, attachmentDescription);
 
+        // Source
+        if (!source.host().contains("facebook.com")) {
+            postData.insert(FACEBOOK_ONTOLOGY_POST_SOURCE, source);
+        } else {
+            // TODO: maybe link inside Friends
+            postData.insert(FACEBOOK_ONTOLOGY_POST_SOURCE, QUrl());
+        }
         // Source is not used so we don't set it.
         // Properties is not used so we don't set it.
         // Icon is not used so we don't set it.
