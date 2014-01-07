@@ -88,12 +88,11 @@ Rectangle {
             id: description
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-            wrapMode: Text.WordWrap
+            wrapMode: Text.Wrap
             visible: text.length > 0
         }
 
         Label {
-
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             wrapMode: Text.WordWrap

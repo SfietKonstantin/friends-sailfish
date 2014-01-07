@@ -112,7 +112,7 @@ Item {
         Label {
             anchors.left: parent.left; anchors.right: parent.right
             text: helper.message
-            wrapMode: Text.WordWrap
+            wrapMode: Text.Wrap
             font.pixelSize: Theme.fontSizeSmall
         }
 

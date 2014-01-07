@@ -106,7 +106,7 @@ DateHelper::DateHelper(QObject *parent)
 
 QDateTime DateHelper::fromString(const QString &date)
 {
-    return QDateTime::fromString(date, Qt::ISODate);
+    return QDateTime::fromString(date, Qt::ISODate).toTimeSpec(Qt::LocalTime);
 }
 
 
