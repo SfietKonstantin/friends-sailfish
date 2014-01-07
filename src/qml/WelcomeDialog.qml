@@ -40,8 +40,10 @@ Dialog {
             anchors.fill: parent
             spacing: Theme.paddingLarge
             DialogHeader {
-                cancelText: qsTr("Close")
-                acceptText: qsTr("Close")
+                //: Action displayed in the welcome dialog. Used to close the dialog
+                //% "Close"
+                cancelText: qsTrId("friends_welcome_close")
+                acceptText: qsTrId("friends_welcome_close")
             }
 
             Image {
@@ -52,9 +54,9 @@ Dialog {
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                text: qsTr("Friends is a nice Facebook client, with awesome features like \
-the global menu that can be accessed by flicking from the right. It is still incomplete but you \
-can already enjoy browsing news feed and photos.")
+                //: A welcome message
+                //% "Friends is an elegant Facebook client. You can try the handy 'global menu' that can be accessed by flicking from the right. It is still incomplete though, and new features will be added little by little."
+                text: qsTrId("friends_welcome_description")
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
             }
@@ -62,14 +64,16 @@ can already enjoy browsing news feed and photos.")
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                text: qsTr("Please consider a donation to keep Friends free and open-source.")
+                //: A message for asking for donations
+                //% "Please consider a donation to keep Friends free and open-source."
+                text: qsTrId("friends_welcome_please_donate")
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
             }
 
             Button {
                 anchors.horizontalCenter: parent.horizontalCenter
-                text: qsTr("Donate")
+                text: qsTrId("friends_button_donate")
                 onClicked: Qt.openUrlExternally(PAYPAL_DONATE)
             }
 

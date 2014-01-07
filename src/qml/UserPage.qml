@@ -212,25 +212,31 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            text: qsTr("No posts")
+            //: Text shown on the placeholder, where there is no posts from an user to be displayed
+            //% "No posts"
+            text: qsTrId("friends_user_placeholder")
         }
 
         PullDownMenu {
             z: 1000
 
             MenuItem {
-                text: qsTr("Photos")
+                //: Action that shows the user's photos
+                //% "Photos"
+                text: qsTrId("friends_user_action_photos")
                 onClicked: {
                     var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
                                               {"identifier": user.identifier,
-                                               "name": qsTr("Photos of %1").arg(user.firstName),
+                                               "name": qsTrId("friends_photos_of_someone").arg(user.firstName),
                                                "isUserPhotos": true})
                     page.load()
                 }
             }
 
             MenuItem {
-                text: qsTr("Albums")
+                //: Action that shows the user's albums
+                //% "Albums"
+                text: qsTrId("friends_user_action_albums")
                 onClicked: {
                     var page = pageStack.push(Qt.resolvedUrl("AlbumsPage.qml"),
                                               {"identifier": user.identifier})
@@ -239,13 +245,17 @@ Page {
             }
 
             MenuItem {
-                text: user.identifier == me.identifier ? qsTr("Personal information")
-                                                       : qsTr("About %1").arg(user.firstName)
+                //: Action that shows the current user's personnal informations
+                //% "Personal information"
+                text: user.identifier == me.identifier ? qsTrId("friends_user_action_about_me")
+                 //: Action that shows the personnal informations of a given user. %1 contains the name of the user.
+                 //% "About %1"
+                                                       : qsTrId("friends_user_action_about").arg(user.firstName)
                 enabled: false
             }
 
             MenuItem {
-                text: qsTr("Refresh")
+                text: qsTrId("friends_action_refresh")
                 onClicked: model.loadPrevious()
             }
         }

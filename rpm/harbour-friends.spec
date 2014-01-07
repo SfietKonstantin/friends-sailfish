@@ -13,7 +13,7 @@ Name:       harbour-friends
 %{!?qtc_make:%define qtc_make make}
 %{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Friends
-Version:    0.1
+Version:    0.0.0
 Release:    1
 Group:      Qt/Qt
 License:    BSD
@@ -70,6 +70,7 @@ desktop-file-install --delete-original       \
 %{_datadir}/%{name}/lib
 %{_datadir}/%{name}/qml
 %{_datadir}/%{name}/data
+%{_datadir}/%{name}/translations
 %{_datadir}/applications/%{name}.desktop
 %{_datadir}/icons/hicolor/86x86/apps/%{name}.png
 # >> files

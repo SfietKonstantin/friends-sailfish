@@ -36,7 +36,6 @@ import harbour.friends.social.extra 1.0
 
 Page {
     id: container
-    property string identifier // Compatibility
     function load() {
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
@@ -72,7 +71,9 @@ Page {
         }
 
         header: PageHeader {
-            title: qsTr("Friends")
+            //: Title of the page showing the list of friends
+            //% "Friends"
+            title: qsTrId("friends_friends_title")
         }
 
         // BUG: not working: criteria FirstCharacter is not taken in account
@@ -118,7 +119,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            text: qsTr("No friends")
+            //: Text shown on the placeholder, where there is no friends to be displayed
+            //% "No Friends"
+            text: qsTrId("friends_friends_placeholder")
         }
     }
 }

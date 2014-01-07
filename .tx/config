@@ -1,0 +1,13 @@
+[main]
+host = https://www.transifex.com
+
+[friends.main]
+source_file = src/translations/friends.ts
+file_filter = src/translations/friends_<lang>.ts
+source_lang = en@lolcat
+type = QT
+
+[friends.launcher]
+source_file = src/translations/harbour-friends.desktop
+source_lang = en@lolcat
+type = DESKTOP

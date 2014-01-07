@@ -160,14 +160,18 @@ Page {
 
                 ViewPlaceholder {
                     enabled: model.status == SocialNetwork.Idle && model.count == 0
-                    text: qsTr("No photos")
+                    //: Text shown on the placeholder, where there is no photos to be displayed
+                    //% "No photos"
+                    text: qsTrId("friends_photos_placeholder")
                 }
 
                 PullDownMenu {
                     id: menu
                     visible: !container.isUserPhotos
                     MenuItem {
-                        text: qsTr("Album informations")
+                        //: Action that shows the album informations
+                        //% "Album informations"
+                        text: qsTrId("friends_photos_action_informations")
                         onClicked: !drawer.open ? drawer.show() : drawer.hide()
                     }
                 }

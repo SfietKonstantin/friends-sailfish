@@ -98,7 +98,9 @@ Rectangle {
             wrapMode: Text.WordWrap
             font.pixelSize: Theme.fontSizeSmall
             color: Theme.secondaryColor
-            text: qsTr("Last update %1").arg(Format.formatDate(DateHelper.fromString(item === null ? "" : item.updatedTime), Formatter.DurationElapsed))
+            //: Display a message about the last updated time. %1 will be replaced by the elapsed time, like "6 weeks ago"
+            //% "Last update %1"
+            text: qsTrId("friends_splitsocial_last_update").arg(Format.formatDate(DateHelper.fromString(item === null ? "" : item.updatedTime), Formatter.DurationElapsed))
         }
     }
 

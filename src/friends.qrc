@@ -28,5 +28,6 @@
         <file>qml/SocialButtons.qml</file>
         <file>qml/PostDialog.qml</file>
         <file>qml/LikesPage.qml</file>
+        <file>translations/friends-engineering-english.qm</file>
     </qresource>
 </RCC>

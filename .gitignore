@@ -1,0 +1,6 @@
+build
+install
+*.pro.user
+src/translations/*.qm
+src/translations/*.ts
+.tx/friends*

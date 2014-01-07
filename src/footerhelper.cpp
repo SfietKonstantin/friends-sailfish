@@ -38,5 +38,15 @@ FooterHelper::FooterHelper(QObject *parent) :
 
 QString FooterHelper::makeFooter(int likes, int comments)
 {
-    return tr("%1 and %2").arg(tr("%n likes", "", likes), tr("%n comments", "", comments));
+    //: Part of post footer, saying "<number> likes". %n is replaced by the number of likes.
+    //% "%n likes"
+    QString likesString = qtTrId("friends_footer_likes", likes);
+
+    //: Part of post footer, saying "<number> cpomments". %n is replaced by the number of comments.
+    //% "%n comments"
+    QString commentsString = qtTrId("friends_footer_comments", comments);
+
+    //: Link between the number of likes and the number of comments. %1 is replaced by the translated version of "<number> likes" and %2 by the translated version of "<number> comments".
+    //% "%1 and %2"
+    return qtTrId("friends_footer_and").arg(likesString, commentsString);
 }

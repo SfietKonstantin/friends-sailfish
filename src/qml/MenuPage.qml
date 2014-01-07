@@ -43,31 +43,45 @@ Page {
         visible: me.status == SocialNetwork.Idle
         model: ListModel {
             ListElement {
-                text: QT_TR_NOOP("Home")
+                //: Menu entry to show the Home page, with the user's news feed
+                //% "Home"
+                text: QT_TRID_NOOP("friends_menu_home")
                 page: "NewsPage.qml"
             }
             ListElement {
-                text: QT_TR_NOOP("Me")
+                //: Menu entry to show the "me" page, with the user's page
+                //% "Me"
+                text: QT_TRID_NOOP("friends_menu_me")
                 page: "UserPage.qml"
             }
             ListElement {
-                text: QT_TR_NOOP("Friends")
+                //: Menu entry to show the friends page, with the user's friends
+                //% "Friends"
+                text: QT_TRID_NOOP("friends_menu_friends")
                 page: "FriendsPage.qml"
             }
             ListElement {
-                text: QT_TR_NOOP("Albums")
+                //: Menu entry to show the albums page, with the user's albums
+                //% "Albums"
+                text: QT_TRID_NOOP("friends_menu_albums")
                 page: "AlbumsPage.qml"
             }
             ListElement {
-                text: QT_TR_NOOP("Photos")
+                //: Menu entry to show the photos page, with the photos where the user has been tagged.
+                //% "Photos"
+                text: QT_TRID_NOOP("friends_menu_photos")
                 page: "PhotosPage.qml"
             }
             ListElement {
-                text: QT_TR_NOOP("Events")
+                //: Menu entry to show the events page, with the events where the user is invited.
+                //% "Events"
+                text: QT_TRID_NOOP("friends_menu_events")
                 page: ""
             }
             ListElement {
-                text: QT_TR_NOOP("Messages")
+                //: Menu entry to show the messages page, where the user can chat.
+                //% "Messages"
+                text: QT_TRID_NOOP("friends_menu_messages")
                 page: ""
             }
         }
@@ -83,7 +97,7 @@ Page {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr(model.text)
+                text: qsTrId(model.text)
                 color: model.page != "" ? Theme.primaryColor : Theme.secondaryColor
             }
             onClicked: {
@@ -96,7 +110,9 @@ Page {
                 pageStack.clear()
                 var properties = {"identifier": facebook.currentUserIdentifier}
                 if (model.page = "PhotosPage.qml") {
-                    properties.name = qsTr("Photos of %1").arg(me.firstName)
+                    //: Specific title for the photos page, since it can display "Photos of someone" and the album's title. This title translates the "Photos of someone". %1 contains the name of the user who have the photos.
+                    //% "Photos of %1"
+                    properties.name = qsTrId("friends_photos_of_someone").arg(me.firstName)
                     properties.isUserPhotos = true
                 }
 
@@ -110,7 +126,9 @@ Page {
         PullDownMenu {
             z: 1000
             MenuItem {
-                text: qsTr("Logout")
+                //: Action that disconnects the user from Facebook
+                //% "Logout"
+                text: qsTrId("friends_menu_action_logout")
                 onClicked: {
                     tokenManager.disconnect()
                     app.performLogin()
@@ -118,7 +136,9 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("About Friends")
+                //: Action that shows the "About Friends" page
+                //% "About Friends"
+                text: qsTrId("friends_menu_action_about_friends")
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
         }

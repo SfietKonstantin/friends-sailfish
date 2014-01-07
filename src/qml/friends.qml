@@ -58,6 +58,9 @@ ApplicationWindow {
     Facebook {
         id: facebook
         accessToken: tokenManager.token
+        //: Set the locale that will be used for Facebook API. See http://www.facebook.com/translations/FacebookLocales.xml for a list of locales supported by Facebook
+        //% "en_US"
+        locale: qsTrId("friends_locale")
         onAccessTokenChanged: {
             me.loadMe()
         }

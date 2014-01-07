@@ -43,14 +43,20 @@ Dialog {
         Column {
             anchors.left: parent.left; anchors.right: parent.right
             DialogHeader {
-                acceptText: qsTr("Post")
-                cancelText: qsTr("Cancel")
+                //: Action displayed on the accept button for the post dialog. Clicking on this button will post something.
+                //% "Post"
+                acceptText: qsTrId("friends_post_post")
+                //: Action displayed on the cancel button for the post dialog.
+                //% "Cancel"
+                cancelText: qsTrId("friends_post_cancel")
             }
 
             TextArea {
                 id: message
-                label: qsTr("Message")
-                placeholderText: qsTr("Message")
+                //: Label for the message text field
+                //% "Message"
+                label: qsTrId("friends_post_message_label")
+                placeholderText: qsTrId("friends_post_message_label")
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             }

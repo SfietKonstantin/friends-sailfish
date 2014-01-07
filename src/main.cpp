@@ -229,13 +229,19 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     importSocialExtra();
 
     // Translations
-//    QScopedPointer<QTranslator> engineeringEnglish(new QTranslator);
-//    engineeringEnglish->load("friends_eng_en", "/usr/share/translations");
-//    QScopedPointer<QTranslator> translator(new QTranslator);
-//    translator->load(QLocale(), "friends", "-", "/usr/share/translations");
+    QScopedPointer<QTranslator> engineeringEnglish(new QTranslator);
+    QScopedPointer<QTranslator> translator(new QTranslator);
+#ifdef DESKTOP
+    QString translationPath = QLatin1String(":/translations/");
+#else
+    QString translationPath = QString(DEPLOYMENT_PATH) + QLatin1String("translations");
+#endif
+    engineeringEnglish->load("friends-engineering-english", translationPath);
+    translator->load(QLocale(), "friends", "_", translationPath);
 
-//    app->installTranslator(engineeringEnglish.data());
-//    app->installTranslator(translator.data());
+
+    app->installTranslator(engineeringEnglish.data());
+    app->installTranslator(translator.data());
 
     QString path = QString(DEPLOYMENT_PATH) + QLatin1String("qml/friends.qml");
 #ifdef DESKTOP
@@ -250,8 +256,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
 
     int result = app->exec();
-//    app->removeTranslator(translator.data());
-//    app->removeTranslator(engineeringEnglish.data());
+    app->removeTranslator(translator.data());
+    app->removeTranslator(engineeringEnglish.data());
     return result;
 }
 

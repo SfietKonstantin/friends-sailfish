@@ -109,13 +109,21 @@ Item {
             function getText() {
                 switch (flickable._errorRecoveryMode) {
                 case "reload_internet":
-                    return qsTr("Something wrong happened. Check your Internet connection and try again.")
+                    //: An error message that informs that there were a problem with the network. It should ask the user to try again.
+                    //% "Something wrong happened. Check your Internet connection and try again."
+                    return qsTrId("friends_error_network")
                 case "reload_facebook":
-                    return qsTr("Facebook has returned an error. The operation might not be permitted.")
+                    //: An error message that informs that there were a problem with Facebook. It might be an operation that Facebook prohibits. It might ask the user to try again.
+                    //% "Facebook has returned an error. The operation might not be permitted."
+                    return qsTrId("friends_error_facebook")
                 case "reconnect":
-                    return qsTr("Session expired. Please reconnect to Facebook.")
+                    //: An error message that informs that the session has expired, and ask the user to reconnect to Facebook.
+                    //% "Session expired. Please reconnect to Facebook."
+                    return qsTrId("friends_error_session")
                 case "bad":
-                    return qsTr("Something really bad happened. Please get in touch with the developer.")
+                    //: An error message that informs that something bad happened, and is not handled. It might ask the user to get in touch with the developer.
+                    //% "Something really bad happened. Please get in touch with the developer."
+                    return qsTrId("friends_error_unknown")
                 default:
                     return ""
                 }
@@ -130,11 +138,15 @@ Item {
         function getText() {
             switch (flickable._errorRecoveryMode) {
             case "reload_internet":
-                return qsTr("Retry")
+                //: A button that allows to retry to load data from Facebook, because of an Internet failure, or because Facebook sent an error.
+                //% "Retry"
+                return qsTrId("friends_button_retry")
             case "reload_facebook":
-                return qsTr("Retry")
+                return qsTrId("friends_button_retry")
             case "reconnect":
-                return qsTr("Reconnect")
+                //: A button that allows to reconnect (perform login again) to Facebook, because the current session expired.
+                //% "Reconnect"
+                return qsTrId("friends_button_reconnect")
             default:
                 return ""
             }

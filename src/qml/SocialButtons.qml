@@ -64,7 +64,12 @@ Item {
         }
 
         Label {
-            text: container.item === null ? "" : (container.item.liked ? qsTr("Unlike") : qsTr("Like"))
+            //: A button to cancel the Facebook "like"
+            //% "Unlike"
+            text: container.item === null ? "" : (container.item.liked ? qsTrId("friends_button_unlike")
+            //: A button to perform the Facebook "like"
+            //% "Like"
+                                                                       : qsTrId("friends_button_like"))
             anchors.left: likeIcon.right; anchors.leftMargin: Theme.paddingLarge
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
             anchors.verticalCenter: parent.verticalCenter
@@ -98,7 +103,9 @@ Item {
         }
 
         Label {
-            text: qsTr("Comment")
+            //: A button to show or perform a comment
+            //% "Comment"
+            text: qsTrId("friends_button_comment")
             anchors.left: commentsIcon.right; anchors.leftMargin: Theme.paddingLarge
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
             anchors.verticalCenter: parent.verticalCenter

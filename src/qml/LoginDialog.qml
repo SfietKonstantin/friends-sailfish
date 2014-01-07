@@ -41,8 +41,12 @@ Dialog {
 
     DialogHeader {
         id: header
-        cancelText: qsTr("Quit")
-        acceptText: qsTr("Ignore")
+        //: Action displayed on the cancel button for the login dialog
+        //% "Quit"
+        cancelText: qsTrId("friends_login_quit")
+        //: Action displayed on the accept button for the login dialog. This button is never active, and should display "Ignore". It cannot be triggered.
+        //% "Ignore"
+        acceptText: qsTrId("friends_login_ignore")
     }
 
     LoginManager {

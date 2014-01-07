@@ -66,7 +66,9 @@ Page {
         }
 
         header: PageHeader {
-            title: qsTr("Albums")
+            //: Title of the page showing the list of albums
+            //% "Albums"
+            title: qsTrId("friends_albums_title")
         }
 
         delegate: Item {
@@ -148,7 +150,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            text: qsTr("No albums")
+            //: Text shown on the placeholder, where there is no albums to be displayed
+            //% "No albums"
+            text: qsTrId("friends_album_placeholder")
         }
     }
 }

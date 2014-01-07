@@ -77,7 +77,9 @@ Page {
         header: Column {
             width: view.width
             PageHeader {
-                title: qsTr("Comments")
+                //: Title of the page showing the list of comments
+                //% "Comments"
+                title: qsTrId("friends_comments_title")
             }
 
             Item {
@@ -203,7 +205,9 @@ Page {
 
         PullDownMenu {
             MenuItem {
-                text: qsTr("Show likes")
+                //: Action that shows who liked a given item
+                //% "Show likes"
+                text: qsTrId("friends_comments_action_show_likes")
                 onClicked: {
                     var page = pageStack.push(Qt.resolvedUrl("LikesPage.qml"),
                                               {"identifier": container.identifier})

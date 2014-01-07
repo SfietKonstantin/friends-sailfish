@@ -87,7 +87,9 @@ Page {
         }
 
         header: PageHeader {
-            title: qsTr("Developers")
+            //: Title of the page showing the list of developers
+            //% "Developers"
+            title: qsTrId("friends_developers_title")
         }
 
         delegate: ListItem {
@@ -126,12 +128,16 @@ Page {
                 ContextMenu {
                     MenuItem {
                         visible: model.website != ""
-                        text: qsTr("%1's webpage").arg(model.name)
+                        //: A menu item that opens a developer's webpage. %1 will be replaced by the developer's name
+                        //% "%1's webpage"
+                        text: qsTrId("friends_developers_webpage").arg(model.name)
                         onClicked: Qt.openUrlExternally(model.website)
                     }
                     MenuItem {
                         visible: model.twitter != ""
-                        text: qsTr("%1's Twitter account").arg(model.name)
+                        //: A menu item that opens a developer's Twitter page. %1 will be replaced by the developer's name
+                        //% "%1's Twitter account"
+                        text: qsTrId("friends_developers_twitter").arg(model.name)
                         onClicked: Qt.openUrlExternally(model.twitter)
                     }
                 }

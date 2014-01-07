@@ -343,7 +343,9 @@ void PostHelper::performPostCreation()
         applicationName = get(application, "objectName").toString();
     }
     if (!applicationName.isEmpty()) {
-        via = tr("Via %1").arg(applicationName);
+        //: Translate the "via <appication> footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.
+        //% "Via %1"
+        via = qtTrId("friends_posthelper_via").arg(applicationName);
     }
     if (m_via != via) {
         m_via = via;

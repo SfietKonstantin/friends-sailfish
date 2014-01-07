@@ -83,7 +83,9 @@ Page {
             }
         }
         header: PageHeader {
-            title: qsTr("News")
+            //: Title of the page showing the news feed (or the Home feed)
+            //% "News"
+            title: qsTrId("friends_news_title")
         }
 
         delegate: PostDelegate {
@@ -112,7 +114,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            text: qsTr("No news")
+            //: Text shown on the placeholder, where there is no news to be displayed
+            //% "No news"
+            text: qsTrId("friends_news_placeholder")
         }
 
         PullDownMenu {
@@ -123,7 +127,9 @@ Page {
                     loading = true
                 }
 
-                text: qsTr("Post something")
+                //: Action that allows the user to post something
+                //% "Post something"
+                text: qsTrId("friends_news_action_post")
                 onClicked: {
                     var dialog = pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
                     dialog.accepted.connect(posted)
@@ -141,7 +147,9 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Refresh")
+                //: Action that allows to refresh a feed
+                //% "Refresh"
+                text: qsTrId("friends_action_refresh")
                 onClicked: model.loadPrevious()
             }
         }

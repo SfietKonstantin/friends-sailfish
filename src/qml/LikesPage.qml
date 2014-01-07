@@ -68,7 +68,9 @@ Page {
         model: model
         visible: model.status == SocialNetwork.Idle || model.count > 0
         header: PageHeader {
-            title: qsTr("Likes")
+            //: Title of the page showing the list of people who are liking an item
+            //% "Likes"
+            title: qsTrId("friends_likes_title")
         }
 
         delegate: BackgroundItem {
@@ -104,7 +106,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.count == 0
-            text: qsTr("No likes")
+            //: Text shown on the placeholder, where there is no people who liked an item to be displayed
+            //% "No likes"
+            text: qsTrId("friends_likes_placeholder")
         }
     }
 }

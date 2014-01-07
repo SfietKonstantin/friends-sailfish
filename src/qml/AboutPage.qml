@@ -40,7 +40,9 @@ Page {
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             PageHeader {
-                title: qsTr("About")
+                //: Title of the "About application" page
+                //% "About"
+                title: qsTrId("friends_about_title")
             }
 
             Image {
@@ -54,7 +56,9 @@ Page {
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: Theme.fontSizeHuge
-                    text: qsTr("Friends")
+                    //: Name of the application. Should be "Friends"
+                    //% "Friends"
+                    text: qsTrId("friends_app_name")
                 }
 
                 Label {
@@ -62,7 +66,9 @@ Page {
                     font.pixelSize: Theme.fontSizeExtraSmall
                     color: Theme.secondaryColor
                     wrapMode: Text.WordWrap
-                    text: qsTr("Version %1, powered by Nemo Social.").arg(VERSION)
+                    //: Version of Friends. %1 will be replaced by the version. Please add "powered by Nemo Social"
+                    //% "Version %1, powered by Nemo Social"
+                    text: qsTrId("friends_about_version").arg(VERSION)
                 }
             }
 
@@ -70,10 +76,9 @@ Page {
                 wrapMode: Text.WordWrap
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Theme.fontSizeSmall
-                text: qsTr("Friends is a simple and elegant Facebook client for Sailfish OS.\
-It is an Open Source software, meaning that it can be modified and enhanced by \
-anybody. If you like Friends, please consider a donation. It will help maintaining the software, \
-and keeping it status of Open Source software.")
+                //: Description of Friends
+                //% "Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software."
+                text: qsTrId("friends_about_text")
             }
         }
     }
@@ -87,7 +92,9 @@ and keeping it status of Open Source software.")
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Facebook page")
+                //: Caption of a button that shows the Facebook page of the application
+                //% "Facebook page"
+                text: qsTrId("friends_about_button_facebook_page")
             }
         }
         BackgroundItem {
@@ -97,7 +104,9 @@ and keeping it status of Open Source software.")
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Donate")
+                //: Caption of a button that shows a Paypal donation page
+                //% "Donate"
+                text: qsTrId("friends_button_donate")
             }
         }
         BackgroundItem {
@@ -107,7 +116,9 @@ and keeping it status of Open Source software.")
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Developers")
+                //: Caption of a button that shows the list of developers
+                //% "Developers"
+                text: qsTrId("friends_about_button_developers")
             }
         }
     }
