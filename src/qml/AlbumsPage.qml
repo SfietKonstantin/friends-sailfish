@@ -61,6 +61,7 @@ Page {
             filter: FacebookRelatedDataFilter {
                 identifier: container.identifier
                 connection: Facebook.Albums
+                fields: "id,name"
                 limit: 10
             }
         }
@@ -83,8 +84,7 @@ Page {
                 anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium / 2
                 onClicked: {
                     var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
-                                              {"identifier": model.contentItem.identifier,
-                                               "name": model.contentItem.name})
+                                              {"identifier": model.contentItem.identifiers})
                     page.load()
                 }
 

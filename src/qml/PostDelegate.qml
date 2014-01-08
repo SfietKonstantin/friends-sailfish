@@ -116,7 +116,6 @@ Item {
             font.pixelSize: Theme.fontSizeSmall
         }
 
-
         //Images
         Rectangle {
             id: imagesContainer

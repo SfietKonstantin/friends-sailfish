@@ -33,14 +33,15 @@
 #define NOTIFICATIONSHELPER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QUrl>
+#include <QtCore/QVariantMap>
 
 class NotificationsHelper : public QObject
 {
     Q_OBJECT
 public:
     explicit NotificationsHelper(QObject *parent = 0);
-    Q_INVOKABLE static QString getObject(const QUrl &link);
+    Q_INVOKABLE static QString getObject(const QVariantMap &data);
+    Q_INVOKABLE static void reparentObject(QObject *object, QObject *parent);
 };
 
 #endif // NOTIFICATIONSHELPER_H

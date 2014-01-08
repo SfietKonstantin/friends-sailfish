@@ -31,6 +31,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.friends 1.0
 import harbour.friends.social 1.0
 import harbour.friends.social.extra 1.0
 
@@ -45,19 +46,115 @@ Page {
 
     onStatusChanged: {
         if (status == PageStatus.Active) {
-            pageStack.pushAttached(menuPage)
+            if (item.source.length > 0) {
+                item.pushPage(item.source, item.properties, item.needLoad, item.reparentedItems)
+            }
         }
     }
 
     TypeSolver {
         id: item
+        property bool loading: false
+        property string source
+        property var properties
+        property bool needLoad
+        property list<QtObject> reparentedItems
+
+        function pushPage(source, properties, needLoad, reparentedItems) {
+            if (container.status == PageStatus.Active) {
+                var page = pageStack.replace(Qt.resolvedUrl(source), properties,
+                                             PageStackAction.Immediate)
+
+                if (reparentedItems.length > 0) {
+                    for (var i = 0; i < reparentedItems.length; i++) {
+                        NotificationsHelper.reparentObject(reparentedItems[i], page)
+                    }
+                }
+
+                if (needLoad) {
+                    page.load()
+                }
+            } else {
+                item.source = source
+                item.properties = properties
+                item.needLoad = needLoad
+                if (reparentedItems !== null) {
+                    item.reparentedItems = reparentedItems
+                }
+            }
+        }
+
+        function showUnsolvableObject() {
+            console.debug("Unknown type: " + objectType + " and as string: " + objectTypeString)
+            unsupported.enabled = true
+        }
+
+        function solveObjectType() {
+            console.debug("Object Type:" + objectType + " " + objectTypeString)
+
+            if (objectType == Facebook.Album) {
+                item.pushPage("PhotosPage.qml", {"identifier": container.identifier}, true)
+                return
+            } else if (objectType == Facebook.Post) {
+                if (objectTypeString == "post") {
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,link,picture,name,caption,description"
+                } else if (objectTypeString == "location") {
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,"
+                } else if (objectTypeString == "link") {
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,link,picture,name,caption,description"
+                } else if (objectTypeString == "status") {
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time"
+                } else {
+                    showUnsolvableObject()
+                    return
+                }
+                indicator.item = post
+                loading = true
+                post.load()
+            } else {
+                showUnsolvableObject()
+                return
+            }
+        }
+
         socialNetwork: facebook
         filter: TypeSolverFilter {
             identifier: container.identifier
         }
+        onObjectTypeChanged: solveObjectType()
+    }
+
+    FacebookExtraPost {
+        id: post
+        socialNetwork: facebook
+        filter: FacebookItemFilter {
+            identifier: container.identifier
+        }
+        onStatusChanged: {
+            if (status == SocialNetwork.Idle && item.loading) {
+                var headerProperties = {"post": post}
+                item.pushPage(Qt.resolvedUrl("CommentsPage.qml"),
+                              {"identifier": post.identifier, "item": post,
+                               "headerComponent": postHeaderComponent,
+                               "headerProperties": headerProperties}, true, [post])
+            }
+        }
     }
 
     StateIndicator {
+        id: indicator
         item: item
     }
+
+    SilicaFlickable {
+        anchors.fill: parent
+
+        ViewPlaceholder {
+            id: unsupported
+            //: Describe that loading this item is not available yet
+            //% "Friends cannot load this yet. This feature has not been implemented."
+            text: qsTrId("friends_type_unsupported")
+        }
+    }
 }
+

@@ -111,6 +111,10 @@ ApplicationWindow {
             app.performLogin()
         }
     }
+
+    PostCommentHeaderComponent {
+        id: postHeaderComponent
+    }
 }
 
 

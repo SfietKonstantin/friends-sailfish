@@ -115,7 +115,7 @@ Page {
                 }
 
                 header: PageHeader {
-                    title: container.name
+                    title: container.name.length > 0 ? container.name : album.name
                 }
 
                 delegate: Item {

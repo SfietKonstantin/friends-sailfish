@@ -74,7 +74,19 @@ FacebookExtraPostInterface::FacebookExtraPostInterface(QObject *parent) :
 
 QStringList FacebookExtraPostInterface::media() const
 {
-    return data().value(MEDIA_KEY).toStringList();
+    QStringList mediaList = data().value(MEDIA_KEY).toStringList();
+    if (mediaList.isEmpty()) {
+        QString singlePicture = picture().toString();
+        if (singlePicture.isEmpty()) {
+            return QStringList();
+        }
+
+        QStringList mediumList;
+        mediumList.append(singlePicture);
+        return mediumList;
+    }
+
+    return mediaList;
 }
 
 bool FacebookExtraPostInterface::isVideo() const

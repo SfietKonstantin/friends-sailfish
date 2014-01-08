@@ -36,8 +36,6 @@ Component {
     Column {
         id: container
         property alias post: delegate.post
-        property alias from: delegate.from
-        property alias to: delegate.to
         anchors.left: parent.left; anchors.right: parent.right
 
         Item {
@@ -48,6 +46,8 @@ Component {
             PostDelegate {
                 id: delegate
                 fancy: true
+                from: post.from
+                to: post.to.length > 0 ? post.to[0] : null
                 anchors.left: parent.left; anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
             }

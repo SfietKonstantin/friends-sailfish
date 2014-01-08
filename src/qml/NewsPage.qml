@@ -37,7 +37,6 @@ import harbour.friends.social.extra 1.0
 
 Page {
     id: container
-    property string identifier
     function load() {
         if (!view.ready) {
             view.queued = true
@@ -94,11 +93,11 @@ Page {
             to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
             fancy: false
             onClicked: {
-                var headerProperties = {"post": post, "to": to, "from": from }
+                var headerProperties = {"post": post}
                 var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
                                           {"identifier": post.identifier,
                                            "item": post,
-                                           "headerComponent": headerComponent,
+                                           "headerComponent": postHeaderComponent,
                                            "headerProperties": headerProperties})
                 page.load()
             }
@@ -153,9 +152,5 @@ Page {
                 onClicked: model.loadPrevious()
             }
         }
-    }
-
-    PostCommentHeaderComponent {
-        id: headerComponent
     }
 }

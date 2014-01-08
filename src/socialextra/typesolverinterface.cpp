@@ -86,7 +86,6 @@ bool TypeSolverFilterInterface::performLoadRequestImpl(QObject *item, SocialNetw
                                                        LoadType loadType)
 {
     Q_D(TypeSolverFilterInterface);
-    QString fields = "id";
     QMap<QString, QString> arguments;
     arguments.insert("metadata", "1");
 
@@ -95,7 +94,7 @@ bool TypeSolverFilterInterface::performLoadRequestImpl(QObject *item, SocialNetw
         return false;
     }
 
-    return d->addHandle(facebook->get(this, d->identifier, QString(), fields, arguments), item,
+    return d->addHandle(facebook->get(this, d->identifier, QString(), QString(), arguments), item,
                         socialNetwork, loadType);
 }
 
@@ -130,20 +129,85 @@ public:
     explicit TypeSolverInterfacePrivate(TypeSolverInterface *q);
     void emitPropertyChangeSignals(const QVariantMap &oldData, const QVariantMap &newData);
     FacebookInterface::ContentItemType objectType;
+    QString objectTypeString;
+private:
+    Q_DECLARE_PUBLIC(TypeSolverInterface)
 };
 
 TypeSolverInterfacePrivate::TypeSolverInterfacePrivate(TypeSolverInterface *q)
-    : IdentifiableContentItemInterfacePrivate(q), objectType(FacebookInterface::Unknown)
+    : IdentifiableContentItemInterfacePrivate(q), objectType(FacebookInterface::NotInitialized)
 {
 }
 
 void TypeSolverInterfacePrivate::emitPropertyChangeSignals(const QVariantMap &oldData,
                                                            const QVariantMap &newData)
 {
-    // TODO: identify more types
+    Q_Q(TypeSolverInterface);
+
     QVariantMap metadata = newData.value("metadata").toMap();
     QString type = metadata.value("type").toString();
-    qDebug() << type;
+    if (type.isEmpty()) {
+        type = newData.value("type").toString();
+    }
+
+    FacebookInterface::ContentItemType newObjectType = FacebookInterface::Unknown;
+
+    if (type == "album") {
+        newObjectType = FacebookInterface::Album;
+    }
+    if (type == "comment") {
+        newObjectType = FacebookInterface::Comment;
+    }
+    if (type == "notification") {
+        newObjectType = FacebookInterface::Notification;
+    }
+
+    if (type == "photo") {
+        newObjectType = FacebookInterface::Photo;
+    }
+
+    if (type == "post") {
+        newObjectType = FacebookInterface::Post;
+    }
+
+    if (type == "user") {
+        newObjectType = FacebookInterface::User;
+    }
+
+    if (type == "application") {
+        newObjectType = FacebookInterface::Application;
+    }
+
+    if (type == "event") {
+        newObjectType = FacebookInterface::Event;
+    }
+
+    // Other recognized as posts
+    if (type == "checkin") {
+        newObjectType = FacebookInterface::Post;
+    }
+
+    if (type == "link") {
+        newObjectType = FacebookInterface::Post;
+    }
+
+    if (type == "status") {
+        newObjectType = FacebookInterface::Post;
+    }
+
+    if (newObjectType == FacebookInterface::Unknown) {
+        qWarning() << "Unknown type:" << type;
+    }
+
+    if (objectTypeString != type) {
+        objectTypeString = type;
+        emit q->objectTypeStringChanged();
+    }
+
+    if (objectType != newObjectType) {
+        objectType = newObjectType;
+        emit q->objectTypeChanged();
+    }
 
     // Call super class implementation
     QVariantMap oldDataWithId = oldData;
@@ -169,4 +233,10 @@ FacebookInterface::ContentItemType TypeSolverInterface::objectType() const
 {
     Q_D(const TypeSolverInterface);
     return d->objectType;
+}
+
+QString TypeSolverInterface::objectTypeString() const
+{
+    Q_D(const TypeSolverInterface);
+    return d->objectTypeString;
 }

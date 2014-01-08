@@ -74,14 +74,17 @@ class TypeSolverInterface : public IdentifiableContentItemInterface
 {
     Q_OBJECT
     Q_PROPERTY(FacebookInterface::ContentItemType objectType READ objectType NOTIFY objectTypeChanged)
+    Q_PROPERTY(QString objectTypeString READ objectTypeString NOTIFY objectTypeStringChanged)
 public:
     explicit TypeSolverInterface(QObject *parent = 0);
     int type() const;
 
     // Accessors
     FacebookInterface::ContentItemType objectType() const;
+    QString objectTypeString() const;
 Q_SIGNALS:
     void objectTypeChanged();
+    void objectTypeStringChanged();
 private:
     Q_DECLARE_PRIVATE(TypeSolverInterface)
 };

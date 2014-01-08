@@ -61,7 +61,7 @@ Page {
             filter: FacebookRelatedDataFilter {
                 identifier: facebook.currentUserIdentifier
                 connection: Facebook.Notifications
-                fields: "from,title,link,created_time,unread"
+                fields: "from,title,link,created_time,unread,object.id"
                 limit: 20
             }
         }
@@ -73,7 +73,10 @@ Page {
         }
 
         delegate: BackgroundItem {
+            id: background
+            property string identifier: NotificationsHelper.getObject(model.contentItem.data)
             height: Math.max(message.height + itemFooter.height, avatar.height) + Theme.paddingLarge
+            enabled: identifier.length > 0
 
             GlassItem {
                 id: glass
@@ -85,7 +88,7 @@ Page {
             FacebookPicture {
                 id: avatar
                 anchors.top: parent.top; anchors.topMargin: Theme.paddingLarge / 2
-                anchors.left: glass.right//; anchors.leftMargin: Theme.paddingSmall
+                anchors.left: glass.right
                 identifier: model.contentItem.from.objectIdentifier
                 imageWidth: Theme.iconSizeMedium
                 imageHeight: Theme.iconSizeMedium
@@ -115,9 +118,9 @@ Page {
             }
 
             onClicked: {
-                // var object = NotificationsHelper.getObject(model.contentItem.link)
-                // var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"), {"identifier": object})
-                // page.load()
+                 var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                           {"identifier": background.identifier})
+                 page.load()
             }
         }
 

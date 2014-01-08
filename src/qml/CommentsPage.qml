@@ -52,6 +52,8 @@ Page {
     property var headerProperties
     property var item
 
+    Component.onCompleted: console.debug(identifier)
+
     SocialNetworkModel {
         id: model
         signal performFocusCommentField()

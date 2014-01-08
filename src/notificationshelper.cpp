@@ -32,23 +32,35 @@
 #include "notificationshelper.h"
 #include <QtCore/QDebug>
 #include <QtCore/QStringList>
+#include <QtCore/QUrl>
+#include "facebook/facebookontology_p.h"
 
 NotificationsHelper::NotificationsHelper(QObject *parent) :
     QObject(parent)
 {
 }
 
-QString NotificationsHelper::getObject(const QUrl &link)
+QString NotificationsHelper::getObject(const QVariantMap &data)
 {
-    // Notifications usually gives the link as
-    // <api>/<user>/<source>/<id>
-    // <api>/<something>/<user>/<id>
-    // So the easiest way to get the topic of interest is to get
-    // the last part of the path
-    QStringList splittedPath = link.path().split("/");
-    if (splittedPath.isEmpty()) {
-        return QString();
+    QVariantMap object = data.value("object").toMap();
+    QString id = object.value(FACEBOOK_ONTOLOGY_METADATA_ID).toString();
+
+    if (!id.isEmpty()) {
+        return id;
     }
 
-    return splittedPath.last();
+    // Good old method, might not work
+    QUrl url = data.value(FACEBOOK_ONTOLOGY_NOTIFICATION_LINK).toUrl();
+    QStringList path = url.path().split("/", QString::SkipEmptyParts);
+
+    if (!path.isEmpty()) {
+        return path.last();
+    }
+
+    return QString();
+}
+
+void NotificationsHelper::reparentObject(QObject *object, QObject *parent)
+{
+    object->setParent(parent);
 }
