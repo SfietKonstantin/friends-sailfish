@@ -29,42 +29,61 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef NEWSFEEDFILTERINTERFACE_H
-#define NEWSFEEDFILTERINTERFACE_H
+#ifndef TYPESOLVERINTERFACE_H
+#define TYPESOLVERINTERFACE_H
 
 #include "filterinterface.h"
+#include "identifiablecontentiteminterface.h"
+#include "facebook/facebookinterface.h"
 
-class NewsFeedFilterInterfacePrivate;
-class NewsFeedFilterInterface : public FilterInterface
+class TypeSolverFilterInterfacePrivate;
+class TypeSolverFilterInterface: public FilterInterface
 {
     Q_OBJECT
-    Q_PROPERTY(FeedType type READ type WRITE setType NOTIFY typeChanged)
     Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
-    Q_ENUMS(FeedType)
 public:
-    enum FeedType {
-        Home,
-        Feed
-    };
-    explicit NewsFeedFilterInterface(QObject *parent = 0);
-    FeedType type() const;
-    void setType(FeedType type);
+    explicit TypeSolverFilterInterface(QObject *parent = 0);
+
+    // Properties
     QString identifier() const;
     void setIdentifier(const QString &identifier);
 
+    // Non QML API
+    // Used by items
     bool isAcceptable(QObject *item, SocialNetworkInterface *socialNetwork) const;
-signals:
-    void typeChanged();
+Q_SIGNALS:
     void identifierChanged();
+    void fieldsChanged();
+
 protected:
     bool performLoadRequestImpl(QObject *item, SocialNetworkInterface *socialNetwork,
                                 LoadType loadType);
-    bool performSetModelDataImpl(SocialNetworkModelInterface *model,
-                                 SocialNetworkInterface *socialNetwork, const QByteArray &data,
-                                 LoadType loadType, const QVariantMap &properties);
-
+    bool performSetItemDataImpl(IdentifiableContentItemInterface *item,
+                                SocialNetworkInterface *socialNetwork,
+                                const QByteArray &data, LoadType loadType,
+                                const QVariantMap &properties);
 private:
-    Q_DECLARE_PRIVATE(NewsFeedFilterInterface)
+    Q_DECLARE_PRIVATE(TypeSolverFilterInterface)
 };
 
-#endif // NEWSFEEDFILTERINTERFACE_H
+
+// This ICII is only provides the type of item that corresponds to
+// an identifier. It can only be used with the specific TypeSolverFilterInterface
+class TypeSolverInterfacePrivate;
+class TypeSolverInterface : public IdentifiableContentItemInterface
+{
+    Q_OBJECT
+    Q_PROPERTY(FacebookInterface::ContentItemType objectType READ objectType NOTIFY objectTypeChanged)
+public:
+    explicit TypeSolverInterface(QObject *parent = 0);
+    int type() const;
+
+    // Accessors
+    FacebookInterface::ContentItemType objectType() const;
+Q_SIGNALS:
+    void objectTypeChanged();
+private:
+    Q_DECLARE_PRIVATE(TypeSolverInterface)
+};
+
+#endif // TYPESOLVERINTERFACE_H

@@ -29,5 +29,7 @@
         <file>qml/PostDialog.qml</file>
         <file>qml/LikesPage.qml</file>
         <file>translations/friends-engineering-english.qm</file>
+        <file>qml/NotificationsPage.qml</file>
+        <file>qml/TypeSolverPage.qml</file>
     </qresource>
 </RCC>

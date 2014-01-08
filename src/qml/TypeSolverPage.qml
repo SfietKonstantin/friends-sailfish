@@ -29,42 +29,35 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef NEWSFEEDFILTERINTERFACE_H
-#define NEWSFEEDFILTERINTERFACE_H
+import QtQuick 2.0
+import Sailfish.Silica 1.0
+import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 
-#include "filterinterface.h"
+Page {
+    id: container
+    property string identifier
+    function load() {
+        if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
+            item.load()
+        }
+    }
 
-class NewsFeedFilterInterfacePrivate;
-class NewsFeedFilterInterface : public FilterInterface
-{
-    Q_OBJECT
-    Q_PROPERTY(FeedType type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
-    Q_ENUMS(FeedType)
-public:
-    enum FeedType {
-        Home,
-        Feed
-    };
-    explicit NewsFeedFilterInterface(QObject *parent = 0);
-    FeedType type() const;
-    void setType(FeedType type);
-    QString identifier() const;
-    void setIdentifier(const QString &identifier);
+    onStatusChanged: {
+        if (status == PageStatus.Active) {
+            pageStack.pushAttached(menuPage)
+        }
+    }
 
-    bool isAcceptable(QObject *item, SocialNetworkInterface *socialNetwork) const;
-signals:
-    void typeChanged();
-    void identifierChanged();
-protected:
-    bool performLoadRequestImpl(QObject *item, SocialNetworkInterface *socialNetwork,
-                                LoadType loadType);
-    bool performSetModelDataImpl(SocialNetworkModelInterface *model,
-                                 SocialNetworkInterface *socialNetwork, const QByteArray &data,
-                                 LoadType loadType, const QVariantMap &properties);
+    TypeSolver {
+        id: item
+        socialNetwork: facebook
+        filter: TypeSolverFilter {
+            identifier: container.identifier
+        }
+    }
 
-private:
-    Q_DECLARE_PRIVATE(NewsFeedFilterInterface)
-};
-
-#endif // NEWSFEEDFILTERINTERFACE_H
+    StateIndicator {
+        item: item
+    }
+}

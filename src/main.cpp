@@ -49,6 +49,7 @@
 #include "settingsmanager.h"
 #include "posthelper.h"
 #include "footerhelper.h"
+#include "notificationshelper.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -82,6 +83,7 @@
 #include "socialextra/alphabeticalsorterinterface.h"
 #include "socialextra/newsfeedfilterinterface.h"
 #include "socialextra/facebookextrapostinterface.h"
+#include "socialextra/typesolverinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -132,6 +134,13 @@ static QObject * footerhelper_provider(QQmlEngine *engine, QJSEngine *scriptEngi
     return new FooterHelper();
 }
 
+static QObject * notificationshelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+{
+    Q_UNUSED(engine)
+    Q_UNUSED(scriptEngine)
+    return new NotificationsHelper();
+}
+
 void importMisc()
 {
     // @uri harbour.friends
@@ -141,6 +150,8 @@ void importMisc()
     qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
     qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
     qmlRegisterSingletonType<FooterHelper>(URI, 1, 0, "FooterHelper", footerhelper_provider);
+    qmlRegisterSingletonType<NotificationsHelper>(URI, 1, 0, "NotificationsHelper",
+                                           notificationshelper_provider);
     qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
 }
 
@@ -183,7 +194,9 @@ void importSocialExtra()
     // @uri harbour.friends.social.extra
     qmlRegisterType<AlphabeticalSorterInterface>(URI_SOCIAL_EXTRA, 1, 0, "AlphabeticalSorter");
     qmlRegisterType<NewsFeedFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "NewsFeedFilter");
-    qmlRegisterType<FacebookExtraPostInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraPostInterface");
+    qmlRegisterType<FacebookExtraPostInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraPost");
+    qmlRegisterType<TypeSolverInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolver");
+    qmlRegisterType<TypeSolverFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolverFilter");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

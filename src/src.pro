@@ -21,12 +21,14 @@ HEADERS += clientidplugininterface.h \
     tokenmanager.h \
     settingsmanager.h \
     posthelper.h \
-    footerhelper.h
+    footerhelper.h \
+    notificationshelper.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
     posthelper.cpp \
-    footerhelper.cpp
+    footerhelper.cpp \
+    notificationshelper.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -52,7 +54,9 @@ OTHER_FILES += qml/friends.qml \
     qml/WelcomeDialog.qml \
     qml/SocialButtons.qml \
     qml/PostDialog.qml \
-    qml/LikesPage.qml
+    qml/LikesPage.qml \
+    qml/NotificationsPage.qml \
+    qml/TypeSolverPage.qml
 
 target.path = $$TARGETPATH
 

@@ -84,6 +84,10 @@ Page {
                 text: QT_TRID_NOOP("friends_menu_messages")
                 page: ""
             }
+            ListElement {
+                text: "Notifications"
+                page: "NotificationsPage.qml"
+            }
         }
         header: CoverHeader {
             anchors.left: parent.left; anchors.right: parent.right

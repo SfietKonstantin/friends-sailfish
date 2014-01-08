@@ -29,42 +29,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef NEWSFEEDFILTERINTERFACE_H
-#define NEWSFEEDFILTERINTERFACE_H
+#include "notificationshelper.h"
+#include <QtCore/QDebug>
+#include <QtCore/QStringList>
 
-#include "filterinterface.h"
-
-class NewsFeedFilterInterfacePrivate;
-class NewsFeedFilterInterface : public FilterInterface
+NotificationsHelper::NotificationsHelper(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-    Q_PROPERTY(FeedType type READ type WRITE setType NOTIFY typeChanged)
-    Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
-    Q_ENUMS(FeedType)
-public:
-    enum FeedType {
-        Home,
-        Feed
-    };
-    explicit NewsFeedFilterInterface(QObject *parent = 0);
-    FeedType type() const;
-    void setType(FeedType type);
-    QString identifier() const;
-    void setIdentifier(const QString &identifier);
+}
 
-    bool isAcceptable(QObject *item, SocialNetworkInterface *socialNetwork) const;
-signals:
-    void typeChanged();
-    void identifierChanged();
-protected:
-    bool performLoadRequestImpl(QObject *item, SocialNetworkInterface *socialNetwork,
-                                LoadType loadType);
-    bool performSetModelDataImpl(SocialNetworkModelInterface *model,
-                                 SocialNetworkInterface *socialNetwork, const QByteArray &data,
-                                 LoadType loadType, const QVariantMap &properties);
+QString NotificationsHelper::getObject(const QUrl &link)
+{
+    // Notifications usually gives the link as
+    // <api>/<user>/<source>/<id>
+    // <api>/<something>/<user>/<id>
+    // So the easiest way to get the topic of interest is to get
+    // the last part of the path
+    QStringList splittedPath = link.path().split("/");
+    if (splittedPath.isEmpty()) {
+        return QString();
+    }
 
-private:
-    Q_DECLARE_PRIVATE(NewsFeedFilterInterface)
-};
-
-#endif // NEWSFEEDFILTERINTERFACE_H
+    return splittedPath.last();
+}
