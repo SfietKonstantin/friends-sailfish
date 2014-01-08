@@ -4,7 +4,6 @@
         <file>qml/friends.qml</file>
         <file>qml/MenuPage.qml</file>
         <file>qml/NewsPage.qml</file>
-        <file>qml/LoginDialog.qml</file>
         <file>qml/CoverHeader.qml</file>
         <file>qml/FacebookImage.qml</file>
         <file>qml/FacebookPicture.qml</file>
@@ -31,5 +30,6 @@
         <file>translations/friends-engineering-english.qm</file>
         <file>qml/NotificationsPage.qml</file>
         <file>qml/TypeSolverPage.qml</file>
+        <file>qml/LoginPage.qml</file>
     </qresource>
 </RCC>

@@ -36,7 +36,7 @@ OTHER_FILES += qml/friends.qml \
     qml/CoverPage.qml \
     qml/MenuPage.qml \
     qml/NewsPage.qml \
-    qml/LoginDialog.qml \
+    qml/LoginPage.qml \
     qml/FacebookImage.qml \
     qml/FacebookPicture.qml \
     qml/FriendsPage.qml \

@@ -94,7 +94,7 @@ Item {
                                                    && model.count == 0) : false
         property string _errorRecoveryMode: ""
 
-        property bool busy: container.busy || _itemBusy || _modelBusy
+        property bool busy: (container.busy && !error) || _itemBusy || _modelBusy
         property bool error: !container.busy && (_itemError || _modelError)
 
         // Currently, the model have higher priority on error

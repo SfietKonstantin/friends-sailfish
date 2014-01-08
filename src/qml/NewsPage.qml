@@ -46,6 +46,16 @@ Page {
             model.load()
         }
     }
+
+    Connections {
+        target: me
+        onStatusChanged: {
+            if (me.status == SocialNetwork.Error) {
+                pageStack.navigateForward()
+            }
+        }
+    }
+
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)

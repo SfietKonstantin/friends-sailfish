@@ -40,7 +40,8 @@ ApplicationWindow {
 
     function performLogin() {
         me.loaded = false
-        pageStack.push(loginDialogComponent)
+        pageStack.clear()
+        pageStack.push(loginPageComponent)
     }
 
     MenuPage {
@@ -92,11 +93,10 @@ ApplicationWindow {
     }
 
     Component {
-        id: loginDialogComponent
-        LoginDialog {
+        id: loginPageComponent
+        LoginPage {
             onConnected: {
-                pageStack.clear()
-                var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
+                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
                 page.load()
             }
         }

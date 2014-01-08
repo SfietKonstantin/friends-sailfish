@@ -89,7 +89,7 @@ static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
 static const char *URI_SOCIAL_EXTRA = "harbour.friends.social.extra";
 static const char *REASON = "Cannot be created";
-static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsforn9";
+static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsqt";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
                                    "hosted_button_id=R6AJV4U2G33XG";
 
