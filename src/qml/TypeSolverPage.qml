@@ -111,6 +111,9 @@ Page {
                 indicator.item = post
                 loading = true
                 post.load()
+            } else if (objectType == Facebook.User) {
+                item.pushPage("UserPage.qml", {"identifier": container.identifier}, true)
+                return
             } else {
                 showUnsolvableObject()
                 return

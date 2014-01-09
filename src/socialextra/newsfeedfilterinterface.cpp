@@ -439,7 +439,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         postData.insert(FACEBOOK_ONTOLOGY_POST_STORY, story);
 
         // Story tags
-        postData.insert(FACEBOOK_ONTOLOGY_POST_MESSAGETAGS, postMap.value("description_tags"));
+        postData.insert(FACEBOOK_ONTOLOGY_POST_STORYTAGS, postMap.value("description_tags"));
 
         // With tags
         postData.insert(FACEBOOK_ONTOLOGY_POST_WITHTAGS,

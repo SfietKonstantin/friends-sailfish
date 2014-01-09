@@ -36,17 +36,17 @@
 #include <QtCore/QDebug>
 #include <QtCore/QMetaObject>
 #include <QtCore/QMetaProperty>
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 #include <QtCore/QUrl>
 
 static const int ELIDE_COUNT = 50;
 
 static const char *RICH_TEXT_NAME
-    = "<a style=\"text-decoration:none; color:%1\" href=\"user----%2----%3\">%4</a>";
+    = "<a style=\"text-decoration:none; color:%1\" href=\"item----%2\">%3</a>";
 
 static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?]*)";
 static const char *RICH_TEXT_URL
-    = "<a style=\"text-decoration:none; color:#%1\" href=\"url----%2\">%3</a>";
+    = "<a style=\"text-decoration:none; color:%1\" href=\"url----%2\">%3</a>";
 
 inline QVariant get(QObject *object, const char *property)
 {
@@ -61,10 +61,10 @@ inline QVariant get(QObject *object, const char *property)
 }
 
 
-//bool tagLesser(QFB::PostTag *tag1, QFB::PostTag *tag2)
-//{
-//    return tag1->offset() < tag2->offset();
-//}
+bool tagLesser(QObject *tag1, QObject *tag2)
+{
+    return get(tag1, "offset").toInt() < get(tag2, "offset").toInt();
+}
 
 PostHelper::PostHelper(QObject *parent) :
     QObject(parent)
@@ -219,9 +219,20 @@ void PostHelper::clearMessageTags()
     m_messageTags.clear();
 }
 
-void PostHelper::appendMessageTag(QObject *messageTag)
+void PostHelper::addMessageTag(QObject *messageTag)
 {
     m_messageTags.append(messageTag);
+    createPost();
+}
+
+void PostHelper::clearStoryTags()
+{
+    m_storyTags.clear();
+}
+
+void PostHelper::addStoryTag(QObject *storyTag)
+{
+    m_storyTags.append(storyTag);
     createPost();
 }
 
@@ -259,7 +270,68 @@ void PostHelper::performPostCreation()
         emit storyChanged();
     }
 
-    performHeaderAndMessageCreation();
+    performHeaderCreation();
+
+    QString message = get(m_post, !m_story ? "message" : "story").toString();
+    message.replace("<", "&lt;");
+    message.replace(">", "&gt;");
+    message.replace("\n", "<br/>");
+
+    if (!m_fancy) {
+        message = elideText(message, 120);
+    } else {
+        QList<QObject *> tags;
+        if (!m_story) {
+            tags = m_messageTags;
+        } else {
+            tags = m_storyTags;
+        }
+
+        QString remainingMessage = message;
+        message.clear();
+        std::sort(tags.begin(), tags.end(), tagLesser);
+
+        int previousOffset = 0;
+        foreach (QObject *tag, tags) {
+            int offset = get(tag, "offset").toInt();
+            int length = get(tag, "length").toInt();
+            QString identifier = get(tag, "userIdentifier").toString();
+            QString name = get(tag, "userName").toString();
+
+            message.append(remainingMessage.left(offset - previousOffset));
+            remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
+            previousOffset = offset + length;
+            message.append(QString(RICH_TEXT_NAME).arg(m_highlightColor, identifier, name));
+        }
+        message.append(remainingMessage);
+
+        QRegularExpression urlRegExp(URL_REGEXP);
+        remainingMessage = message;
+        message.clear();
+
+        QRegularExpressionMatchIterator i = urlRegExp.globalMatch(remainingMessage);
+        int previousIndex = 0;
+        while (i.hasNext()) {
+            QRegularExpressionMatch match = i.next();
+            QString captured = match.captured(1);
+
+
+            QString url = captured;
+            if (!url.startsWith("http://")) {
+                url.prepend("http://");
+            }
+            message.append(remainingMessage.mid(previousIndex, match.capturedStart(1) - previousIndex));
+            previousIndex = match.capturedEnd(1);
+
+            message.append(QString(RICH_TEXT_URL).arg(m_highlightColor, url, captured));
+        }
+        message.append(remainingMessage.right(remainingMessage.length() - previousIndex));
+    }
+
+    if (m_message != message) {
+        m_message = message;
+        emit messageChanged();
+    }
 
     // Process message
 //    QString message;
@@ -354,22 +426,8 @@ void PostHelper::performPostCreation()
 
 }
 
-void PostHelper::performHeaderAndMessageCreation()
+void PostHelper::performHeaderCreation()
 {
-    QString message = get(m_post, !m_story ? "message" : "story").toString();
-    if (!m_fancy) {
-        message = elideText(message, 120);
-    }
-
-    message.replace("<", "&lt;");
-    message.replace(">", "&gt;");
-    message.replace("\n", "<br/>");
-
-    if (m_message != message) {
-        m_message = message;
-        emit messageChanged();
-    }
-
     // Process from and to
     QString toIdentifier;
     QString toName;
@@ -380,7 +438,7 @@ void PostHelper::performHeaderAndMessageCreation()
     QString toHeader = RICH_TEXT_NAME;
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         QString elidedTo = elideText(toName, ELIDE_COUNT);
-        toHeader = toHeader.arg(m_highlightColor, toIdentifier, toName, elidedTo);
+        toHeader = toHeader.arg(m_highlightColor, toIdentifier, elidedTo);
     }
     QString elidedFrom;
     QString fromName;
@@ -393,7 +451,7 @@ void PostHelper::performHeaderAndMessageCreation()
         elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
     }
     QString header = RICH_TEXT_NAME;
-    header = header.arg(m_highlightColor, fromIdentifier, fromName, elidedFrom);
+    header = header.arg(m_highlightColor, fromIdentifier, elidedFrom);
 
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         header.append(" &gt; ");

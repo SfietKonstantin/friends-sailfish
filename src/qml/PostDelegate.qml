@@ -52,6 +52,23 @@ Item {
 
     BackgroundItem {
         id: background
+
+        function solveLink(link) {
+            var splitted = link.split("----")
+            console.debug(splitted)
+            if (splitted.length !== 2) {
+                return
+            }
+
+            if (splitted[0] == "item") {
+                var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                          {"identifier": splitted[1]})
+                page.load()
+            } else if (splitted[0] == "url") {
+                Qt.openUrlExternally(splitted[1])
+            }
+        }
+
         anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         anchors.verticalCenter: parent.verticalCenter
@@ -70,6 +87,18 @@ Item {
         PostHelper {
             id: helper
             highlightColor: Theme.highlightColor
+        }
+
+        Component.onCompleted: {
+            // Add the message tags
+            for (var i = 0; i < container.post.messageTags.length; i++) {
+                helper.addMessageTag(container.post.messageTags[i])
+            }
+
+            // Add the story tags
+            for (i = 0; i < container.post.storyTags.length; i++) {
+                helper.addStoryTag(container.post.storyTags[i])
+            }
         }
 
         // Header
@@ -95,6 +124,7 @@ Item {
                     text: helper.header
                     font.pixelSize: Theme.fontSizeSmall
                     truncationMode: TruncationMode.Fade
+                    onLinkActivated: background.solveLink(link)
                 }
 
                 Label {
@@ -111,9 +141,11 @@ Item {
         // Content
         Label {
             anchors.left: parent.left; anchors.right: parent.right
+            textFormat: Text.RichText
             text: helper.message
             wrapMode: Text.Wrap
             font.pixelSize: Theme.fontSizeSmall
+            onLinkActivated: background.solveLink(link)
         }
 
         //Images

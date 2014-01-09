@@ -83,7 +83,9 @@ public:
     QString description() const;
 public slots:
     void clearMessageTags();
-    void appendMessageTag(QObject *messageTag);
+    void addMessageTag(QObject *messageTag);
+    void clearStoryTags();
+    void addStoryTag(QObject *storyTag);
 signals:
     void postChanged();
     void fromChanged();
@@ -106,7 +108,7 @@ private slots:
     void createPost();
 private:
     void performPostCreation();
-    void performHeaderAndMessageCreation();
+    void performHeaderCreation();
     static QString elideText(const QString &text, int count);
     QObject *m_post;
     QObject *m_from;
@@ -115,6 +117,7 @@ private:
     QString m_userIdentifier;
     QString m_highlightColor;
     QList<QObject *> m_messageTags;
+    QList<QObject *> m_storyTags;
     QString m_header;
     QString m_footer;
     QString m_message;
