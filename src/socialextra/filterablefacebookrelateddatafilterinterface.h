@@ -58,6 +58,10 @@ public:
     void setFilterField(const QString &filterField);
     QString filterValue() const;
     void setFilterValue(const QString &filterValue);
+
+    // Non QML API
+    // Used by SNMI
+    QString dataSection(const QVariantMap &data);
 signals:
     void filterTypeChanged();
     void filterFieldChanged();

@@ -88,9 +88,7 @@ Page {
             }
         }
 
-        // BUG: not working: criteria FirstCharacter is not taken in account
         section {
-            criteria: ViewSection.FirstCharacter
             property: "section"
             delegate: SectionHeader {
                 text: section

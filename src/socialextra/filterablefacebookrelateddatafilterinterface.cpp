@@ -81,6 +81,15 @@ void FilterableFacebookRelatedDataFilterInterface::setFilterValue(const QString 
     }
 }
 
+QString FilterableFacebookRelatedDataFilterInterface::dataSection(const QVariantMap &data)
+{
+    if (sectionField().isEmpty()) {
+        return QString();
+    }
+
+    return data.value(sectionField()).toString().left(1);
+}
+
 bool FilterableFacebookRelatedDataFilterInterface::performSetModelDataImpl(SocialNetworkModelInterface *model,
                                                                            SocialNetworkInterface *socialNetwork,
                                                                            const QByteArray &data,
