@@ -34,7 +34,7 @@ PRE_TARGETDEPS += engineering_english
 # Other translations
 translations.commands += $$PWD/translations/translate.sh $$PWD/translations/ $$OUT_PWD
 translations.CONFIG += no_check_exist
-translations.depends = ts
+translations.depends = engineering_english
 
 translations_install.path = $$DEPLOYMENT_PATH/translations
 translations_install.files = $$OUT_PWD/friends_*.qm
