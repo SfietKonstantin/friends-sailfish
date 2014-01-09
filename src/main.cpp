@@ -84,6 +84,7 @@
 #include "socialextra/newsfeedfilterinterface.h"
 #include "socialextra/facebookextrapostinterface.h"
 #include "socialextra/typesolverinterface.h"
+#include "socialextra/filterablefacebookrelateddatafilterinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -197,6 +198,7 @@ void importSocialExtra()
     qmlRegisterType<FacebookExtraPostInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraPost");
     qmlRegisterType<TypeSolverInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolver");
     qmlRegisterType<TypeSolverFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolverFilter");
+    qmlRegisterType<FilterableFacebookRelatedDataFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "FilterableFacebookRelatedDataFilter");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

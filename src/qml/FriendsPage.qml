@@ -52,15 +52,20 @@ Page {
     }
 
     SilicaListView {
+        id: view
         anchors.fill: parent
         visible: model.status == SocialNetwork.Idle
+        currentIndex: -1
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            filter: FacebookRelatedDataFilter {
+            filter: FilterableFacebookRelatedDataFilter {
                 identifier: facebook.currentUserIdentifier
                 connection: Facebook.Friends
                 limit: 500
+                fields: "id,first_name,name"
+                sectionField: "first_name"
+                filterField: "name"
             }
             sorters: AlphabeticalSorter {field: "name"}
             onStatusChanged: {
@@ -70,21 +75,28 @@ Page {
             }
         }
 
-        header: PageHeader {
-            //: Title of the page showing the list of friends
-            //% "Friends"
-            title: qsTrId("friends_friends_title")
+        header: Column {
+            width: view.width
+            PageHeader {
+                //: Title of the page showing the list of friends
+                //% "Friends"
+                title: qsTrId("friends_friends_title")
+            }
+            SearchField {
+                anchors.left: parent.left; anchors.right: parent.right
+                onTextChanged: model.filter.filterValue = text
+            }
         }
 
         // BUG: not working: criteria FirstCharacter is not taken in account
-//        section {
-//            criteria: ViewSection.FirstCharacter
-//            property: "contentItem.name"
-//            delegate: SectionHeader {
-//                text: section
-//                height: Theme.itemSizeExtraSmall
-//            }
-//        }
+        section {
+            criteria: ViewSection.FirstCharacter
+            property: "section"
+            delegate: SectionHeader {
+                text: section
+                height: Theme.itemSizeExtraSmall
+            }
+        }
 
         delegate: BackgroundItem {
             height: Theme.itemSizeLarge
@@ -97,14 +109,14 @@ Page {
                 id: icon
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                identifier: model.contentItem.identifier
+                identifier: model.contentItem !== undefined ? model.contentItem.identifier : ""
             }
 
             Label {
                 anchors.left: icon.right; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
-                text: model.contentItem.name
+                text: model.contentItem !== undefined ? model.contentItem.name : ""
                 truncationMode: TruncationMode.Fade
             }
 
