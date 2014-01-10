@@ -1,6 +1,14 @@
 {
   "0.1.11": [
     {
+      "text": "A remorse timer now prevents you from disconnection from Facebook if you triggered the action by error.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "When Friends is updated, a list of new features and bugfixes is now displayed.", 
+      "type": "feature"
+    }, 
+    {
       "text": "New translations: German and Hungarian", 
       "type": "feature"
     }, 
