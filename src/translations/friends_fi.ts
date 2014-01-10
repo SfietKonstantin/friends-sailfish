@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.0">
 <context>
     <name/>
     <message id="friends_about_title">
@@ -93,13 +93,13 @@
         <translation>fi_FI</translation>
     </message>
     <message id="friends_friends_title">
-        <location filename="../qml/FriendsPage.qml" line="76"/>
+        <location filename="../qml/FriendsPage.qml" line="83"/>
         <source>Friends</source>
         <extracomment>Title of the page showing the list of friends</extracomment>
         <translation>Kaverit</translation>
     </message>
     <message id="friends_friends_placeholder">
-        <location filename="../qml/FriendsPage.qml" line="124"/>
+        <location filename="../qml/FriendsPage.qml" line="134"/>
         <source>No Friends</source>
         <extracomment>Text shown on the placeholder, where there is no friends to be displayed</extracomment>
         <translation>Ei kavereita</translation>
@@ -116,15 +116,11 @@
         <extracomment>Text shown on the placeholder, where there is no people who liked an item to be displayed</extracomment>
         <translation>Ei tykkäyksiä</translation>
     </message>
-    <message id="friends_login_quit">
-        <source>Quit</source>
-        <extracomment>Action displayed on the cancel button for the login dialog</extracomment>
-        <translation type="vanished">Lopeta</translation>
-    </message>
-    <message id="friends_login_ignore">
-        <source>Ignore</source>
-        <extracomment>Action displayed on the accept button for the login dialog. This button is never active, and should display &quot;Ignore&quot;. It cannot be triggered.</extracomment>
-        <translation type="vanished">Jätä huomioimatta</translation>
+    <message id="friends_login_title">
+        <location filename="../qml/LoginPage.qml" line="56"/>
+        <source>Login</source>
+        <extracomment>Title of the login page</extracomment>
+        <translation>Kirjaudu sisään</translation>
     </message>
     <message id="friends_menu_home">
         <location filename="../qml/MenuPage.qml" line="48"/>
@@ -168,21 +164,27 @@
         <extracomment>Menu entry to show the messages page, where the user can chat.</extracomment>
         <translation>Viestit</translation>
     </message>
+    <message id="friends_menu_notifications">
+        <location filename="../qml/MenuPage.qml" line="90"/>
+        <source>Notifications</source>
+        <extracomment>Menu entry to show the notifications page, where the user can read notifications.</extracomment>
+        <translation>Ilmoitukset</translation>
+    </message>
     <message id="friends_photos_of_someone">
-        <location filename="../qml/MenuPage.qml" line="119"/>
+        <location filename="../qml/MenuPage.qml" line="121"/>
         <location filename="../qml/UserPage.qml" line="230"/>
         <source>Photos of %1</source>
         <extracomment>Specific title for the photos page, since it can display &quot;Photos of someone&quot; and the album's title. This title translates the &quot;Photos of someone&quot;. %1 contains the name of the user who have the photos.</extracomment>
         <translation>Kuvat käyttäjältä %1</translation>
     </message>
     <message id="friends_menu_action_logout">
-        <location filename="../qml/MenuPage.qml" line="135"/>
+        <location filename="../qml/MenuPage.qml" line="137"/>
         <source>Logout</source>
         <extracomment>Action that disconnects the user from Facebook</extracomment>
         <translation>Kirjaudu ulos</translation>
     </message>
     <message id="friends_menu_action_about_friends">
-        <location filename="../qml/MenuPage.qml" line="145"/>
+        <location filename="../qml/MenuPage.qml" line="147"/>
         <source>About Friends</source>
         <extracomment>Action that shows the &quot;About Friends&quot; page</extracomment>
         <translation>Tietoja Friendsistä</translation>
@@ -212,14 +214,26 @@
         <extracomment>Action that allows to refresh a feed</extracomment>
         <translation>Päivitä</translation>
     </message>
+    <message id="friends_notifications_title">
+        <location filename="../qml/NotificationsPage.qml" line="72"/>
+        <source>Notifications</source>
+        <extracomment>Title of the page showing the list of notifications</extracomment>
+        <translation>Ilmoitukset</translation>
+    </message>
+    <message id="friends_notifications_placeholder">
+        <location filename="../qml/NotificationsPage.qml" line="139"/>
+        <source>No notifications</source>
+        <extracomment>Text shown on the placeholder, where there is no notifications to be displayed</extracomment>
+        <translation>Ei ilmoituksia</translation>
+    </message>
     <message id="friends_photos_placeholder">
-        <location filename="../qml/PhotosPage.qml" line="165"/>
+        <location filename="../qml/PhotosPage.qml" line="168"/>
         <source>No photos</source>
         <extracomment>Text shown on the placeholder, where there is no photos to be displayed</extracomment>
         <translation>Ei kuvia</translation>
     </message>
     <message id="friends_photos_action_informations">
-        <location filename="../qml/PhotosPage.qml" line="174"/>
+        <location filename="../qml/PhotosPage.qml" line="177"/>
         <source>Album informations</source>
         <extracomment>Action that shows the album informations</extracomment>
         <translation>Albumin tiedot</translation>
@@ -304,6 +318,12 @@
         <extracomment>A button that allows to reconnect (perform login again) to Facebook, because the current session expired.</extracomment>
         <translation>Yhdistä uudelleen.</translation>
     </message>
+    <message id="friends_type_unsupported">
+        <location filename="../qml/TypeSolverPage.qml" line="159"/>
+        <source>Friends cannot load this yet. This feature has not been implemented.</source>
+        <extracomment>Describe that loading this item is not available yet</extracomment>
+        <translation>Friends ei voi ladata tätä vielä. Ominaisuus ei ole käytössä.</translation>
+    </message>
     <message id="friends_user_placeholder">
         <location filename="../qml/UserPage.qml" line="217"/>
         <source>No posts</source>
@@ -356,14 +376,12 @@
     <message id="friends_footer_likes" numerus="yes">
         <location filename="../footerhelper.cpp" line="43"/>
         <source>%n likes</source>
-        <oldsource>There are %n likes</oldsource>
         <extracomment>Part of post footer, saying &quot;&lt;number&gt; likes&quot;. %n is replaced by the number of likes.</extracomment>
         <translation><numerusform>%n tykkäys</numerusform><numerusform>%n tykkäystä</numerusform></translation>
     </message>
     <message id="friends_footer_comments" numerus="yes">
         <location filename="../footerhelper.cpp" line="47"/>
         <source>%n comments</source>
-        <oldsource>there are %n comments</oldsource>
         <extracomment>Part of post footer, saying &quot;&lt;number&gt; cpomments&quot;. %n is replaced by the number of comments.</extracomment>
         <translation><numerusform>%n kommentti</numerusform><numerusform>%n kommenttia</numerusform></translation>
     </message>
@@ -374,34 +392,10 @@
         <translation>%1 ja %2</translation>
     </message>
     <message id="friends_posthelper_via">
-        <location filename="../posthelper.cpp" line="348"/>
+        <location filename="../posthelper.cpp" line="420"/>
         <source>Via %1</source>
         <extracomment>Translate the &quot;via &lt;appication&gt; footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.</extracomment>
         <translation>Via %1</translation>
-    </message>
-    <message id="friends_notifications_title">
-        <location filename="../qml/NotificationsPage.qml" line="72"/>
-        <source>Notifications</source>
-        <extracomment>Title of the page showing the list of notifications</extracomment>
-        <translation>Ilmoitukset</translation>
-    </message>
-    <message id="friends_notifications_placeholder">
-        <location filename="../qml/NotificationsPage.qml" line="139"/>
-        <source>No notifications</source>
-        <extracomment>Text shown on the placeholder, where there is no notifications to be displayed</extracomment>
-        <translation>Ei ilmoituksia</translation>
-    </message>
-    <message id="friends_type_unsupported">
-        <location filename="../qml/TypeSolverPage.qml" line="156"/>
-        <source>Friends cannot load this yet. This feature has not been implemented.</source>
-        <extracomment>Describe that loading this item is not available yet</extracomment>
-        <translation>Friends ei voi ladata tätä vielä. Ominaisuus ei ole käytössä.</translation>
-    </message>
-    <message id="friends_login_title">
-        <location filename="../qml/LoginPage.qml" line="56"/>
-        <source>Login</source>
-        <extracomment>Title of the login page</extracomment>
-        <translation>Kirjaudu sisään</translation>
     </message>
 </context>
 </TS>

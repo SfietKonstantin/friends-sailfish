@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl_NL" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="nl_NL" version="2.0">
 <context>
     <name/>
     <message id="friends_about_title">
@@ -11,32 +11,32 @@
         <location filename="../qml/AboutPage.qml" line="61"/>
         <source>Friends</source>
         <extracomment>Name of the application. Should be &quot;Friends&quot;</extracomment>
-        <translation>Vrienden</translation>
+        <translation>Friends</translation>
     </message>
     <message id="friends_about_version">
         <location filename="../qml/AboutPage.qml" line="71"/>
         <source>Version %1, powered by Nemo Social</source>
         <extracomment>Version of Friends. %1 will be replaced by the version. Please add &quot;powered by Nemo Social&quot;</extracomment>
-        <translation>Versie %1, aangedreven door Nemo Social</translation>
+        <translation>Versie %1, mogelijk gemaakt door Nemo Social</translation>
     </message>
     <message id="friends_about_text">
         <location filename="../qml/AboutPage.qml" line="81"/>
         <source>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software.</source>
         <extracomment>Description of Friends</extracomment>
-        <translation>Vrienden is een eenvoudige en elegante Facebook client voor Sailfish OS. Het is een Open Source applicatie, dit betekend dat het door iedereen kan worden aangepast en verbeterd. Als je Vrienden leuk vindt, overweeg dan alstublieft een donatie. Dit helpt bij het onderhoud van deze applicatie en zorgt ervoor dat het Open Source kan blijven.</translation>
+        <translation>Friends is een eenvoudige en elegante Facebook client voor Sailfish OS. Het is  opensourcesoftware, wat betekent dat het door iedereen kan worden aangepast en verbeterd. Als je Friends leuk vindt, overweeg dan te doneren. Dit helpt bij het onderhoud van deze applicatie en zorgt ervoor dat het opensourcesoftware kan blijven.</translation>
     </message>
     <message id="friends_about_button_facebook_page">
         <location filename="../qml/AboutPage.qml" line="97"/>
         <source>Facebook page</source>
         <extracomment>Caption of a button that shows the Facebook page of the application</extracomment>
-        <translation>Facebook pagina</translation>
+        <translation>Facebookpagina</translation>
     </message>
     <message id="friends_button_donate">
         <location filename="../qml/AboutPage.qml" line="109"/>
         <location filename="../qml/WelcomeDialog.qml" line="76"/>
         <source>Donate</source>
         <extracomment>Caption of a button that shows a Paypal donation page</extracomment>
-        <translation>Doneer</translation>
+        <translation>Doneren</translation>
     </message>
     <message id="friends_about_button_developers">
         <location filename="../qml/AboutPage.qml" line="121"/>
@@ -54,7 +54,7 @@
         <location filename="../qml/AlbumsPage.qml" line="155"/>
         <source>No albums</source>
         <extracomment>Text shown on the placeholder, where there is no albums to be displayed</extracomment>
-        <translation>Geen Albums</translation>
+        <translation>Geen albums</translation>
     </message>
     <message id="friends_comments_title">
         <location filename="../qml/CommentsPage.qml" line="84"/>
@@ -66,7 +66,7 @@
         <location filename="../qml/CommentsPage.qml" line="212"/>
         <source>Show likes</source>
         <extracomment>Action that shows who liked a given item</extracomment>
-        <translation>Laat Likes zien</translation>
+        <translation>Laat vind-ik-leuks zien</translation>
     </message>
     <message id="friends_developers_title">
         <location filename="../qml/DevelopersPage.qml" line="92"/>
@@ -78,53 +78,49 @@
         <location filename="../qml/DevelopersPage.qml" line="133"/>
         <source>%1&apos;s webpage</source>
         <extracomment>A menu item that opens a developer's webpage. %1 will be replaced by the developer's name</extracomment>
-        <translation>%1&apos;s webpagina</translation>
+        <translation>Webpagina van %1</translation>
     </message>
     <message id="friends_developers_twitter">
         <location filename="../qml/DevelopersPage.qml" line="140"/>
         <source>%1&apos;s Twitter account</source>
         <extracomment>A menu item that opens a developer's Twitter page. %1 will be replaced by the developer's name</extracomment>
-        <translation>%1&apos;s Twitter account</translation>
+        <translation>Twitter-account van %1</translation>
     </message>
     <message id="friends_locale">
         <location filename="../qml/friends.qml" line="64"/>
         <source>en_US</source>
         <extracomment>Set the locale that will be used for Facebook API. See http://www.facebook.com/translations/FacebookLocales.xml for a list of locales supported by Facebook</extracomment>
-        <translation>en_US</translation>
+        <translation>nl_NL</translation>
     </message>
     <message id="friends_friends_title">
-        <location filename="../qml/FriendsPage.qml" line="76"/>
+        <location filename="../qml/FriendsPage.qml" line="83"/>
         <source>Friends</source>
         <extracomment>Title of the page showing the list of friends</extracomment>
         <translation>Vrienden</translation>
     </message>
     <message id="friends_friends_placeholder">
-        <location filename="../qml/FriendsPage.qml" line="124"/>
+        <location filename="../qml/FriendsPage.qml" line="134"/>
         <source>No Friends</source>
         <extracomment>Text shown on the placeholder, where there is no friends to be displayed</extracomment>
-        <translation>Geen Vrienden</translation>
+        <translation>Geen vrienden</translation>
     </message>
     <message id="friends_likes_title">
         <location filename="../qml/LikesPage.qml" line="73"/>
         <source>Likes</source>
         <extracomment>Title of the page showing the list of people who are liking an item</extracomment>
-        <translation>Vind ik leuk&apos;s</translation>
+        <translation>Vind-ik-leuks</translation>
     </message>
     <message id="friends_likes_placeholder">
         <location filename="../qml/LikesPage.qml" line="111"/>
         <source>No likes</source>
         <extracomment>Text shown on the placeholder, where there is no people who liked an item to be displayed</extracomment>
-        <translation>Geen vind ik leuk&apos;s</translation>
+        <translation>Geen vind-ik-leuks</translation>
     </message>
-    <message id="friends_login_quit">
-        <source>Quit</source>
-        <extracomment>Action displayed on the cancel button for the login dialog</extracomment>
-        <translation type="vanished">Afsluiten</translation>
-    </message>
-    <message id="friends_login_ignore">
-        <source>Ignore</source>
-        <extracomment>Action displayed on the accept button for the login dialog. This button is never active, and should display &quot;Ignore&quot;. It cannot be triggered.</extracomment>
-        <translation type="vanished">Negeer</translation>
+    <message id="friends_login_title">
+        <location filename="../qml/LoginPage.qml" line="56"/>
+        <source>Login</source>
+        <extracomment>Title of the login page</extracomment>
+        <translation>Login</translation>
     </message>
     <message id="friends_menu_home">
         <location filename="../qml/MenuPage.qml" line="48"/>
@@ -154,7 +150,7 @@
         <location filename="../qml/MenuPage.qml" line="72"/>
         <source>Photos</source>
         <extracomment>Menu entry to show the photos page, with the photos where the user has been tagged.</extracomment>
-        <translation>Photo&apos;s</translation>
+        <translation>Foto&apos;s</translation>
     </message>
     <message id="friends_menu_events">
         <location filename="../qml/MenuPage.qml" line="78"/>
@@ -168,24 +164,30 @@
         <extracomment>Menu entry to show the messages page, where the user can chat.</extracomment>
         <translation>Berichten</translation>
     </message>
+    <message id="friends_menu_notifications">
+        <location filename="../qml/MenuPage.qml" line="90"/>
+        <source>Notifications</source>
+        <extracomment>Menu entry to show the notifications page, where the user can read notifications.</extracomment>
+        <translation type="unfinished"/>
+    </message>
     <message id="friends_photos_of_someone">
-        <location filename="../qml/MenuPage.qml" line="119"/>
+        <location filename="../qml/MenuPage.qml" line="121"/>
         <location filename="../qml/UserPage.qml" line="230"/>
         <source>Photos of %1</source>
         <extracomment>Specific title for the photos page, since it can display &quot;Photos of someone&quot; and the album's title. This title translates the &quot;Photos of someone&quot;. %1 contains the name of the user who have the photos.</extracomment>
-        <translation>Photo&apos;s van %1</translation>
+        <translation>Foto&apos;s van %1</translation>
     </message>
     <message id="friends_menu_action_logout">
-        <location filename="../qml/MenuPage.qml" line="135"/>
+        <location filename="../qml/MenuPage.qml" line="137"/>
         <source>Logout</source>
         <extracomment>Action that disconnects the user from Facebook</extracomment>
-        <translation>Log uit</translation>
+        <translation>Uitloggen</translation>
     </message>
     <message id="friends_menu_action_about_friends">
-        <location filename="../qml/MenuPage.qml" line="145"/>
+        <location filename="../qml/MenuPage.qml" line="147"/>
         <source>About Friends</source>
         <extracomment>Action that shows the &quot;About Friends&quot; page</extracomment>
-        <translation>Over Vrienden</translation>
+        <translation>Over Friends</translation>
     </message>
     <message id="friends_news_title">
         <location filename="../qml/NewsPage.qml" line="97"/>
@@ -210,31 +212,43 @@
         <location filename="../qml/UserPage.qml" line="258"/>
         <source>Refresh</source>
         <extracomment>Action that allows to refresh a feed</extracomment>
-        <translation>Ververs</translation>
+        <translation>Verversen</translation>
+    </message>
+    <message id="friends_notifications_title">
+        <location filename="../qml/NotificationsPage.qml" line="72"/>
+        <source>Notifications</source>
+        <extracomment>Title of the page showing the list of notifications</extracomment>
+        <translation>Meldingen</translation>
+    </message>
+    <message id="friends_notifications_placeholder">
+        <location filename="../qml/NotificationsPage.qml" line="139"/>
+        <source>No notifications</source>
+        <extracomment>Text shown on the placeholder, where there is no notifications to be displayed</extracomment>
+        <translation>Geen meldingen</translation>
     </message>
     <message id="friends_photos_placeholder">
-        <location filename="../qml/PhotosPage.qml" line="165"/>
+        <location filename="../qml/PhotosPage.qml" line="168"/>
         <source>No photos</source>
         <extracomment>Text shown on the placeholder, where there is no photos to be displayed</extracomment>
-        <translation>Geen photo&apos;s</translation>
+        <translation>Geen foto&apos;s</translation>
     </message>
     <message id="friends_photos_action_informations">
-        <location filename="../qml/PhotosPage.qml" line="174"/>
+        <location filename="../qml/PhotosPage.qml" line="177"/>
         <source>Album informations</source>
         <extracomment>Action that shows the album informations</extracomment>
-        <translation>Album informatie</translation>
+        <translation>Albuminformatie</translation>
     </message>
     <message id="friends_post_post">
         <location filename="../qml/PostDialog.qml" line="48"/>
         <source>Post</source>
         <extracomment>Action displayed on the accept button for the post dialog. Clicking on this button will post something.</extracomment>
-        <translation>Plaats</translation>
+        <translation>Posten</translation>
     </message>
     <message id="friends_post_cancel">
         <location filename="../qml/PostDialog.qml" line="51"/>
         <source>Cancel</source>
         <extracomment>Action displayed on the cancel button for the post dialog.</extracomment>
-        <translation>Cancel</translation>
+        <translation>Annuleren</translation>
     </message>
     <message id="friends_post_message_label">
         <location filename="../qml/PostDialog.qml" line="58"/>
@@ -247,19 +261,19 @@
         <location filename="../qml/SocialButtons.qml" line="69"/>
         <source>Unlike</source>
         <extracomment>A button to cancel the Facebook &quot;like&quot;</extracomment>
-        <translation>Vind niet leuk</translation>
+        <translation>Vind ik niet meer leuk</translation>
     </message>
     <message id="friends_button_like">
         <location filename="../qml/SocialButtons.qml" line="72"/>
         <source>Like</source>
         <extracomment>A button to perform the Facebook &quot;like&quot;</extracomment>
-        <translation>Vind leuk</translation>
+        <translation>Vind ik leuk</translation>
     </message>
     <message id="friends_button_comment">
         <location filename="../qml/SocialButtons.qml" line="108"/>
         <source>Comment</source>
         <extracomment>A button to show or perform a comment</extracomment>
-        <translation>Reageer</translation>
+        <translation>Reageren</translation>
     </message>
     <message id="friends_splitsocial_last_update">
         <location filename="../qml/SplitSocialPanel.qml" line="103"/>
@@ -296,13 +310,19 @@
         <location filename="../qml/StateIndicator.qml" line="145"/>
         <source>Retry</source>
         <extracomment>A button that allows to retry to load data from Facebook, because of an Internet failure, or because Facebook sent an error.</extracomment>
-        <translation>Probeer opnieuw</translation>
+        <translation>Opnieuw proberen</translation>
     </message>
     <message id="friends_button_reconnect">
         <location filename="../qml/StateIndicator.qml" line="149"/>
         <source>Reconnect</source>
         <extracomment>A button that allows to reconnect (perform login again) to Facebook, because the current session expired.</extracomment>
-        <translation>Herstel verbinding</translation>
+        <translation>Verbinding herstellen</translation>
+    </message>
+    <message id="friends_type_unsupported">
+        <location filename="../qml/TypeSolverPage.qml" line="159"/>
+        <source>Friends cannot load this yet. This feature has not been implemented.</source>
+        <extracomment>Describe that loading this item is not available yet</extracomment>
+        <translation>Friends kan dit nog niet laden. Dit onderdeel is nog niet geïmplementeerd.</translation>
     </message>
     <message id="friends_user_placeholder">
         <location filename="../qml/UserPage.qml" line="217"/>
@@ -314,7 +334,7 @@
         <location filename="../qml/UserPage.qml" line="226"/>
         <source>Photos</source>
         <extracomment>Action that shows the user's photos</extracomment>
-        <translation>Photo&apos;s</translation>
+        <translation>Foto&apos;s</translation>
     </message>
     <message id="friends_user_action_albums">
         <location filename="../qml/UserPage.qml" line="239"/>
@@ -339,33 +359,31 @@
         <location filename="../qml/WelcomeDialog.qml" line="46"/>
         <source>Close</source>
         <extracomment>Action displayed in the welcome dialog. Used to close the dialog</extracomment>
-        <translation>Sluit</translation>
+        <translation>Sluiten</translation>
     </message>
     <message id="friends_welcome_description">
         <location filename="../qml/WelcomeDialog.qml" line="59"/>
         <source>Friends is an elegant Facebook client. You can try the handy &apos;global menu&apos; that can be accessed by flicking from the right. It is still incomplete though, and new features will be added little by little.</source>
         <extracomment>A welcome message</extracomment>
-        <translation>Vrienden is een elegante Facebook applicatie. Probeer het handige &apos;global menu&apos; dat je opend door vanaf de rechter kant te vegen. De applicatie is nog niet helemaal compleet, nieuwe functies worden beetje bij beetje toegevoegd. </translation>
+        <translation>Friends is een elegante Facebook-applicatie. Probeer het handige &apos;global menu&apos; dat je opent door vanaf de rechterkant te vegen. De applicatie is nog niet helemaal compleet, nieuwe functies worden beetje bij beetje toegevoegd. </translation>
     </message>
     <message id="friends_welcome_please_donate">
         <location filename="../qml/WelcomeDialog.qml" line="69"/>
         <source>Please consider a donation to keep Friends free and open-source.</source>
         <extracomment>A message for asking for donations</extracomment>
-        <translation>Overweeg een donatie om Vrienden vrij en open-source te houden</translation>
+        <translation>Overweeg te doneren om Friends vrij en open-source te houden</translation>
     </message>
     <message id="friends_footer_likes" numerus="yes">
         <location filename="../footerhelper.cpp" line="43"/>
         <source>%n likes</source>
-        <oldsource>There are %n likes</oldsource>
         <extracomment>Part of post footer, saying &quot;&lt;number&gt; likes&quot;. %n is replaced by the number of likes.</extracomment>
-        <translation><numerusform>%n vind ik leuk</numerusform><numerusform>%n vind ik leuks</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message id="friends_footer_comments" numerus="yes">
         <location filename="../footerhelper.cpp" line="47"/>
         <source>%n comments</source>
-        <oldsource>there are %n comments</oldsource>
         <extracomment>Part of post footer, saying &quot;&lt;number&gt; cpomments&quot;. %n is replaced by the number of comments.</extracomment>
-        <translation><numerusform>%n reactie</numerusform><numerusform>%n reacties</numerusform></translation>
+        <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message id="friends_footer_and">
         <location filename="../footerhelper.cpp" line="51"/>
@@ -374,34 +392,10 @@
         <translation>%1 en %2</translation>
     </message>
     <message id="friends_posthelper_via">
-        <location filename="../posthelper.cpp" line="348"/>
+        <location filename="../posthelper.cpp" line="420"/>
         <source>Via %1</source>
         <extracomment>Translate the &quot;via &lt;appication&gt; footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.</extracomment>
-        <translation>Via %1</translation>
-    </message>
-    <message id="friends_notifications_title">
-        <location filename="../qml/NotificationsPage.qml" line="72"/>
-        <source>Notifications</source>
-        <extracomment>Title of the page showing the list of notifications</extracomment>
-        <translation>Meldingen</translation>
-    </message>
-    <message id="friends_notifications_placeholder">
-        <location filename="../qml/NotificationsPage.qml" line="139"/>
-        <source>No notifications</source>
-        <extracomment>Text shown on the placeholder, where there is no notifications to be displayed</extracomment>
-        <translation>Geen meldingen</translation>
-    </message>
-    <message id="friends_type_unsupported">
-        <location filename="../qml/TypeSolverPage.qml" line="156"/>
-        <source>Friends cannot load this yet. This feature has not been implemented.</source>
-        <extracomment>Describe that loading this item is not available yet</extracomment>
-        <translation>Vrienden kan dit nog niet laden. Dit onderdeel is nog niet geïmplementeerd.</translation>
-    </message>
-    <message id="friends_login_title">
-        <location filename="../qml/LoginPage.qml" line="56"/>
-        <source>Login</source>
-        <extracomment>Title of the login page</extracomment>
-        <translation>Login</translation>
+        <translation>via %1</translation>
     </message>
 </context>
 </TS>
