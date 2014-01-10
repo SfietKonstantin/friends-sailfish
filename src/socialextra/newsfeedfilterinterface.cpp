@@ -357,6 +357,7 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
             }
         }
 
+
         // Discard stories without attachments
         if (!hasMedia && !story.isEmpty() && message.isEmpty()) {
             continue;
@@ -410,8 +411,9 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         QString attachmentDescription = attachment.value("description").toString();
         QString attachmentUrl = attachment.value("href").toString();
 
-        // Facebook object id
+        // Facebook object id / type
         postData.insert(FACEBOOK_OBJECT_ID, attachment.value(FACEBOOK_OBJECT_ID));
+        postData.insert(FACEBOOK_OBJECT_TYPE, attachment.value(FACEBOOK_OBJECT_TYPE));
 
         // Link
         postData.insert(FACEBOOK_ONTOLOGY_POST_LINK, attachmentUrl);

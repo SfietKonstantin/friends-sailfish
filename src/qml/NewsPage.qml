@@ -129,26 +129,18 @@ Page {
         }
 
         PullDownMenu {
+            busy: model.status == SocialNetwork.Busy
             MenuItem {
                 id: postMenu
-                property bool loading: false
-                function posted() {
-                    loading = true
-                }
-
                 //: Action that allows the user to post something
                 //% "Post something"
                 text: qsTrId("friends_news_action_post")
-                onClicked: {
-                    var dialog = pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
-                    dialog.accepted.connect(posted)
-                }
+                onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
 
                 Connections {
                     target: me
-                    onActionStatusChanged: {
-                        if (me.actionStatus == SocialNetwork.Idle && postMenu.loading) {
-                            postMenu.loading = false
+                    onActionComplete: {
+                        if (ok) {
                             model.loadPrevious()
                         }
                     }

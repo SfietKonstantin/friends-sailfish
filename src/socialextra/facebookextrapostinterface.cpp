@@ -102,3 +102,8 @@ QString FacebookExtraPostInterface::facebookObjectId() const
 {
     return data().value(FACEBOOK_OBJECT_ID).toString();
 }
+
+QString FacebookExtraPostInterface::facebookObjectType() const
+{
+    return data().value(FACEBOOK_OBJECT_TYPE).toString();
+}

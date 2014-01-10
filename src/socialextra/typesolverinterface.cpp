@@ -34,6 +34,11 @@
 #include "identifiablecontentiteminterface_p.h"
 #include "facebook/facebookontology_p.h"
 
+static const char *FQL_KEY = "fql";
+static const char *TYPE_KEY = "type";
+static const char *ALBUM_FQL = "SELECT object_id FROM album WHERE aid = \"%1\"";
+static const char *PHOTO_FQL = "SELECT object_id FROM photo WHERE pid = \"%1\"";
+
 class TypeSolverFilterInterfacePrivate: public FilterInterfacePrivate
 {
 public:
@@ -41,10 +46,12 @@ public:
 private:
     Q_DECLARE_PUBLIC(TypeSolverFilterInterface)
     QString identifier;
+    QString type;
+    bool fql;
 };
 
 TypeSolverFilterInterfacePrivate::TypeSolverFilterInterfacePrivate(TypeSolverFilterInterface *q)
-    : FilterInterfacePrivate(q)
+    : FilterInterfacePrivate(q), fql(false)
 {
 }
 
@@ -68,6 +75,36 @@ void TypeSolverFilterInterface::setIdentifier(const QString &identifier)
     }
 }
 
+QString TypeSolverFilterInterface::type() const
+{
+    Q_D(const TypeSolverFilterInterface);
+    return d->type;
+}
+
+void TypeSolverFilterInterface::setType(const QString &type)
+{
+    Q_D(TypeSolverFilterInterface);
+    if (d->type != type) {
+        d->type = type;
+        emit typeChanged();
+    }
+}
+
+bool TypeSolverFilterInterface::isFql() const
+{
+    Q_D(const TypeSolverFilterInterface);
+    return d->fql;
+}
+
+void TypeSolverFilterInterface::setFql(bool fql)
+{
+    Q_D(TypeSolverFilterInterface);
+    if (d->fql != fql) {
+        d->fql = fql;
+        emit fqlChanged();
+    }
+}
+
 bool TypeSolverFilterInterface::isAcceptable(QObject *item, SocialNetworkInterface *socialNetwork) const
 {
     if (!testType<FacebookInterface>(socialNetwork)) {
@@ -86,16 +123,38 @@ bool TypeSolverFilterInterface::performLoadRequestImpl(QObject *item, SocialNetw
                                                        LoadType loadType)
 {
     Q_D(TypeSolverFilterInterface);
-    QMap<QString, QString> arguments;
-    arguments.insert("metadata", "1");
 
     FacebookInterface *facebook = qobject_cast<FacebookInterface *>(socialNetwork);
     if (!facebook) {
         return false;
     }
 
-    return d->addHandle(facebook->get(this, d->identifier, QString(), QString(), arguments), item,
-                        socialNetwork, loadType);
+    QVariantMap properties;
+    properties.insert(FQL_KEY, d->fql);
+    QMap<QString, QString> arguments;
+    QObject *handle = 0;
+    if (d->fql) {
+        properties.insert(TYPE_KEY, d->type);
+        if (d->type == QLatin1String("album")) {
+            // Query album using FQL
+            QString query = QString(ALBUM_FQL).arg(d->identifier);
+            arguments.insert("q", query);
+            handle = facebook->get(this, QLatin1String("fql"), QString(), QString(), arguments);
+        } else if (d->type == QLatin1String("photo")) {
+            // Query album using FQL
+            QString query = QString(PHOTO_FQL).arg(d->identifier);
+            arguments.insert("q", query);
+            handle = facebook->get(this, QLatin1String("fql"), QString(), QString(), arguments);
+        } else {
+            return false;
+        }
+    } else {
+        arguments.insert("metadata", "1");
+        handle = facebook->get(this, d->identifier, QString(), QString(), arguments);
+    }
+
+    d->addHandleProperties(handle, properties);
+    return d->addHandle(handle, item, socialNetwork, loadType);
 }
 
 bool TypeSolverFilterInterface::performSetItemDataImpl(IdentifiableContentItemInterface *item,
@@ -114,6 +173,17 @@ bool TypeSolverFilterInterface::performSetItemDataImpl(IdentifiableContentItemIn
                                                      "Downloaded data: %1")).arg(QString(data));
         item->setError(SocialNetworkInterface::DataError, errorMessage);
         return false;
+    }
+
+    bool fql = properties.value(FQL_KEY, false).toBool();
+    if (fql) {
+        // Create an artificial data
+        QString type = properties.value(TYPE_KEY).toString();
+        QVariantMap newDataMap;
+        QVariantMap object = dataMap.value(FACEBOOK_ONTOLOGY_METADATA_DATA).toList().first().toMap();
+        newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_ID, object.value("object_id"));
+        newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_TYPE, type);
+        dataMap = newDataMap;
     }
 
     dataMap.insert(NEMOQMLPLUGINS_SOCIAL_CONTENTITEMID,
@@ -144,10 +214,10 @@ void TypeSolverInterfacePrivate::emitPropertyChangeSignals(const QVariantMap &ol
 {
     Q_Q(TypeSolverInterface);
 
-    QVariantMap metadata = newData.value("metadata").toMap();
-    QString type = metadata.value("type").toString();
+    QVariantMap metadata = newData.value(FACEBOOK_ONTOLOGY_METADATA).toMap();
+    QString type = metadata.value(FACEBOOK_ONTOLOGY_METADATA_TYPE).toString();
     if (type.isEmpty()) {
-        type = newData.value("type").toString();
+        type = newData.value(FACEBOOK_ONTOLOGY_METADATA_TYPE).toString();
     }
 
     FacebookInterface::ContentItemType newObjectType = FacebookInterface::Unknown;

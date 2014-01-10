@@ -41,20 +41,26 @@ class TypeSolverFilterInterface: public FilterInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString identifier READ identifier WRITE setIdentifier NOTIFY identifierChanged)
+    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+    Q_PROPERTY(bool fql READ isFql WRITE setFql NOTIFY fqlChanged)
 public:
     explicit TypeSolverFilterInterface(QObject *parent = 0);
 
     // Properties
     QString identifier() const;
     void setIdentifier(const QString &identifier);
+    QString type() const;
+    void setType(const QString &type);
+    bool isFql() const;
+    void setFql(bool isFql);
 
     // Non QML API
     // Used by items
     bool isAcceptable(QObject *item, SocialNetworkInterface *socialNetwork) const;
 Q_SIGNALS:
     void identifierChanged();
-    void fieldsChanged();
-
+    void typeChanged();
+    void fqlChanged();
 protected:
     bool performLoadRequestImpl(QObject *item, SocialNetworkInterface *socialNetwork,
                                 LoadType loadType);

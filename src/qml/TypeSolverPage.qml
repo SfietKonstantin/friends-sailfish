@@ -38,17 +38,14 @@ import harbour.friends.social.extra 1.0
 Page {
     id: container
     property string identifier
-    property string postIdentifier
+    property string type
+    property bool fql: false
     function load() {
-        if (identifier.length > 0) {
-            if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
-                item.load()
+        if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
+            if (!item.load()) {
+                console.debug("FQL type not supported: " + type)
+                item.showUnsolvableObject()
             }
-            return
-        }
-
-        if (preloadPost.status == SocialNetwork.Idle || preloadPost.status == SocialNetwork.Error) {
-            preloadPost.load()
         }
     }
 
@@ -60,25 +57,8 @@ Page {
         }
     }
 
-    FacebookPost {
-        // Used to translate attached id to graph id
-        id: preloadPost
-        socialNetwork: facebook
-        filter: FacebookItemFilter {
-            identifier: container.postIdentifier
-            fields: "object_id"
-        }
-        onObjectIdentifierChanged: {
-            if (objectIdentifier.length > 0) {
-                container.identifier = objectIdentifier
-                container.load()
-            }
-        }
-    }
-
     TypeSolver {
         id: item
-        property bool loading: false
         property string source
         property var properties
         property bool needLoad
@@ -117,7 +97,7 @@ Page {
             console.debug("Object Type:" + objectType + " " + objectTypeString)
 
             if (objectType == Facebook.Album) {
-                item.pushPage("PhotosPage.qml", {"identifier": container.identifier}, true)
+                item.pushPage("PhotosPage.qml", {"identifier": item.identifier}, true)
                 return
             } else if (objectType == Facebook.Post) {
                 if (objectTypeString == "post") {
@@ -133,14 +113,12 @@ Page {
                     return
                 }
                 indicator.item = post
-                loading = true
                 post.load()
             } else if (objectType == Facebook.User) {
-                item.pushPage("UserPage.qml", {"identifier": container.identifier}, true)
+                item.pushPage("UserPage.qml", {"identifier": item.identifier}, true)
                 return
             } else if (objectType == Facebook.Photo) {
                 indicator.item = photo
-                loading = true
                 photo.load()
             } else {
                 showUnsolvableObject()
@@ -151,18 +129,20 @@ Page {
         socialNetwork: facebook
         filter: TypeSolverFilter {
             identifier: container.identifier
+            type: container.type
+            fql: container.fql
         }
-        onObjectTypeChanged: solveObjectType()
+        onLoaded: solveObjectType()
     }
 
     FacebookExtraPost {
         id: post
         socialNetwork: facebook
         filter: FacebookItemFilter {
-            identifier: container.identifier
+            identifier: item.identifier
         }
-        onStatusChanged: {
-            if (status == SocialNetwork.Idle && item.loading) {
+        onLoaded: {
+            if (ok) {
                 var headerProperties = {"post": post}
                 item.pushPage(Qt.resolvedUrl("CommentsPage.qml"),
                               {"identifier": post.identifier, "item": post,
@@ -180,12 +160,12 @@ Page {
         id: photo
         socialNetwork: facebook
         filter: FacebookItemFilter {
-            identifier: container.identifier
+            identifier: item.identifier
             fields: "id,name,updated_time,likes,comments"
         }
 
-        onStatusChanged: {
-            if (status == SocialNetwork.Idle && item.loading) {
+        onLoaded: {
+            if (ok) {
                 var headerProperties = {"post": post}
                 photoModel.append({"contentItem": photo})
 

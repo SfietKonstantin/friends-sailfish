@@ -179,7 +179,9 @@ Item {
                         Qt.openUrlExternally(post.source)
                     } else {
                         var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                  {"postIdentifier": post.identifier})
+                                                  {"identifier": post.facebookObjectId,
+                                                   "type": post.facebookObjectType,
+                                                   "fql": true})
                         page.load()
                     }
                 }

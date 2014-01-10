@@ -37,12 +37,14 @@
 #define MEDIA_KEY "media"
 #define IS_VIDEO_KEY "is_video"
 #define FACEBOOK_OBJECT_ID "fb_object_id"
+#define FACEBOOK_OBJECT_TYPE "fb_object_type"
 
 class FacebookExtraPostInterfacePrivate;
 class FacebookExtraPostInterface : public FacebookPostInterface
 {
     Q_OBJECT
     Q_PROPERTY(QString facebookObjectId READ facebookObjectId NOTIFY facebookObjectIdChanged)
+    Q_PROPERTY(QString facebookObjectType READ facebookObjectType NOTIFY facebookObjectTypeChanged)
     Q_PROPERTY(QStringList media READ media NOTIFY mediaChanged)
     Q_PROPERTY(bool isVideo READ isVideo NOTIFY isVideoChanged)
 public:
@@ -50,10 +52,12 @@ public:
 
     // Accessors
     QString facebookObjectId() const;
+    QString facebookObjectType() const;
     QStringList media() const;
     bool isVideo() const;
 Q_SIGNALS:
     void facebookObjectIdChanged();
+    void facebookObjectTypeChanged();
     void mediaChanged();
     void isVideoChanged();
 private:
