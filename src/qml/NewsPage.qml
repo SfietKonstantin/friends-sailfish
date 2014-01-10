@@ -61,6 +61,7 @@ Page {
             pageStack.pushAttached(menuPage)
             if (!settingsManager.welcomeDone) {
                 settingsManager.welcomeDone = true
+                settingsManager.version = VERSION
                 pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
             } else if (VERSION != settingsManager.version) {
                 settingsManager.version = VERSION
