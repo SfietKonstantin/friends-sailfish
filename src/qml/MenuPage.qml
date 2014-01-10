@@ -85,7 +85,9 @@ Page {
                 page: ""
             }
             ListElement {
-                text: "Notifications"
+                //: Menu entry to show the notifications page, where the user can read notifications.
+                //% "Notifications"
+                text: QT_TRID_NOOP("friends_menu_notifications")
                 page: "NotificationsPage.qml"
             }
         }
