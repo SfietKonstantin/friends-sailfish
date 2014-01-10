@@ -41,13 +41,13 @@ Page {
     property bool isFacebookModel: true
     allowedOrientations: Orientation.All
 
-    function load() {
-        view.positionViewAtIndex(container.currentIndex, ListView.Center)
-    }
-
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
+        }
+
+        if (status == PageStatus.Deactivating) {
+            container.currentIndex = view.currentIndex
         }
     }
 
@@ -59,7 +59,6 @@ Page {
         background: SplitSocialPanel {
             property int realIndex: view.currentIndex < 0 || view.currentIndex >= container.model.count ? 0 : view.currentIndex
             item: container.isFacebookModel ? model.relatedItem(realIndex) : model.get(realIndex).contentItem
-            onItemChanged: console.debug(item)
             description: item.name
             onShowComments: {
                 var headerProperties = {"identifier": item.identifier,
@@ -75,14 +74,12 @@ Page {
 
         foreground: ListView {
             id: view
-            onVisibleChanged: {
-                if (visible) {
-                    view.positionViewAtIndex(container.currentIndex, ListView.Contain)
-                }
-            }
             property int imageSize: Math.max(Screen.width, Screen.height)
             anchors.fill: parent
             model: visible ? container.model : null
+            onModelChanged: {
+                view.positionViewAtIndex(container.currentIndex, ListView.Center)
+            }
             interactive: visible ? model.count > 1 : false
             orientation: Qt.Horizontal
             highlightRangeMode: ListView.StrictlyEnforceRange
@@ -93,8 +90,11 @@ Page {
                 }
 
                 if (container.isFacebookModel) {
-                    if (atXEnd && view.model.hasNext) {
-                        view.model.loadNext()
+                    if (atXEnd && container.model.hasNext) {
+                        if (container.model.status == SocialNetwork.Idle
+                            || container.model.status == SocialNetwork.Error) {
+                            container.model.loadNext()
+                        }
                     }
                 }
             }

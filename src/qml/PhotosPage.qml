@@ -126,9 +126,8 @@ Page {
                         id: background
                         anchors.fill: parent
                         onClicked: {
-                            var page = pageStack.push(Qt.resolvedUrl("PhotoPage.qml"),
-                                                      {"model": view.model, "currentIndex": model.index})
-                            page.load()
+                            pageStack.push(Qt.resolvedUrl("PhotoPage.qml"),
+                                           {"model": view.model, "currentIndex": model.index})
                         }
 
                         Item {
@@ -155,7 +154,9 @@ Page {
 
                 onAtYEndChanged: {
                     if (atYEnd && model.hasNext) {
-                        model.loadNext()
+                        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                            model.loadNext()
+                        }
                     }
                 }
 
