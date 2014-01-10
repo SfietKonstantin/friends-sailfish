@@ -34,9 +34,21 @@ import Sailfish.Silica 1.0
 import harbour.friends.social 1.0
 
 Page {
+    id: container
     StateIndicator {
         item: me
     }
+
+    function disconnect() {
+        //: Message displayed in a remorse timer, when the disconnect from Facebook action has been triggered
+        //% "Disconnecting"
+        remorse.execute(qsTrId("friends_menu_remorse_disconnect"),
+                        function() {
+                            tokenManager.disconnect()
+                            app.performLogin()
+                        })
+    }
+    RemorsePopup { id: remorse }
 
     SilicaListView {
         anchors.fill: parent
@@ -135,10 +147,7 @@ Page {
                 //: Action that disconnects the user from Facebook
                 //% "Logout"
                 text: qsTrId("friends_menu_action_logout")
-                onClicked: {
-                    tokenManager.disconnect()
-                    app.performLogin()
-                }
+                onClicked: container.disconnect()
             }
 
             MenuItem {
