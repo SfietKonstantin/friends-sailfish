@@ -24,7 +24,8 @@ HEADERS += cachehelper_p.h \
     footerhelper.h \
     notificationshelper.h \
     imagehelper.h \
-    imagemanager.h
+    imagemanager.h \
+    changelogmodel.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
@@ -32,7 +33,8 @@ SOURCES += main.cpp \
     footerhelper.cpp \
     notificationshelper.cpp \
     imagehelper.cpp \
-    imagemanager.cpp
+    imagemanager.cpp \
+    changelogmodel.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -60,7 +62,10 @@ OTHER_FILES += qml/friends.qml \
     qml/PostDialog.qml \
     qml/LikesPage.qml \
     qml/NotificationsPage.qml \
-    qml/TypeSolverPage.qml
+    qml/TypeSolverPage.qml \
+    qml/ChangeLogPage.qml \
+    qml/UpdatedDialog.qml \
+    qml/ChangeLogView.qml
 
 target.path = $$TARGETPATH
 

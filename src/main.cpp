@@ -52,6 +52,7 @@
 #include "notificationshelper.h"
 #include "imagehelper.h"
 #include "imagemanager.h"
+#include "changelogmodel.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -157,6 +158,7 @@ void importMisc()
     qmlRegisterType<ImageHelper>(URI, 1, 0, "ImageHelper");
     qmlRegisterSingletonType<ImageManager>(URI, 1, 0, "ImageManager", imagemanager_provider);
     qmlRegisterUncreatableType<QQuickImageBase>(URI, 1, 0, "QQuickImageBase", REASON);
+    qmlRegisterType<ChangeLogModel>(URI, 1, 0, "ChangeLogModel");
 }
 
 void importSocial()

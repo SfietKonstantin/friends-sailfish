@@ -62,6 +62,9 @@ Page {
             if (!settingsManager.welcomeDone) {
                 settingsManager.welcomeDone = true
                 pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
+            } else if (VERSION != settingsManager.version) {
+                settingsManager.version = VERSION
+                pageStack.push(Qt.resolvedUrl("UpdatedDialog.qml"))
             }
         }
     }

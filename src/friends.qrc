@@ -31,5 +31,9 @@
         <file>qml/NotificationsPage.qml</file>
         <file>qml/TypeSolverPage.qml</file>
         <file>qml/LoginPage.qml</file>
+        <file>data/changelog.json</file>
+        <file>qml/ChangeLogPage.qml</file>
+        <file>qml/UpdatedDialog.qml</file>
+        <file>qml/ChangeLogView.qml</file>
     </qresource>
 </RCC>

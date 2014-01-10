@@ -29,28 +29,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+import QtQuick 2.0
+import Sailfish.Silica 1.0
+import harbour.friends 1.0
 
-#include <QtCore/QObject>
+SilicaListView {
+    id: view
+    property alias onlyCurrent: model.onlyCurrent
+    model: ChangeLogModel {
+        id: model
+    }
+    delegate: Item {
+        width: view.width
+        height: label.height + 2 * Theme.paddingMedium
 
-class SettingsManager : public QObject
-{
-    Q_OBJECT
-    Q_PROPERTY(bool welcomeDone READ welcomeDone WRITE setWelcomeDone NOTIFY welcomeDoneChanged)
-    Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
-public:
-    explicit SettingsManager(QObject *parent = 0);
-    bool welcomeDone() const;
-    void setWelcomeDone(bool welcomeDone);
-    QString version() const;
-    void setVersion(const QString &version);
-signals:
-    void welcomeDoneChanged();
-    void versionChanged();
-private:
-    bool m_welcomeDone;
-    QString m_version;
-};
-
-#endif // SETTINGSMANAGER_H
+        Label {
+            id: label
+            anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
+            anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
+            text: model.text
+            wrapMode: Text.WordWrap
+            font.pixelSize: Theme.fontSizeSmall
+            color: model.type === "feature" ? Theme.primaryColor: Theme.secondaryColor
+        }
+    }
+}

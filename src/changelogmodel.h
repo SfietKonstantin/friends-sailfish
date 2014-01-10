@@ -29,28 +29,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+#ifndef CHANGELOGMODEL_H
+#define CHANGELOGMODEL_H
 
-#include <QtCore/QObject>
+#include <QtCore/QAbstractListModel>
 
-class SettingsManager : public QObject
+class QJsonArray;
+struct ChangeLogModelData;
+class ChangeLogModel : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(bool welcomeDone READ welcomeDone WRITE setWelcomeDone NOTIFY welcomeDoneChanged)
-    Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
+    Q_PROPERTY(int count READ count NOTIFY countChanged)
+    Q_PROPERTY(bool onlyCurrent READ isOnlyCurrent WRITE setOnlyCurrent NOTIFY onlyCurrentChanged)
 public:
-    explicit SettingsManager(QObject *parent = 0);
-    bool welcomeDone() const;
-    void setWelcomeDone(bool welcomeDone);
-    QString version() const;
-    void setVersion(const QString &version);
-signals:
-    void welcomeDoneChanged();
-    void versionChanged();
+    enum Roles {
+        VersionRole,
+        TypeRole,
+        TextRole
+    };
+public:
+    explicit ChangeLogModel(QObject *parent = 0);
+    virtual ~ChangeLogModel();
+
+    QHash<int, QByteArray> roleNames() const;
+
+    int rowCount(const QModelIndex &index = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role) const;
+
+    int count() const;
+    bool isOnlyCurrent() const;
+    void setOnlyCurrent(bool onlyCurrent);
+Q_SIGNALS:
+    void countChanged();
+    void onlyCurrentChanged();
 private:
-    bool m_welcomeDone;
-    QString m_version;
+    void load();
+    void addVersion(const QString &version, const QJsonArray &data);
+    bool m_onlyCurrent;
+    QList<ChangeLogModelData *> m_data;
 };
 
-#endif // SETTINGSMANAGER_H
+#endif // CHANGELOGMODEL_H

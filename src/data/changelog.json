@@ -1,0 +1,28 @@
+{
+  "0.1.11": [
+    {
+      "text": "New translations: German and Hungarian", 
+      "type": "feature"
+    }, 
+    {
+      "text": "It is possible to open photos and albums from news feed.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "The pulley menus in news feed page and user page now glow when feeds are loading.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "Section separator in friends page are now displayed correctly.", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Improved images handling. There should be less freezes.", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Performance improvements for image browsing.", 
+      "type": "bug"
+    }
+  ]
+}

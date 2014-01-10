@@ -40,10 +40,10 @@ Dialog {
             anchors.fill: parent
             spacing: Theme.paddingLarge
             DialogHeader {
-                //: Action displayed in the welcome dialog. Used to close the dialog
+                //: Action used to close the dialog
                 //% "Close"
-                cancelText: qsTrId("friends_welcome_close")
-                acceptText: qsTrId("friends_welcome_close")
+                cancelText: qsTrId("friends_close")
+                acceptText: qsTrId("friends_close")
             }
 
             Image {
@@ -64,8 +64,8 @@ Dialog {
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                //: A message for asking for donations
-                //% "Please consider a donation to keep Friends free and open-source."
+                //: A message for asking for donations.
+                //% "Please consider a donation to help improving Friends."
                 text: qsTrId("friends_welcome_please_donate")
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall

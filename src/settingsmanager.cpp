@@ -33,12 +33,14 @@
 #include <QtCore/QSettings>
 
 static const char *WELCOME_DONE_KEY = "welcome/done";
+static const char *VERSION_KEY = "version/version";
 
 SettingsManager::SettingsManager(QObject *parent) :
     QObject(parent), m_welcomeDone(false)
 {
     QSettings settings;
     setWelcomeDone(settings.value(WELCOME_DONE_KEY, false).toBool());
+    setVersion(settings.value(VERSION_KEY, QString()).toString());
 }
 
 bool SettingsManager::welcomeDone() const
@@ -53,5 +55,20 @@ void SettingsManager::setWelcomeDone(bool welcomeDone)
         emit welcomeDoneChanged();
         QSettings settings;
         settings.setValue(WELCOME_DONE_KEY, welcomeDone);
+    }
+}
+
+QString SettingsManager::version() const
+{
+    return m_version;
+}
+
+void SettingsManager::setVersion(const QString &version)
+{
+    if (m_version != version) {
+        m_version = version;
+        emit versionChanged();
+        QSettings settings;
+        settings.setValue(VERSION_KEY, version);
     }
 }

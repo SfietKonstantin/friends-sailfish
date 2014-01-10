@@ -35,7 +35,9 @@ import Sailfish.Silica 1.0
 Page {
     SilicaFlickable {
         anchors.fill: parent
+        contentHeight: mainColumn.height + Theme.paddingLarge + buttonsColumn.height
         Column {
+            id: mainColumn
             spacing: Theme.paddingMedium
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
@@ -68,7 +70,7 @@ Page {
                     wrapMode: Text.WordWrap
                     //: Version of Friends. %1 will be replaced by the version. Please add "powered by Nemo Social"
                     //% "Version %1, powered by Nemo Social"
-                    text: qsTrId("friends_about_version").arg(VERSION)
+                    text: qsTrId("friends_version").arg(VERSION)
                 }
             }
 
@@ -77,49 +79,65 @@ Page {
                 anchors.left: parent.left; anchors.right: parent.right
                 font.pixelSize: Theme.fontSizeSmall
                 //: Description of Friends
-                //% "Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software."
+                //% "Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help improving the software, while keeping it free and Open Source."
                 text: qsTrId("friends_about_text")
             }
         }
-    }
-    Column {
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        BackgroundItem {
+
+        Column {
+            id: buttonsColumn
+            anchors.top: mainColumn.bottom; anchors.topMargin: Theme.paddingLarge
             anchors.left: parent.left; anchors.right: parent.right
-            onClicked: Qt.openUrlExternally(FACEBOOK_PAGE)
-            Label {
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                anchors.verticalCenter: parent.verticalCenter
-                //: Caption of a button that shows the Facebook page of the application
-                //% "Facebook page"
-                text: qsTrId("friends_about_button_facebook_page")
+            BackgroundItem {
+                anchors.left: parent.left; anchors.right: parent.right
+                onClicked: Qt.openUrlExternally(FACEBOOK_PAGE)
+                Label {
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                    //: Caption of a button that shows the Facebook page of the application
+                    //% "Facebook page"
+                    text: qsTrId("friends_about_button_facebook_page")
+                }
+            }
+            BackgroundItem {
+                anchors.left: parent.left; anchors.right: parent.right
+                onClicked: Qt.openUrlExternally(PAYPAL_DONATE)
+                Label {
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                    //: Caption of a button that shows a Paypal donation page
+                    //% "Donate"
+                    text: qsTrId("friends_button_donate")
+                }
+            }
+            BackgroundItem {
+                anchors.left: parent.left; anchors.right: parent.right
+                onClicked: pageStack.push(Qt.resolvedUrl("DevelopersPage.qml"))
+                Label {
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                    //: Caption of a button that shows the list of developers
+                    //% "Developers"
+                    text: qsTrId("friends_about_button_developers")
+                }
+            }
+            BackgroundItem {
+                anchors.left: parent.left; anchors.right: parent.right
+                onClicked: pageStack.push(Qt.resolvedUrl("ChangeLogPage.qml"))
+                Label {
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    anchors.verticalCenter: parent.verticalCenter
+                    //: Caption of a button that leads to the changelog
+                    //% "ChangeLog"
+                    text: qsTrId("friends_about_button_changelog")
+                }
             }
         }
-        BackgroundItem {
-            anchors.left: parent.left; anchors.right: parent.right
-            onClicked: Qt.openUrlExternally(PAYPAL_DONATE)
-            Label {
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                anchors.verticalCenter: parent.verticalCenter
-                //: Caption of a button that shows a Paypal donation page
-                //% "Donate"
-                text: qsTrId("friends_button_donate")
-            }
-        }
-        BackgroundItem {
-            anchors.left: parent.left; anchors.right: parent.right
-            onClicked: pageStack.push(Qt.resolvedUrl("DevelopersPage.qml"))
-            Label {
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                anchors.verticalCenter: parent.verticalCenter
-                //: Caption of a button that shows the list of developers
-                //% "Developers"
-                text: qsTrId("friends_about_button_developers")
-            }
-        }
+
+        VerticalScrollDecorator {}
     }
 }
