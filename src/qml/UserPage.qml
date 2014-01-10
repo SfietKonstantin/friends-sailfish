@@ -219,6 +219,7 @@ Page {
 
         PullDownMenu {
             z: 1000
+            busy: model.status == SocialNetwork.Busy
 
             MenuItem {
                 //: Action that shows the user's photos
