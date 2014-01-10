@@ -51,11 +51,15 @@ void FacebookExtraPostInterfacePrivate::emitPropertyChangeSignals(const QVariant
     QVariant newMedia = newData.value(MEDIA_KEY);
     QVariant oldIsVideo = oldData.value(IS_VIDEO_KEY);
     QVariant newIsVideo = newData.value(IS_VIDEO_KEY);
+    QVariant oldFacebookObjecId = oldData.value(FACEBOOK_OBJECT_ID);
+    QVariant newFacebookObjecId = newData.value(FACEBOOK_OBJECT_ID);
 
     if (oldMedia != newMedia)
         emit q->mediaChanged();
     if (oldIsVideo != newIsVideo)
         emit q->isVideoChanged();
+    if (oldFacebookObjecId != newFacebookObjecId)
+        emit q->facebookObjectIdChanged();
 
     // Call super class implementation
     FacebookPostInterfacePrivate::emitPropertyChangeSignals(oldData, newData);
@@ -94,3 +98,7 @@ bool FacebookExtraPostInterface::isVideo() const
     return data().value(IS_VIDEO_KEY).toBool();
 }
 
+QString FacebookExtraPostInterface::facebookObjectId() const
+{
+    return data().value(FACEBOOK_OBJECT_ID).toString();
+}

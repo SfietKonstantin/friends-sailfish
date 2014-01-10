@@ -172,10 +172,16 @@ Item {
 
             MouseArea {
                 id: imagesContainerMouseArea
-                enabled: post.source != ""
+                enabled: post.source != "" || post.facebookObjectId != ""
                 anchors.fill: parent
                 onClicked: {
-                    Qt.openUrlExternally(post.source)
+                    if (post.source != "") {
+                        Qt.openUrlExternally(post.source)
+                    } else {
+                        var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                                  {"postIdentifier": post.identifier})
+                        page.load()
+                    }
                 }
             }
 
@@ -188,6 +194,7 @@ Item {
                 anchors.leftMargin: !imagesContainer.small ? 0 : Theme.paddingMedium
                 anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
                 width: !imagesContainer.small ? imagesContainer.width : Theme.iconSizeLarge
+                opacity: imagesContainerMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1
 
                 Repeater {
                     model: post.media

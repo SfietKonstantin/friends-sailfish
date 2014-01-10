@@ -38,10 +38,10 @@ Page {
     id: container
     property int currentIndex
     property var model
+    property bool isFacebookModel: true
     allowedOrientations: Orientation.All
 
     function load() {
-//        console.debug(currentIndex)
         view.positionViewAtIndex(container.currentIndex, ListView.Center)
     }
 
@@ -57,7 +57,9 @@ Page {
         dock: container.orientation == Orientation.Portrait ? Dock.Top: Dock.Left
 
         background: SplitSocialPanel {
-            item: model.relatedItem(view.currentIndex < 0 || view.currentIndex >= container.model.count ? 0 : view.currentIndex)
+            property int realIndex: view.currentIndex < 0 || view.currentIndex >= container.model.count ? 0 : view.currentIndex
+            item: container.isFacebookModel ? model.relatedItem(realIndex) : model.get(realIndex).contentItem
+            onItemChanged: console.debug(item)
             description: item.name
             onShowComments: {
                 var headerProperties = {"identifier": item.identifier,
@@ -90,8 +92,10 @@ Page {
                     return
                 }
 
-                if (atXEnd && view.model.hasNext) {
-                    view.model.loadNext()
+                if (container.isFacebookModel) {
+                    if (atXEnd && view.model.hasNext) {
+                        view.model.loadNext()
+                    }
                 }
             }
 

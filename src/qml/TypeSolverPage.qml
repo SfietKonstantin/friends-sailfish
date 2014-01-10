@@ -38,9 +38,17 @@ import harbour.friends.social.extra 1.0
 Page {
     id: container
     property string identifier
+    property string postIdentifier
     function load() {
-        if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
-            item.load()
+        if (identifier.length > 0) {
+            if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
+                item.load()
+            }
+            return
+        }
+
+        if (preloadPost.status == SocialNetwork.Idle || preloadPost.status == SocialNetwork.Error) {
+            preloadPost.load()
         }
     }
 
@@ -48,6 +56,22 @@ Page {
         if (status == PageStatus.Active) {
             if (item.source.length > 0) {
                 item.pushPage(item.source, item.properties, item.needLoad, item.reparentedItems)
+            }
+        }
+    }
+
+    FacebookPost {
+        // Used to translate attached id to graph id
+        id: preloadPost
+        socialNetwork: facebook
+        filter: FacebookItemFilter {
+            identifier: container.postIdentifier
+            fields: "object_id"
+        }
+        onObjectIdentifierChanged: {
+            if (objectIdentifier.length > 0) {
+                container.identifier = objectIdentifier
+                container.load()
             }
         }
     }
@@ -114,6 +138,10 @@ Page {
             } else if (objectType == Facebook.User) {
                 item.pushPage("UserPage.qml", {"identifier": container.identifier}, true)
                 return
+            } else if (objectType == Facebook.Photo) {
+                indicator.item = photo
+                loading = true
+                photo.load()
             } else {
                 showUnsolvableObject()
                 return
@@ -140,6 +168,30 @@ Page {
                               {"identifier": post.identifier, "item": post,
                                "headerComponent": postHeaderComponent,
                                "headerProperties": headerProperties}, true, [post])
+            }
+        }
+    }
+
+    ListModel {
+        id: photoModel
+    }
+
+    FacebookPhoto {
+        id: photo
+        socialNetwork: facebook
+        filter: FacebookItemFilter {
+            identifier: container.identifier
+            fields: "id,name,updated_time,likes,comments"
+        }
+
+        onStatusChanged: {
+            if (status == SocialNetwork.Idle && item.loading) {
+                var headerProperties = {"post": post}
+                photoModel.append({"contentItem": photo})
+
+                item.pushPage(Qt.resolvedUrl("PhotoPage.qml"),
+                              {"currentIndex": 0, "model": photoModel,
+                               "isFacebookModel": false}, true, [photoModel, photo])
             }
         }
     }

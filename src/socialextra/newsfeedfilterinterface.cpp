@@ -410,6 +410,8 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         QString attachmentDescription = attachment.value("description").toString();
         QString attachmentUrl = attachment.value("href").toString();
 
+        // Facebook object id
+        postData.insert(FACEBOOK_OBJECT_ID, attachment.value(FACEBOOK_OBJECT_ID));
 
         // Link
         postData.insert(FACEBOOK_ONTOLOGY_POST_LINK, attachmentUrl);
@@ -427,7 +429,6 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         if (!source.host().contains("facebook.com")) {
             postData.insert(FACEBOOK_ONTOLOGY_POST_SOURCE, source);
         } else {
-            // TODO: maybe link inside Friends
             postData.insert(FACEBOOK_ONTOLOGY_POST_SOURCE, QUrl());
         }
         // Source is not used so we don't set it.
@@ -448,12 +449,12 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         // ObjectIdentifier is not used so we don't set it.
         // Application is not queried (TODO ?)
         // CreatedTime
-        uint createdTimestamp = postMap.value("created_time").toUInt();
+        uint createdTimestamp = postMap.value(FACEBOOK_ONTOLOGY_POST_CREATEDTIME).toUInt();
         QDateTime createdTime = QDateTime::fromTime_t(createdTimestamp);
         postData.insert(FACEBOOK_ONTOLOGY_POST_CREATEDTIME, createdTime.toString(Qt::ISODate));
 
         // UpdatedTime
-        uint updatedTimestamp = postMap.value("updated_time").toUInt();
+        uint updatedTimestamp = postMap.value(FACEBOOK_ONTOLOGY_POST_UPDATEDTIME).toUInt();
         QDateTime updatedTime = QDateTime::fromTime_t(updatedTimestamp);
         postData.insert(FACEBOOK_ONTOLOGY_POST_UPDATEDTIME, updatedTime.toString(Qt::ISODate));
 

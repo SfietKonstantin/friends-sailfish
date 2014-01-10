@@ -89,6 +89,8 @@ Rectangle {
             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             wrapMode: Text.Wrap
+            maximumLineCount: 4
+            elide: Text.ElideRight
             visible: text.length > 0
         }
 
