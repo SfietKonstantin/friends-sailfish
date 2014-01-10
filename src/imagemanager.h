@@ -29,36 +29,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef IMAGELOADER_H
-#define IMAGELOADER_H
+#ifndef IMAGEMANAGER_H
+#define IMAGEMANAGER_H
 
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
+#include <QtCore/QMap>
+#include <QtCore/QSet>
+#include <QtGui/QImage>
 
-class ImageLoaderPrivate;
-class ImageLoader : public QObject
+class ImageManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit ImageLoader(QObject *parent = 0);
-    virtual ~ImageLoader();
+    explicit ImageManager(QObject *parent = 0);
+    QUrl realSource(const QUrl &url) const;
+    void save(const QUrl &url, const QImage &image);
     Q_INVOKABLE static QUrl pictureUrl(const QString &id, const QString &token,
-                                       const QString &type = QString());
+                                           const QString &type = QString());
     Q_INVOKABLE static QUrl pictureUrl(const QString &id, const QString &token,
                                        int width, int height);
-public Q_SLOTS:
-    void load(const QUrl &url);
-Q_SIGNALS:
-    void error(const QUrl &url);
-    void loaded(const QUrl &url, const QString &path);
-protected:
-    bool event(QEvent *e);
-    QScopedPointer<ImageLoaderPrivate> d_ptr;
 private:
-    Q_DECLARE_PRIVATE(ImageLoader)
-    Q_PRIVATE_SLOT(d_func(), void slotFinished())
-    Q_PRIVATE_SLOT(d_func(), void slotError(QNetworkReply::NetworkError))
-    Q_PRIVATE_SLOT(d_func(), void slotSslErrors(QList<QSslError>))
+    void manageCache();
+    QSet<QString> m_existingImages;
 };
 
-#endif // IMAGELOADER_H
+#endif // IMAGEMANAGER_H

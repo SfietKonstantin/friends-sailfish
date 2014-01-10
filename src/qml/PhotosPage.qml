@@ -125,8 +125,11 @@ Page {
                     BackgroundItem {
                         id: background
                         anchors.fill: parent
-                        onClicked: pageStack.push(Qt.resolvedUrl("PhotoPage.qml"),
-                                                  {"model": view.model, "currentIndex": model.index})
+                        onClicked: {
+                            var page = pageStack.push(Qt.resolvedUrl("PhotoPage.qml"),
+                                                      {"model": view.model, "currentIndex": model.index})
+                            page.load()
+                        }
 
                         Item {
                             id: image
@@ -142,8 +145,8 @@ Page {
                                 anchors.centerIn: parent
                                 width: parent.width
                                 height: parent.height
-                                imageWidth: drawer.imageSize
-                                imageHeight: drawer.imageSize
+                                pictureWidth: drawer.imageSize
+                                pictureHeight: drawer.imageSize
                             }
                         }
 
@@ -221,8 +224,8 @@ Page {
                                     identifier: model.contentItem.identifier
                                     width: grid.width / 3
                                     height: grid.width / 3
-                                    imageWidth: column.imageSize
-                                    imageHeight: column.imageSize
+                                    pictureWidth: column.imageSize
+                                    pictureHeight: column.imageSize
                                 }
                             }
                         }

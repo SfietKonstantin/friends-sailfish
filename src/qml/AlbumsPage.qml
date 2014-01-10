@@ -101,8 +101,8 @@ Page {
                     FacebookPicture {
                         identifier: model.contentItem.coverPhoto
                         anchors.horizontalCenter: parent.horizontalCenter
-                        imageWidth: Screen.width - 2 * Theme.paddingMedium
-                        imageHeight: 2 * Theme.itemSizeExtraLarge
+                        pictureWidth: Screen.width - 2 * Theme.paddingMedium
+                        pictureHeight: 2 * Theme.itemSizeExtraLarge
                     }
                 }
 

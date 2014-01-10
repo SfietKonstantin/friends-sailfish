@@ -108,8 +108,8 @@ Item {
             FacebookPicture {
                 id: picture
                 identifier: container.from.objectIdentifier
-                imageWidth: Theme.iconSizeMedium
-                imageHeight: Theme.iconSizeMedium
+                pictureWidth: Theme.iconSizeMedium
+                pictureHeight: Theme.iconSizeMedium
             }
 
             Item {

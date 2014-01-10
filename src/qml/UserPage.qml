@@ -170,8 +170,8 @@ Page {
                         id: picture
                         identifier: user.identifier
                         anchors.centerIn: parent
-                        imageWidth: Theme.itemSizeSmall * 2
-                        imageHeight: Theme.itemSizeSmall * 2
+                        pictureWidth: Theme.itemSizeSmall * 2
+                        pictureHeight: Theme.itemSizeSmall * 2
                     }
                 }
             }

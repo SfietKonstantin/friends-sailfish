@@ -1,7 +1,6 @@
 include(social.pri)
 include(socialextra/socialextra.pri)
 include(login/login.pri)
-include(imageloader/imageloader.pri)
 include(../version.pri)
 
 TEMPLATE = app
@@ -13,22 +12,27 @@ DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clie
 include(data/data.pri)
 include(translations.pri)
 
-QT += qml quick
+QT += qml quick quick-private
 
 CONFIG += link_pkgconfig
 
-HEADERS += clientidplugininterface.h \
+HEADERS += cachehelper_p.h \
+    clientidplugininterface.h \
     tokenmanager.h \
     settingsmanager.h \
     posthelper.h \
     footerhelper.h \
-    notificationshelper.h
+    notificationshelper.h \
+    imagehelper.h \
+    imagemanager.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
     posthelper.cpp \
     footerhelper.cpp \
-    notificationshelper.cpp
+    notificationshelper.cpp \
+    imagehelper.cpp \
+    imagemanager.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \

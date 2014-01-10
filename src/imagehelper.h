@@ -29,32 +29,44 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-import QtQuick 2.0
-import "UiConstants.js" as Ui
-import harbour.friends 1.0
+#ifndef IMAGEHELPER_H
+#define IMAGEHELPER_H
 
-Image {
-    id: image
-    property string url
-    smooth: true
-    asynchronous: true
-    fillMode: Image.PreserveAspectCrop
-    opacity: 0
-    states: State {
-        name: "visible"; when: image.status == Image.Ready
-        PropertyChanges {
-            target: image
-            opacity: 1
-        }
-    }
-    Behavior on opacity {
-        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
-    }
+#include <QtCore/QObject>
+#include <QtQuick/private/qquickimagebase_p.h>
+#include <QtQuick/private/qquickimage_p.h>
+#include "imagemanager.h"
 
-    ImageHelper {
-        image: image
-        cached: true
-        imageManager: ImageManager
-        source: image.url
-    }
-}
+class ImageHelper : public QObject
+{
+    Q_OBJECT
+    Q_PROPERTY(ImageManager * imageManager READ imageManager WRITE setImageManager
+               NOTIFY imageManagerChanged)
+    Q_PROPERTY(bool cached READ isCached WRITE setCached NOTIFY cachedChanged)
+    Q_PROPERTY(QQuickImageBase *image READ image WRITE setImage NOTIFY imageChanged)
+    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
+public:
+    explicit ImageHelper(QObject *parent = 0);
+    ImageManager * imageManager() const;
+    void setImageManager(ImageManager *imageManager);
+    bool isCached() const;
+    void setCached(bool cached);
+    QQuickImageBase * image() const;
+    void setImage(QQuickImageBase *image);
+    QUrl source() const;
+    void setSource(const QUrl &source);
+signals:
+    void imageManagerChanged();
+    void cachedChanged();
+    void imageChanged();
+    void sourceChanged();
+private:
+    ImageManager *m_imageManager;
+    bool m_cached;
+    QQuickImageBase *m_image;
+    QUrl m_source;
+private slots:
+    void slotStatusChanged(QQuickImageBase::Status status);
+};
+
+#endif // IMAGEHELPER_H

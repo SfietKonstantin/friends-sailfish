@@ -50,12 +50,14 @@
 #include "posthelper.h"
 #include "footerhelper.h"
 #include "notificationshelper.h"
+#include "imagehelper.h"
+#include "imagemanager.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
 
 // Image loader headers
-#include "imageloader/imageloader.h"
+//#include "imageloader/imageloader.h"
 
 // social plugin headers
 #include "socialnetworkinterface.h"
@@ -112,13 +114,11 @@ QDateTime DateHelper::fromString(const QString &date)
     return QDateTime::fromString(date, Qt::ISODate).toTimeSpec(Qt::LocalTime);
 }
 
-
-
-static QObject *imageloader_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+static QObject *imagemanager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
     Q_UNUSED(engine)
     Q_UNUSED(scriptEngine)
-    return new ImageLoader();
+    return new ImageManager();
 }
 
 static QObject * datehelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
@@ -148,12 +148,15 @@ void importMisc()
     qmlRegisterType<TokenManager>(URI, 1, 0, "TokenManager");
     qmlRegisterType<SettingsManager>(URI, 1, 0, "SettingsManager");
     qmlRegisterType<QFB::LoginManager>(URI, 1, 0, "LoginManager");
-    qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
+    // qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
     qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
     qmlRegisterSingletonType<FooterHelper>(URI, 1, 0, "FooterHelper", footerhelper_provider);
     qmlRegisterSingletonType<NotificationsHelper>(URI, 1, 0, "NotificationsHelper",
                                            notificationshelper_provider);
     qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
+    qmlRegisterType<ImageHelper>(URI, 1, 0, "ImageHelper");
+    qmlRegisterSingletonType<ImageManager>(URI, 1, 0, "ImageManager", imagemanager_provider);
+    qmlRegisterUncreatableType<QQuickImageBase>(URI, 1, 0, "QQuickImageBase", REASON);
 }
 
 void importSocial()

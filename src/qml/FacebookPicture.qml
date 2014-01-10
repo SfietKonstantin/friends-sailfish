@@ -37,24 +37,11 @@ import harbour.friends 1.0
 Image {
     id: picture
     property string identifier
-    property int imageWidth: Theme.iconSizeLarge
-    property int imageHeight: Theme.iconSizeLarge
+    property int pictureWidth: Theme.iconSizeLarge
+    property int pictureHeight: Theme.iconSizeLarge
 
-    function load() {
-        if (identifier == "" || imageWidth <= 0 || imageHeight <= 0) {
-            return
-        }
-        ImageLoader.load(ImageLoader.pictureUrl(identifier, facebook.accessToken, imageWidth,
-                                                imageHeight))
-    }
-
-    onIdentifierChanged: load()
-    onImageWidthChanged: load()
-    onImageHeightChanged: load()
-    Component.onCompleted: load()
-
-    width: imageWidth
-    height: imageHeight
+    width: pictureWidth
+    height: pictureHeight
     smooth: true
     asynchronous: true
     fillMode: Image.PreserveAspectCrop
@@ -72,13 +59,11 @@ Image {
         NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
     }
 
-    Connections {
-        target: ImageLoader
-        onLoaded: {
-            if (url == ImageLoader.pictureUrl(identifier, facebook.accessToken, imageWidth,
-                                              imageHeight)) {
-                picture.source = path
-            }
-        }
+    ImageHelper {
+        image: picture
+        cached: true
+        imageManager: ImageManager
+        source: ImageManager.pictureUrl(picture.identifier, facebook.accessToken,
+                                        picture.pictureWidth, picture.pictureHeight)
     }
 }

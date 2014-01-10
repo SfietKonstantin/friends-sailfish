@@ -36,17 +36,18 @@ import harbour.friends.social 1.0
 
 Page {
     id: container
-    property alias currentIndex: view.currentIndex
-    property alias model: view.model
+    property int currentIndex
+    property var model
     allowedOrientations: Orientation.All
+
+    function load() {
+//        console.debug(currentIndex)
+        view.positionViewAtIndex(container.currentIndex, ListView.Center)
+    }
 
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
-            if (!settingsManager.welcomeDone) {
-                settingsManager.welcomeDone = true
-                pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
-            }
         }
     }
 
@@ -56,7 +57,7 @@ Page {
         dock: container.orientation == Orientation.Portrait ? Dock.Top: Dock.Left
 
         background: SplitSocialPanel {
-            item: model.relatedItem(view.currentIndex)
+            item: model.relatedItem(view.currentIndex < 0 || view.currentIndex >= container.model.count ? 0 : view.currentIndex)
             description: item.name
             onShowComments: {
                 var headerProperties = {"identifier": item.identifier,
@@ -72,13 +73,23 @@ Page {
 
         foreground: ListView {
             id: view
+            onVisibleChanged: {
+                if (visible) {
+                    view.positionViewAtIndex(container.currentIndex, ListView.Contain)
+                }
+            }
             property int imageSize: Math.max(Screen.width, Screen.height)
             anchors.fill: parent
-            interactive: model.count > 1
+            model: visible ? container.model : null
+            interactive: visible ? model.count > 1 : false
             orientation: Qt.Horizontal
             highlightRangeMode: ListView.StrictlyEnforceRange
             snapMode: ListView.SnapOneItem
             onAtXEndChanged: {
+                if (view.model === null) {
+                    return
+                }
+
                 if (atXEnd && view.model.hasNext) {
                     view.model.loadNext()
                 }
@@ -90,8 +101,8 @@ Page {
                 FacebookPicture {
                     identifier: model.contentItem.identifier
                     anchors.fill: parent
-                    imageWidth: view.imageSize
-                    imageHeight: view.imageSize
+                    pictureWidth: view.imageSize
+                    pictureHeight: view.imageSize
                     fillMode: Image.PreserveAspectFit
                 }
 
@@ -138,8 +149,8 @@ Page {
                             property int imageSize: Math.max(Screen.width, Screen.height)
                             anchors.left: parent.left; anchors.right: parent.right
                             height: width * 2 / 3
-                            imageWidth: imageSize
-                            imageHeight: imageSize
+                            pictureWidth: imageSize
+                            pictureHeight: imageSize
                         }
 
                         Label {

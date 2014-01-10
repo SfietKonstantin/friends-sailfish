@@ -129,8 +129,8 @@ Page {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.top: parent.top; anchors.topMargin: footer.displayMargins ? Theme.paddingLarge : 0
                 identifier: facebook.currentUserIdentifier
-                imageWidth: Theme.iconSizeMedium
-                imageHeight: Theme.iconSizeMedium
+                pictureWidth: Theme.iconSizeMedium
+                pictureHeight: Theme.iconSizeMedium
 
             }
 
@@ -172,8 +172,8 @@ Page {
                 id: avatar
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 identifier: model.contentItem.from.objectIdentifier
-                imageWidth: Theme.iconSizeMedium
-                imageHeight: Theme.iconSizeMedium
+                pictureWidth: Theme.iconSizeMedium
+                pictureHeight: Theme.iconSizeMedium
             }
 
             Label {

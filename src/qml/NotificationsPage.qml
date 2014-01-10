@@ -90,8 +90,8 @@ Page {
                 anchors.top: parent.top; anchors.topMargin: Theme.paddingLarge / 2
                 anchors.left: glass.right
                 identifier: model.contentItem.from.objectIdentifier
-                imageWidth: Theme.iconSizeMedium
-                imageHeight: Theme.iconSizeMedium
+                pictureWidth: Theme.iconSizeMedium
+                pictureHeight: Theme.iconSizeMedium
             }
 
             Label {
