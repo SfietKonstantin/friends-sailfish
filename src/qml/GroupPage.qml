@@ -78,42 +78,11 @@ Page {
                 anchors.left: parent.left; anchors.right: parent.right
                 height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
 
-                Rectangle {
-                    id: coverBackground
+                CoverImage {
+                    id: coverImage
                     anchors.left: parent.left; anchors.right: parent.right
                     height: 2 * Theme.itemSizeExtraLarge
-                    color: Theme.secondaryHighlightColor
-                    clip: true
-
-                    FacebookImage {
-                        id: image
-                        anchors.fill: parent
-                        fillMode: Image.PreserveAspectCrop
-                         url: group.cover.source
-                    }
-
-                    ShaderEffect {
-                        id: gradient
-                        property variant source: ShaderEffectSource {
-                            hideSource: true
-                            sourceItem: image
-                        }
-
-                        property real _boundary: 1 - (Theme.paddingLarge + Theme.fontSizeLarge + Theme.paddingMedium) / height;
-                        anchors.fill: image
-
-                        fragmentShader: "
-                        varying highp vec2 qt_TexCoord0;
-                        uniform float qt_Opacity;
-                        uniform float _boundary;
-                        uniform sampler2D source;
-                        void main(void)
-                        {
-                            lowp vec4 textureColor = texture2D(source, qt_TexCoord0.st);
-                            gl_FragColor = (1. - smoothstep(_boundary, 1., qt_TexCoord0.y)) * textureColor * qt_Opacity;
-                        }
-                        "
-                    }
+                    coverUrl: group.cover.source
 
                     Label {
                         id: nameText
@@ -131,10 +100,6 @@ Page {
                                     target: nameText
                                     opacity: 1
                                     text: group.name
-                                }
-                                PropertyChanges {
-                                    target: gradient
-                                    opacity: 0.8
                                 }
                             }
                         ]
@@ -172,9 +137,7 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no posts from a group to be displayed
-            //% "No posts"
-            text: qsTrId("friends_group_placeholder")
+            text: qsTrId("friends_no_posts")
         }
 
         PullDownMenu {

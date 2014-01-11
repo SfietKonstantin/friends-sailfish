@@ -33,37 +33,65 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "UiConstants.js" as Ui
 
-Item {
-    id: container
-    property string name
-    property alias coverUrl: coverImage.coverUrl
-    height: 2 * Theme.itemSizeExtraLarge
+Rectangle {
+    id: coverBackground
+    color: Theme.secondaryHighlightColor
+    clip: true
+    property alias coverUrl: image.url
 
-    CoverImage {
-        id: coverImage
+    FacebookImage {
+        id: image
         anchors.fill: parent
+        fillMode: Image.PreserveAspectCrop
+    }
 
-        Label {
-            id: nameText
-            anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-            anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-            anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-            opacity: 0
-            truncationMode: TruncationMode.Fade
-            font.pixelSize: Theme.fontSizeLarge
-            states: [
-                State {
-                    name: "visible"; when: container.name != ""
-                    PropertyChanges {
-                        target: nameText
-                        opacity: 1
-                        text: container.name
-                    }
+    ShaderEffect {
+        id: gradient
+        property variant source: ShaderEffectSource {
+            hideSource: true
+            sourceItem: image
+        }
+
+        property real _boundary: 1 - (Theme.paddingLarge + Theme.fontSizeLarge + Theme.paddingMedium) / height;
+        anchors.fill: image
+
+        fragmentShader: "
+        varying highp vec2 qt_TexCoord0;
+        uniform float qt_Opacity;
+        uniform float _boundary;
+        uniform sampler2D source;
+        void main(void)
+        {
+            lowp vec4 textureColor = texture2D(source, qt_TexCoord0.st);
+            gl_FragColor = (1. - smoothstep(_boundary, 1., qt_TexCoord0.y)) * textureColor * qt_Opacity;
+        }
+        "
+    }
+
+    Label {
+        id: nameText
+        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
+        opacity: 0
+        truncationMode: TruncationMode.Fade
+        font.pixelSize: Theme.fontSizeLarge
+        states: [
+            State {
+                name: "visible"; when: container.name != ""
+                PropertyChanges {
+                    target: nameText
+                    opacity: 1
+                    text: container.name
                 }
-            ]
-            Behavior on opacity {
-                NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
+                PropertyChanges {
+                    target: gradient
+                    opacity: 0.8
+                }
             }
+        ]
+        Behavior on opacity {
+            NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
         }
     }
 }

@@ -39,5 +39,6 @@
         <file>qml/GroupsPage.qml</file>
         <file>qml/PagesPage.qml</file>
         <file>qml/PagePage.qml</file>
+        <file>qml/CoverImage.qml</file>
     </qresource>
 </RCC>

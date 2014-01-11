@@ -118,7 +118,7 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no news to be displayed
+            //: Text shown on the news page placeholder, where there is no news to be displayed
             //% "No news"
             text: qsTrId("friends_news_placeholder")
         }
