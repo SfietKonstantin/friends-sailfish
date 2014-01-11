@@ -10,7 +10,7 @@ DEPLOYMENT_PATH = /usr/share/$$TARGET
 DEFINES *= 'VERSION=\'\"$${VERSION}\"\''
 DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clientidplugin.so\"\''
 include(data/data.pri)
-include(translations.pri)
+include(translations/translations.pri)
 
 QT += qml quick quick-private
 
