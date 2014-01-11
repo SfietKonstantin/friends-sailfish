@@ -66,7 +66,7 @@ def write_version(version, codename):
         sys.exit(5)
 
 def commit_and_tag(version):
-    subprocess.Popen(["git", "commit", "-a", "-m", "\"Bump to version %s\"" % version], stdout = subprocess.PIPE)
+    subprocess.Popen(["git", "commit", "-a", "-m", "Bump to version %s" % version], stdout = subprocess.PIPE)
     subprocess.Popen(["git", "tag", version], stdout = subprocess.PIPE)
     
 def push(version):
@@ -115,7 +115,7 @@ if not push_only:
 
 print("")
 print("Pushing to the server")
-if not check_tag(version):
+if check_tag(version):
     print("Error: tag is not set")
     sys.exit(6)
 push(version)
