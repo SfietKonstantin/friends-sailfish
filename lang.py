@@ -105,7 +105,7 @@ def do_pull(perc):
     subprocess.call(["%s -idbased *.ts" % lrelease], cwd="%s/src/translations" % current_dir, shell=True)
     subprocess.call(["rm *.ts"], cwd="%s/src/translations" % current_dir, shell=True)
     subprocess.call([lupdate, "src", "-ts", "%s/src/translations/friends.ts" % current_dir])
-    subprocess.call(["%s -idbased -compress friends.ts -qm friends-engineering-english.qm" % lrelease], cwd="%s/src/translations" % current_dir, shell=True)
+    subprocess.call(["%s -idbased friends.ts -qm friends-engineering-english.qm" % lrelease], cwd="%s/src/translations" % current_dir, shell=True)
     subprocess.call(["rm *.ts"], cwd="%s/src/translations" % current_dir, shell=True)
 
 parser = argparse.ArgumentParser(description='Friends translation management script')
@@ -131,7 +131,8 @@ if percentage is not None:
     if percentage < 0 or percentage > 100:
         parser.print_help()
         sys.exit(1)
-
+    else:
+        percentage = 100
 if push:
     do_push()
     sys.exit(0)

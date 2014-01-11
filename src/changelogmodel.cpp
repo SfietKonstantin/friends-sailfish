@@ -139,6 +139,7 @@ void ChangeLogModel::setOnlyCurrent(bool onlyCurrent)
     if (m_onlyCurrent != onlyCurrent) {
         m_onlyCurrent = onlyCurrent;
         emit onlyCurrentChanged();
+        load();
     }
 }
 
