@@ -32,5 +32,23 @@
       "text": "Performance improvements for image browsing.", 
       "type": "bug"
     }
+  ], 
+  "0.1.12": [
+    {
+      "text": "You can now browse pages. It is only an initial support though.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "You can now browse groups. It is only an initial support though, you cannot post anything yet.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "Notifications can now be marked as read.", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Friends won't prompt that it is updated just after showing the welcome dialog.", 
+      "type": "bug"
+    }
   ]
 }
