@@ -97,6 +97,12 @@ Page {
                 page: "GroupsPage.qml"
             }
             ListElement {
+                //: Menu entry to show the pages page, with list of pages the user liked.
+                //% "Pages"
+                text: QT_TRID_NOOP("friends_menu_pages")
+                page: "PagesPage.qml"
+            }
+            ListElement {
                 //: Menu entry to show the messages page, where the user can chat.
                 //% "Messages"
                 text: QT_TRID_NOOP("friends_menu_messages")

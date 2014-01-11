@@ -234,6 +234,9 @@ void TypeSolverInterfacePrivate::emitPropertyChangeSignals(const QVariantMap &ol
     if (type == "notification") {
         newObjectType = FacebookInterface::Notification;
     }
+    if (type == "page") {
+        newObjectType = FacebookInterface::Page;
+    }
     if (type == "photo") {
         newObjectType = FacebookInterface::Photo;
     }

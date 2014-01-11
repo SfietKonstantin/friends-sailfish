@@ -39,8 +39,8 @@ Page {
     id: container
     property string identifier
     function load() {
-        if (user.status == SocialNetwork.Idle || user.status == SocialNetwork.Error) {
-            user.load()
+        if (page.status == SocialNetwork.Idle || page.status == SocialNetwork.Error) {
+            page.load()
         }
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
@@ -55,15 +55,15 @@ Page {
 
     StateIndicator {
         model: model
-        item: user
+        item: page
     }
 
-    FacebookUser {
-        id: user
+    FacebookPage {
+        id: page
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
-            fields: "name,first_name,cover"
+            fields: "name,cover"
         }
     }
 
@@ -89,7 +89,7 @@ Page {
                         id: image
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectCrop
-                        url: user.cover.source
+                        url: page.cover.source
                     }
 
                     ShaderEffect {
@@ -126,11 +126,11 @@ Page {
                         font.pixelSize: Theme.fontSizeLarge
                         states: [
                             State {
-                                name: "visible"; when: user.name != ""
+                                name: "visible"; when: page.name != ""
                                 PropertyChanges {
                                     target: nameText
                                     opacity: 1
-                                    text: user.name
+                                    text: page.name
                                 }
                                 PropertyChanges {
                                     target: gradient
@@ -203,9 +203,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no posts from an user to be displayed
+            //: Text shown on the placeholder, where there is no posts from a page to be displayed
             //% "No posts"
-            text: qsTrId("friends_user_placeholder")
+            text: qsTrId("friends_page_placeholder")
         }
 
         PullDownMenu {
@@ -213,36 +213,9 @@ Page {
             busy: model.status == SocialNetwork.Busy
 
             MenuItem {
-                //: Action that shows the user's photos
-                //% "Photos"
-                text: qsTrId("friends_user_action_photos")
-                onClicked: {
-                    var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
-                                              {"identifier": user.identifier,
-                                               "name": qsTrId("friends_photos_of_someone").arg(user.firstName),
-                                               "isUserPhotos": true})
-                    page.load()
-                }
-            }
-
-            MenuItem {
-                //: Action that shows the user's albums
-                //% "Albums"
-                text: qsTrId("friends_user_action_albums")
-                onClicked: {
-                    var page = pageStack.push(Qt.resolvedUrl("AlbumsPage.qml"),
-                                              {"identifier": user.identifier})
-                    page.load()
-                }
-            }
-
-            MenuItem {
-                //: Action that shows the current user's personnal informations
-                //% "Personal information"
-                text: user.identifier == me.identifier ? qsTrId("friends_user_action_about_me")
-                 //: Action that shows the personnal informations of a given user. %1 contains the name of the user.
-                 //% "About %1"
-                                                       : qsTrId("friends_user_action_about").arg(user.firstName)
+                //: Action that shows information about the page. %1 contains the name of the page.
+                //% "About %1"
+                text: qsTrId("friends_page_action_about").arg(page.name)
                 enabled: false
             }
 

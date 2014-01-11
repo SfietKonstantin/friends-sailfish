@@ -32,15 +32,16 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends.social 1.0
-import harbour.friends.social.extra 1.0
 
 Page {
     id: container
+    property string identifier
     function load() {
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
         }
     }
+
     onStatusChanged: {
         if (status == PageStatus.Active) {
             pageStack.pushAttached(menuPage)
@@ -54,37 +55,28 @@ Page {
     SilicaListView {
         id: view
         anchors.fill: parent
-        visible: model.status == SocialNetwork.Idle
-        currentIndex: -1
+        visible: model.status == SocialNetwork.Idle || model.count > 0
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            filter: FilterableFacebookRelatedDataFilter {
-                identifier: facebook.currentUserIdentifier
-                connection: Facebook.Friends
-                limit: 500
-                fields: "id,first_name,name"
-                sectionField: "first_name"
-                filterField: "name"
-            }
-            sorters: AlphabeticalSorter {field: "name"}
-            onStatusChanged: {
-                if (status == Facebook.Idle && hasNext) {
-                    loadNext()
-                }
+            filter: FacebookRelatedDataFilter {
+                identifier: container.identifier
+                connection: Facebook.LikedPages
+                fields: "id,name,category"
+                limit: 20
             }
         }
 
-        header: Column {
-            width: view.width
-            PageHeader {
-                //: Title of the page showing the list of friends
-                //% "Friends"
-                title: qsTrId("friends_friends_title")
-            }
-            SearchField {
-                anchors.left: parent.left; anchors.right: parent.right
-                onTextChanged: model.filter.filterValue = text
+        header: PageHeader {
+            //: Title of the page showing the list of pages
+            //% "Pages"
+            title: qsTrId("friends_pages_title")
+        }
+
+        section {
+            property: "section"
+            delegate: SectionHeader {
+                text: section
             }
         }
 
@@ -111,9 +103,15 @@ Page {
             }
 
             onClicked: {
-                var page = pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                var page = pageStack.push(Qt.resolvedUrl("PagePage.qml"),
                                           {"identifier": model.contentItem.identifier})
                 page.load()
+            }
+        }
+
+        onAtYEndChanged: {
+            if (atYEnd && model.hasNext) {
+                model.loadNext()
             }
         }
 
@@ -121,9 +119,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no friends to be displayed
-            //% "No Friends"
-            text: qsTrId("friends_friends_placeholder")
+            //: Text shown on the placeholder, where there is no groups to be displayed
+            //% "No groups"
+            text: qsTrId("friends_groups_placeholder")
         }
     }
 }

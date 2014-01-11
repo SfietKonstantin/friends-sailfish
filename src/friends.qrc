@@ -37,5 +37,7 @@
         <file>qml/ChangeLogView.qml</file>
         <file>qml/GroupPage.qml</file>
         <file>qml/GroupsPage.qml</file>
+        <file>qml/PagesPage.qml</file>
+        <file>qml/PagePage.qml</file>
     </qresource>
 </RCC>

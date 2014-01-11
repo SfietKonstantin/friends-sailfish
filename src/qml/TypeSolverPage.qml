@@ -101,6 +101,7 @@ Page {
                 return
             } else if(objectType == Facebook.Group) {
                 item.pushPage("GroupPage.qml", {"identifier": item.identifier}, true)
+                return
             } else if (objectType == Facebook.Post) {
                 if (objectTypeString == "post") {
                     post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,link,picture,name,caption,description"
@@ -116,12 +117,15 @@ Page {
                 }
                 indicator.item = post
                 post.load()
-            } else if (objectType == Facebook.User) {
-                item.pushPage("UserPage.qml", {"identifier": item.identifier}, true)
+            } else if (objectType == Facebook.Page) {
+                item.pushPage("PagePage.qml", {"identifier": item.identifier}, true)
                 return
             } else if (objectType == Facebook.Photo) {
                 indicator.item = photo
                 photo.load()
+            } else if (objectType == Facebook.User) {
+                item.pushPage("UserPage.qml", {"identifier": item.identifier}, true)
+                return
             } else {
                 showUnsolvableObject()
                 return

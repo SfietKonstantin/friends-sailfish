@@ -41,6 +41,8 @@ HEADERS += \
     ../social/src/facebook/facebookgroupinterface_p.h \
     ../social/src/facebook/facebooknotificationinterface.h \
     ../social/src/facebook/facebooknotificationinterface_p.h \
+    ../social/src/facebook/facebookpageinterface.h \
+    ../social/src/facebook/facebookpageinterface_p.h \
     ../social/src/facebook/facebookphotointerface.h \
     ../social/src/facebook/facebookphotointerface_p.h \
     ../social/src/facebook/facebookpostinterface.h \
@@ -66,6 +68,7 @@ SOURCES += \
     ../social/src/facebook/facebookcommentinterface.cpp \
     ../social/src/facebook/facebookgroupinterface.cpp \
     ../social/src/facebook/facebooknotificationinterface.cpp \
+    ../social/src/facebook/facebookpageinterface.cpp \
     ../social/src/facebook/facebookphotointerface.cpp \
     ../social/src/facebook/facebookpostinterface.cpp \
     ../social/src/facebook/facebookuserinterface.cpp \

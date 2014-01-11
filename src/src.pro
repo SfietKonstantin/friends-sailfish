@@ -67,7 +67,9 @@ OTHER_FILES += qml/friends.qml \
     qml/UpdatedDialog.qml \
     qml/ChangeLogView.qml \
     qml/GroupPage.qml \
-    qml/GroupsPage.qml
+    qml/GroupsPage.qml \
+    qml/PagesPage.qml \
+    qml/PagePage.qml
 
 target.path = $$TARGETPATH
 
