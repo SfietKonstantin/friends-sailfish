@@ -2,47 +2,56 @@
 <context>
     <name/>
     <message id="friends_about_title">
-        <location filename="../qml/AboutPage.qml" line="45"/>
+        <location filename="../qml/AboutPage.qml" line="47"/>
         <source>About</source>
         <extracomment>Title of the &quot;About application&quot; page</extracomment>
         <translation>Crediti</translation>
     </message>
     <message id="friends_app_name">
-        <location filename="../qml/AboutPage.qml" line="61"/>
+        <location filename="../qml/AboutPage.qml" line="63"/>
         <source>Friends</source>
         <extracomment>Name of the application. Should be &quot;Friends&quot;</extracomment>
         <translation>Friends</translation>
     </message>
-    <message id="friends_about_version">
-        <location filename="../qml/AboutPage.qml" line="71"/>
+    <message id="friends_version">
+        <location filename="../qml/AboutPage.qml" line="73"/>
+        <location filename="../qml/UpdatedDialog.qml" line="81"/>
         <source>Version %1, powered by Nemo Social</source>
         <extracomment>Version of Friends. %1 will be replaced by the version. Please add &quot;powered by Nemo Social&quot;</extracomment>
         <translation>Versione %1, powered by Nemo Social</translation>
     </message>
     <message id="friends_about_text">
-        <location filename="../qml/AboutPage.qml" line="81"/>
-        <source>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software.</source>
+        <location filename="../qml/AboutPage.qml" line="83"/>
+        <source>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help improving the software, while keeping it free and Open Source.</source>
+        <oldsource>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software.</oldsource>
         <extracomment>Description of Friends</extracomment>
         <translation>Friends è una semplice ed elegante applicazione Facebook per Sailfish OS. È un software Open Source, il che significa che chiunque può modificarlo e migliorarlo. Se ti piace Friends, potresti prendere in considerazione di fare una donazione. Aiuterà a proseguirne lo sviluppo, e a mantenerne lo status di software Open Source.</translation>
     </message>
     <message id="friends_about_button_facebook_page">
-        <location filename="../qml/AboutPage.qml" line="97"/>
+        <location filename="../qml/AboutPage.qml" line="100"/>
         <source>Facebook page</source>
         <extracomment>Caption of a button that shows the Facebook page of the application</extracomment>
         <translation>Pagina Facebook</translation>
     </message>
     <message id="friends_button_donate">
-        <location filename="../qml/AboutPage.qml" line="109"/>
+        <location filename="../qml/AboutPage.qml" line="112"/>
+        <location filename="../qml/UpdatedDialog.qml" line="87"/>
         <location filename="../qml/WelcomeDialog.qml" line="76"/>
         <source>Donate</source>
         <extracomment>Caption of a button that shows a Paypal donation page</extracomment>
         <translation>Donazione</translation>
     </message>
     <message id="friends_about_button_developers">
-        <location filename="../qml/AboutPage.qml" line="121"/>
+        <location filename="../qml/AboutPage.qml" line="124"/>
         <source>Developers</source>
         <extracomment>Caption of a button that shows the list of developers</extracomment>
         <translation>Sviluppatori</translation>
+    </message>
+    <message id="friends_about_button_changelog">
+        <location filename="../qml/AboutPage.qml" line="136"/>
+        <source>ChangeLog</source>
+        <extracomment>Caption of a button that leads to the changelog</extracomment>
+        <translation>ChangeLog</translation>
     </message>
     <message id="friends_albums_title">
         <location filename="../qml/AlbumsPage.qml" line="72"/>
@@ -57,13 +66,13 @@
         <translation>Nessun album</translation>
     </message>
     <message id="friends_comments_title">
-        <location filename="../qml/CommentsPage.qml" line="84"/>
+        <location filename="../qml/CommentsPage.qml" line="82"/>
         <source>Comments</source>
         <extracomment>Title of the page showing the list of comments</extracomment>
         <translation>Commenti</translation>
     </message>
     <message id="friends_comments_action_show_likes">
-        <location filename="../qml/CommentsPage.qml" line="212"/>
+        <location filename="../qml/CommentsPage.qml" line="210"/>
         <source>Show likes</source>
         <extracomment>Action that shows who liked a given item</extracomment>
         <translation>È piaciuto a</translation>
@@ -172,7 +181,7 @@
     </message>
     <message id="friends_photos_of_someone">
         <location filename="../qml/MenuPage.qml" line="121"/>
-        <location filename="../qml/UserPage.qml" line="230"/>
+        <location filename="../qml/UserPage.qml" line="231"/>
         <source>Photos of %1</source>
         <extracomment>Specific title for the photos page, since it can display &quot;Photos of someone&quot; and the album's title. This title translates the &quot;Photos of someone&quot;. %1 contains the name of the user who have the photos.</extracomment>
         <translation>Foto di %1</translation>
@@ -187,29 +196,29 @@
         <location filename="../qml/MenuPage.qml" line="147"/>
         <source>About Friends</source>
         <extracomment>Action that shows the &quot;About Friends&quot; page</extracomment>
-        <translation>A proposito di Friends</translation>
+        <translation>Informazioni su Friends</translation>
     </message>
     <message id="friends_news_title">
-        <location filename="../qml/NewsPage.qml" line="97"/>
+        <location filename="../qml/NewsPage.qml" line="100"/>
         <source>News</source>
         <extracomment>Title of the page showing the news feed (or the Home feed)</extracomment>
         <translation>Notizie</translation>
     </message>
     <message id="friends_news_placeholder">
-        <location filename="../qml/NewsPage.qml" line="128"/>
+        <location filename="../qml/NewsPage.qml" line="131"/>
         <source>No news</source>
         <extracomment>Text shown on the placeholder, where there is no news to be displayed</extracomment>
         <translation>Nessuna notizia</translation>
     </message>
     <message id="friends_news_action_post">
-        <location filename="../qml/NewsPage.qml" line="141"/>
+        <location filename="../qml/NewsPage.qml" line="140"/>
         <source>Post something</source>
         <extracomment>Action that allows the user to post something</extracomment>
         <translation>Pubblica qualcosa</translation>
     </message>
     <message id="friends_action_refresh">
-        <location filename="../qml/NewsPage.qml" line="161"/>
-        <location filename="../qml/UserPage.qml" line="258"/>
+        <location filename="../qml/NewsPage.qml" line="156"/>
+        <location filename="../qml/UserPage.qml" line="259"/>
         <source>Refresh</source>
         <extracomment>Action that allows to refresh a feed</extracomment>
         <translation>Aggiorna</translation>
@@ -227,13 +236,13 @@
         <translation>Nessuna notifica</translation>
     </message>
     <message id="friends_photos_placeholder">
-        <location filename="../qml/PhotosPage.qml" line="168"/>
+        <location filename="../qml/PhotosPage.qml" line="169"/>
         <source>No photos</source>
         <extracomment>Text shown on the placeholder, where there is no photos to be displayed</extracomment>
         <translation>Nessuna foto</translation>
     </message>
     <message id="friends_photos_action_informations">
-        <location filename="../qml/PhotosPage.qml" line="177"/>
+        <location filename="../qml/PhotosPage.qml" line="178"/>
         <source>Album informations</source>
         <extracomment>Action that shows the album informations</extracomment>
         <translation>Informazioni sull&apos;album</translation>
@@ -276,7 +285,7 @@
         <translation>Commenta</translation>
     </message>
     <message id="friends_splitsocial_last_update">
-        <location filename="../qml/SplitSocialPanel.qml" line="103"/>
+        <location filename="../qml/SplitSocialPanel.qml" line="105"/>
         <source>Last update %1</source>
         <extracomment>Display a message about the last updated time. %1 will be replaced by the elapsed time, like &quot;6 weeks ago&quot;</extracomment>
         <translation>Ultimo aggiornamento %1</translation>
@@ -319,7 +328,7 @@
         <translation>Riconnetti</translation>
     </message>
     <message id="friends_type_unsupported">
-        <location filename="../qml/TypeSolverPage.qml" line="159"/>
+        <location filename="../qml/TypeSolverPage.qml" line="191"/>
         <source>Friends cannot load this yet. This feature has not been implemented.</source>
         <extracomment>Describe that loading this item is not available yet</extracomment>
         <translation>Friends non supporta ancora questa funzione. Impossibile caricare.</translation>
@@ -331,35 +340,28 @@
         <translation>Nessun post</translation>
     </message>
     <message id="friends_user_action_photos">
-        <location filename="../qml/UserPage.qml" line="226"/>
+        <location filename="../qml/UserPage.qml" line="227"/>
         <source>Photos</source>
         <extracomment>Action that shows the user's photos</extracomment>
         <translation>Foto</translation>
     </message>
     <message id="friends_user_action_albums">
-        <location filename="../qml/UserPage.qml" line="239"/>
+        <location filename="../qml/UserPage.qml" line="240"/>
         <source>Albums</source>
         <extracomment>Action that shows the user's albums</extracomment>
         <translation>Album</translation>
     </message>
     <message id="friends_user_action_about_me">
-        <location filename="../qml/UserPage.qml" line="250"/>
+        <location filename="../qml/UserPage.qml" line="251"/>
         <source>Personal information</source>
         <extracomment>Action that shows the current user's personnal informations</extracomment>
         <translation>Informazioni personali</translation>
     </message>
     <message id="friends_user_action_about">
-        <location filename="../qml/UserPage.qml" line="253"/>
+        <location filename="../qml/UserPage.qml" line="254"/>
         <source>About %1</source>
         <extracomment>Action that shows the personnal informations of a given user. %1 contains the name of the user.</extracomment>
-        <translation>A proposito di %1</translation>
-    </message>
-    <message id="friends_welcome_close">
-        <location filename="../qml/WelcomeDialog.qml" line="45"/>
-        <location filename="../qml/WelcomeDialog.qml" line="46"/>
-        <source>Close</source>
-        <extracomment>Action displayed in the welcome dialog. Used to close the dialog</extracomment>
-        <translation>Chiudi</translation>
+        <translation>Informazioni su %1</translation>
     </message>
     <message id="friends_welcome_description">
         <location filename="../qml/WelcomeDialog.qml" line="59"/>
@@ -369,8 +371,8 @@
     </message>
     <message id="friends_welcome_please_donate">
         <location filename="../qml/WelcomeDialog.qml" line="69"/>
-        <source>Please consider a donation to keep Friends free and open-source.</source>
-        <extracomment>A message for asking for donations</extracomment>
+        <source>Please consider a donation to help improving Friends.</source>
+        <extracomment>A message for asking for donations.</extracomment>
         <translation>Per mantenere Friends gratuita e Open Source, se puoi e lo desideri, fai una donazione.</translation>
     </message>
     <message id="friends_footer_likes" numerus="yes">
@@ -396,6 +398,34 @@
         <source>Via %1</source>
         <extracomment>Translate the &quot;via &lt;appication&gt; footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.</extracomment>
         <translation>tramite %1</translation>
+    </message>
+    <message id="friends_changelog_title">
+        <location filename="../qml/ChangeLogPage.qml" line="44"/>
+        <source>ChangeLog</source>
+        <extracomment>Title of the page showing the changelog</extracomment>
+        <translation>ChangeLog</translation>
+    </message>
+    <message id="friends_close">
+        <location filename="../qml/UpdatedDialog.qml" line="53"/>
+        <location filename="../qml/UpdatedDialog.qml" line="54"/>
+        <location filename="../qml/WelcomeDialog.qml" line="45"/>
+        <location filename="../qml/WelcomeDialog.qml" line="46"/>
+        <source>Close</source>
+        <extracomment>Action used to close the dialog</extracomment>
+        <translation>Chiudi</translation>
+    </message>
+    <message id="friends_updated_title">
+        <location filename="../qml/UpdatedDialog.qml" line="71"/>
+        <source>Friends has been updated !</source>
+        <oldsource>Friends has been updated to version %1 !</oldsource>
+        <extracomment>A message saying that Friends has been updated.</extracomment>
+        <translation>Friends è stata aggiornata!</translation>
+    </message>
+    <message id="friends_updated_changelog">
+        <location filename="../qml/UpdatedDialog.qml" line="99"/>
+        <source>ChangeLog</source>
+        <extracomment>Changelog title in the &quot;Friends updated&quot; dialog</extracomment>
+        <translation>ChangeLog</translation>
     </message>
 </context>
 </TS>

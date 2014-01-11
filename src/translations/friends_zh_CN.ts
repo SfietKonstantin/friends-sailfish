@@ -2,47 +2,56 @@
 <context>
     <name/>
     <message id="friends_about_title">
-        <location filename="../qml/AboutPage.qml" line="45"/>
+        <location filename="../qml/AboutPage.qml" line="47"/>
         <source>About</source>
         <extracomment>Title of the &quot;About application&quot; page</extracomment>
         <translation>关于</translation>
     </message>
     <message id="friends_app_name">
-        <location filename="../qml/AboutPage.qml" line="61"/>
+        <location filename="../qml/AboutPage.qml" line="63"/>
         <source>Friends</source>
         <extracomment>Name of the application. Should be &quot;Friends&quot;</extracomment>
         <translation>Friends</translation>
     </message>
-    <message id="friends_about_version">
-        <location filename="../qml/AboutPage.qml" line="71"/>
+    <message id="friends_version">
+        <location filename="../qml/AboutPage.qml" line="73"/>
+        <location filename="../qml/UpdatedDialog.qml" line="81"/>
         <source>Version %1, powered by Nemo Social</source>
         <extracomment>Version of Friends. %1 will be replaced by the version. Please add &quot;powered by Nemo Social&quot;</extracomment>
-        <translation>版本：%1, powered by Nemo Social</translation>
+        <translation>版本：%1。Powered by Nemo Social！</translation>
     </message>
     <message id="friends_about_text">
-        <location filename="../qml/AboutPage.qml" line="81"/>
-        <source>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software.</source>
+        <location filename="../qml/AboutPage.qml" line="83"/>
+        <source>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help improving the software, while keeping it free and Open Source.</source>
+        <oldsource>Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help maintaining the software, and keeping it status of Open Source software.</oldsource>
         <extracomment>Description of Friends</extracomment>
-        <translation>Friends是一个为Sailfish开发的简洁漂亮的Facebook客户端。它是一个开源软件，这意味着它可以被任何人修改或增强。如果你喜欢Friends，请考虑捐赠开发者，这将有助于它的维护，并使它能够维持一直开源。</translation>
+        <translation>Friends是一个为Sailfish开发的简洁漂亮的Facebook客户端。它是一个开源软件，这意味着它可以被任何人修改或增强。如果你喜欢Friends，请考虑捐赠开发者，这将有助于它的改进，并使它能够维持一直开源。</translation>
     </message>
     <message id="friends_about_button_facebook_page">
-        <location filename="../qml/AboutPage.qml" line="97"/>
+        <location filename="../qml/AboutPage.qml" line="100"/>
         <source>Facebook page</source>
         <extracomment>Caption of a button that shows the Facebook page of the application</extracomment>
         <translation>Facebook主页</translation>
     </message>
     <message id="friends_button_donate">
-        <location filename="../qml/AboutPage.qml" line="109"/>
+        <location filename="../qml/AboutPage.qml" line="112"/>
+        <location filename="../qml/UpdatedDialog.qml" line="87"/>
         <location filename="../qml/WelcomeDialog.qml" line="76"/>
         <source>Donate</source>
         <extracomment>Caption of a button that shows a Paypal donation page</extracomment>
         <translation>捐赠开发者</translation>
     </message>
     <message id="friends_about_button_developers">
-        <location filename="../qml/AboutPage.qml" line="121"/>
+        <location filename="../qml/AboutPage.qml" line="124"/>
         <source>Developers</source>
         <extracomment>Caption of a button that shows the list of developers</extracomment>
         <translation>开发者名单</translation>
+    </message>
+    <message id="friends_about_button_changelog">
+        <location filename="../qml/AboutPage.qml" line="136"/>
+        <source>ChangeLog</source>
+        <extracomment>Caption of a button that leads to the changelog</extracomment>
+        <translation>更新履历</translation>
     </message>
     <message id="friends_albums_title">
         <location filename="../qml/AlbumsPage.qml" line="72"/>
@@ -57,13 +66,13 @@
         <translation>没有相册</translation>
     </message>
     <message id="friends_comments_title">
-        <location filename="../qml/CommentsPage.qml" line="84"/>
+        <location filename="../qml/CommentsPage.qml" line="82"/>
         <source>Comments</source>
         <extracomment>Title of the page showing the list of comments</extracomment>
         <translation>评论</translation>
     </message>
     <message id="friends_comments_action_show_likes">
-        <location filename="../qml/CommentsPage.qml" line="212"/>
+        <location filename="../qml/CommentsPage.qml" line="210"/>
         <source>Show likes</source>
         <extracomment>Action that shows who liked a given item</extracomment>
         <translation>赞专页</translation>
@@ -172,7 +181,7 @@
     </message>
     <message id="friends_photos_of_someone">
         <location filename="../qml/MenuPage.qml" line="121"/>
-        <location filename="../qml/UserPage.qml" line="230"/>
+        <location filename="../qml/UserPage.qml" line="231"/>
         <source>Photos of %1</source>
         <extracomment>Specific title for the photos page, since it can display &quot;Photos of someone&quot; and the album's title. This title translates the &quot;Photos of someone&quot;. %1 contains the name of the user who have the photos.</extracomment>
         <translation>%1的图片</translation>
@@ -190,26 +199,26 @@
         <translation>关于Friends</translation>
     </message>
     <message id="friends_news_title">
-        <location filename="../qml/NewsPage.qml" line="97"/>
+        <location filename="../qml/NewsPage.qml" line="100"/>
         <source>News</source>
         <extracomment>Title of the page showing the news feed (or the Home feed)</extracomment>
         <translation>新信息</translation>
     </message>
     <message id="friends_news_placeholder">
-        <location filename="../qml/NewsPage.qml" line="128"/>
+        <location filename="../qml/NewsPage.qml" line="131"/>
         <source>No news</source>
         <extracomment>Text shown on the placeholder, where there is no news to be displayed</extracomment>
         <translation>没有新信息</translation>
     </message>
     <message id="friends_news_action_post">
-        <location filename="../qml/NewsPage.qml" line="141"/>
+        <location filename="../qml/NewsPage.qml" line="140"/>
         <source>Post something</source>
         <extracomment>Action that allows the user to post something</extracomment>
         <translation>想写什么？</translation>
     </message>
     <message id="friends_action_refresh">
-        <location filename="../qml/NewsPage.qml" line="161"/>
-        <location filename="../qml/UserPage.qml" line="258"/>
+        <location filename="../qml/NewsPage.qml" line="156"/>
+        <location filename="../qml/UserPage.qml" line="259"/>
         <source>Refresh</source>
         <extracomment>Action that allows to refresh a feed</extracomment>
         <translation>刷新</translation>
@@ -227,13 +236,13 @@
         <translation>没有通知</translation>
     </message>
     <message id="friends_photos_placeholder">
-        <location filename="../qml/PhotosPage.qml" line="168"/>
+        <location filename="../qml/PhotosPage.qml" line="169"/>
         <source>No photos</source>
         <extracomment>Text shown on the placeholder, where there is no photos to be displayed</extracomment>
         <translation>没有图片</translation>
     </message>
     <message id="friends_photos_action_informations">
-        <location filename="../qml/PhotosPage.qml" line="177"/>
+        <location filename="../qml/PhotosPage.qml" line="178"/>
         <source>Album informations</source>
         <extracomment>Action that shows the album informations</extracomment>
         <translation>相册信息</translation>
@@ -276,7 +285,7 @@
         <translation>评论</translation>
     </message>
     <message id="friends_splitsocial_last_update">
-        <location filename="../qml/SplitSocialPanel.qml" line="103"/>
+        <location filename="../qml/SplitSocialPanel.qml" line="105"/>
         <source>Last update %1</source>
         <extracomment>Display a message about the last updated time. %1 will be replaced by the elapsed time, like &quot;6 weeks ago&quot;</extracomment>
         <translation>最后更新：%1</translation>
@@ -319,7 +328,7 @@
         <translation>重新连接</translation>
     </message>
     <message id="friends_type_unsupported">
-        <location filename="../qml/TypeSolverPage.qml" line="159"/>
+        <location filename="../qml/TypeSolverPage.qml" line="191"/>
         <source>Friends cannot load this yet. This feature has not been implemented.</source>
         <extracomment>Describe that loading this item is not available yet</extracomment>
         <translation>Friends还不能读取这些。这个功能尚未实现。</translation>
@@ -331,35 +340,28 @@
         <translation>没有内容</translation>
     </message>
     <message id="friends_user_action_photos">
-        <location filename="../qml/UserPage.qml" line="226"/>
+        <location filename="../qml/UserPage.qml" line="227"/>
         <source>Photos</source>
         <extracomment>Action that shows the user's photos</extracomment>
         <translation>图片</translation>
     </message>
     <message id="friends_user_action_albums">
-        <location filename="../qml/UserPage.qml" line="239"/>
+        <location filename="../qml/UserPage.qml" line="240"/>
         <source>Albums</source>
         <extracomment>Action that shows the user's albums</extracomment>
         <translation>相册</translation>
     </message>
     <message id="friends_user_action_about_me">
-        <location filename="../qml/UserPage.qml" line="250"/>
+        <location filename="../qml/UserPage.qml" line="251"/>
         <source>Personal information</source>
         <extracomment>Action that shows the current user's personnal informations</extracomment>
         <translation>个人信息</translation>
     </message>
     <message id="friends_user_action_about">
-        <location filename="../qml/UserPage.qml" line="253"/>
+        <location filename="../qml/UserPage.qml" line="254"/>
         <source>About %1</source>
         <extracomment>Action that shows the personnal informations of a given user. %1 contains the name of the user.</extracomment>
         <translation>关于%1</translation>
-    </message>
-    <message id="friends_welcome_close">
-        <location filename="../qml/WelcomeDialog.qml" line="45"/>
-        <location filename="../qml/WelcomeDialog.qml" line="46"/>
-        <source>Close</source>
-        <extracomment>Action displayed in the welcome dialog. Used to close the dialog</extracomment>
-        <translation>关闭</translation>
     </message>
     <message id="friends_welcome_description">
         <location filename="../qml/WelcomeDialog.qml" line="59"/>
@@ -369,9 +371,9 @@
     </message>
     <message id="friends_welcome_please_donate">
         <location filename="../qml/WelcomeDialog.qml" line="69"/>
-        <source>Please consider a donation to keep Friends free and open-source.</source>
-        <extracomment>A message for asking for donations</extracomment>
-        <translation>请考虑捐赠开发者以保持Friends的免费和开源。</translation>
+        <source>Please consider a donation to help improving Friends.</source>
+        <extracomment>A message for asking for donations.</extracomment>
+        <translation>请考虑捐赠开发者以帮助Friends的持续改进。</translation>
     </message>
     <message id="friends_footer_likes" numerus="yes">
         <location filename="../footerhelper.cpp" line="43"/>
@@ -396,6 +398,34 @@
         <source>Via %1</source>
         <extracomment>Translate the &quot;via &lt;appication&gt; footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.</extracomment>
         <translation>经由%1</translation>
+    </message>
+    <message id="friends_changelog_title">
+        <location filename="../qml/ChangeLogPage.qml" line="44"/>
+        <source>ChangeLog</source>
+        <extracomment>Title of the page showing the changelog</extracomment>
+        <translation>更新履历</translation>
+    </message>
+    <message id="friends_close">
+        <location filename="../qml/UpdatedDialog.qml" line="53"/>
+        <location filename="../qml/UpdatedDialog.qml" line="54"/>
+        <location filename="../qml/WelcomeDialog.qml" line="45"/>
+        <location filename="../qml/WelcomeDialog.qml" line="46"/>
+        <source>Close</source>
+        <extracomment>Action used to close the dialog</extracomment>
+        <translation>关闭</translation>
+    </message>
+    <message id="friends_updated_title">
+        <location filename="../qml/UpdatedDialog.qml" line="71"/>
+        <source>Friends has been updated !</source>
+        <oldsource>Friends has been updated to version %1 !</oldsource>
+        <extracomment>A message saying that Friends has been updated.</extracomment>
+        <translation>Friends已更新到最新版本！</translation>
+    </message>
+    <message id="friends_updated_changelog">
+        <location filename="../qml/UpdatedDialog.qml" line="99"/>
+        <source>ChangeLog</source>
+        <extracomment>Changelog title in the &quot;Friends updated&quot; dialog</extracomment>
+        <translation>更新履历</translation>
     </message>
 </context>
 </TS>
