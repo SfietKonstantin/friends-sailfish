@@ -35,5 +35,7 @@
         <file>qml/ChangeLogPage.qml</file>
         <file>qml/UpdatedDialog.qml</file>
         <file>qml/ChangeLogView.qml</file>
+        <file>qml/GroupPage.qml</file>
+        <file>qml/GroupsPage.qml</file>
     </qresource>
 </RCC>

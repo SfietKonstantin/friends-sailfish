@@ -37,6 +37,8 @@ HEADERS += \
     ../social/src/facebook/facebookalbuminterface_p.h \
     ../social/src/facebook/facebookcommentinterface.h \
     ../social/src/facebook/facebookcommentinterface_p.h \
+    ../social/src/facebook/facebookgroupinterface.h \
+    ../social/src/facebook/facebookgroupinterface_p.h \
     ../social/src/facebook/facebooknotificationinterface.h \
     ../social/src/facebook/facebooknotificationinterface_p.h \
     ../social/src/facebook/facebookphotointerface.h \
@@ -45,6 +47,7 @@ HEADERS += \
     ../social/src/facebook/facebookpostinterface_p.h \
     ../social/src/facebook/facebookuserinterface.h \
     ../social/src/facebook/facebookuserinterface_p.h \
+    ../social/src/facebook/facebookcoverinterface.h \
     ../social/src/facebook/facebooklikeinterface.h \
     ../social/src/facebook/facebooknametaginterface.h \
     ../social/src/facebook/facebookphotoimageinterface.h \
@@ -61,10 +64,12 @@ SOURCES += \
     ../social/src/facebook/facebookobjectreferenceinterface.cpp \
     ../social/src/facebook/facebookalbuminterface.cpp \
     ../social/src/facebook/facebookcommentinterface.cpp \
+    ../social/src/facebook/facebookgroupinterface.cpp \
     ../social/src/facebook/facebooknotificationinterface.cpp \
     ../social/src/facebook/facebookphotointerface.cpp \
     ../social/src/facebook/facebookpostinterface.cpp \
     ../social/src/facebook/facebookuserinterface.cpp \
+    ../social/src/facebook/facebookcoverinterface.cpp \
     ../social/src/facebook/facebooklikeinterface.cpp \
     ../social/src/facebook/facebooknametaginterface.cpp \
     ../social/src/facebook/facebookphotoimageinterface.cpp \

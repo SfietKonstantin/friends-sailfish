@@ -91,6 +91,12 @@ Page {
                 page: ""
             }
             ListElement {
+                //: Menu entry to show the groups page, with list of groups where the user is.
+                //% "Groups"
+                text: QT_TRID_NOOP("friends_menu_groups")
+                page: "GroupsPage.qml"
+            }
+            ListElement {
                 //: Menu entry to show the messages page, where the user can chat.
                 //% "Messages"
                 text: QT_TRID_NOOP("friends_menu_messages")

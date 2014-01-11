@@ -99,6 +99,8 @@ Page {
             if (objectType == Facebook.Album) {
                 item.pushPage("PhotosPage.qml", {"identifier": item.identifier}, true)
                 return
+            } else if(objectType == Facebook.Group) {
+                item.pushPage("GroupPage.qml", {"identifier": item.identifier}, true)
             } else if (objectType == Facebook.Post) {
                 if (objectTypeString == "post") {
                     post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,link,picture,name,caption,description"

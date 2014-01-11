@@ -228,26 +228,24 @@ void TypeSolverInterfacePrivate::emitPropertyChangeSignals(const QVariantMap &ol
     if (type == "comment") {
         newObjectType = FacebookInterface::Comment;
     }
+    if (type == "group") {
+        newObjectType = FacebookInterface::Group;
+    }
     if (type == "notification") {
         newObjectType = FacebookInterface::Notification;
     }
-
     if (type == "photo") {
         newObjectType = FacebookInterface::Photo;
     }
-
     if (type == "post") {
         newObjectType = FacebookInterface::Post;
     }
-
     if (type == "user") {
         newObjectType = FacebookInterface::User;
     }
-
     if (type == "application") {
         newObjectType = FacebookInterface::Application;
     }
-
     if (type == "event") {
         newObjectType = FacebookInterface::Event;
     }

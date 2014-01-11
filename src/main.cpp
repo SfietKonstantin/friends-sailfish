@@ -76,6 +76,7 @@
 #include "facebook/facebookobjectreferenceinterface.h"
 #include "facebook/facebookalbuminterface.h"
 #include "facebook/facebookcommentinterface.h"
+#include "facebook/facebookgroupinterface.h"
 #include "facebook/facebooknotificationinterface.h"
 #include "facebook/facebookphotointerface.h"
 #include "facebook/facebookpostinterface.h"
@@ -180,11 +181,13 @@ void importSocial()
     qmlRegisterType<FacebookObjectReferenceInterface>(URI_SOCIAL, 1, 0, "FacebookObjectReference");
     qmlRegisterType<FacebookAlbumInterface>(URI_SOCIAL, 1, 0, "FacebookAlbum");
     qmlRegisterType<FacebookCommentInterface>(URI_SOCIAL, 1, 0, "FacebookComment");
+    qmlRegisterType<FacebookGroupInterface>(URI_SOCIAL, 1, 0, "FacebookGroup");
     qmlRegisterType<FacebookNotificationInterface>(URI_SOCIAL, 1, 0, "FacebookNotification");
     qmlRegisterType<FacebookPhotoInterface>(URI_SOCIAL, 1, 0, "FacebookPhoto");
     qmlRegisterType<FacebookPostInterface>(URI_SOCIAL, 1, 0, "FacebookPost");
     qmlRegisterType<FacebookUserInterface>(URI_SOCIAL, 1, 0, "FacebookUser");
 
+    qmlRegisterType<FacebookCoverInterface>(URI_SOCIAL, 1, 0, "FacebookCover");
     qmlRegisterType<FacebookLikeInterface>(URI_SOCIAL, 1, 0, "FacebookLike");
     qmlRegisterType<FacebookNameTagInterface>(URI_SOCIAL, 1, 0, "FacebookNameTag");
     qmlRegisterType<FacebookPhotoImageInterface>(URI_SOCIAL, 1, 0, "FacebookPhotoImage");

@@ -106,15 +106,6 @@ Page {
             from: model.contentItem.from
             to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
             fancy: false
-            onClicked: {
-                var headerProperties = {"post": post}
-                var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
-                                          {"identifier": post.identifier,
-                                           "item": post,
-                                           "headerComponent": postHeaderComponent,
-                                           "headerProperties": headerProperties})
-                page.load()
-            }
         }
 
         onAtYEndChanged: {

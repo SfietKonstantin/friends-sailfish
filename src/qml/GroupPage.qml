@@ -39,8 +39,8 @@ Page {
     id: container
     property string identifier
     function load() {
-        if (user.status == SocialNetwork.Idle || user.status == SocialNetwork.Error) {
-            user.load()
+        if (group.status == SocialNetwork.Idle || group.status == SocialNetwork.Error) {
+            group.load()
         }
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
@@ -55,11 +55,11 @@ Page {
 
     StateIndicator {
         model: model
-        item: user
+        item: group
     }
 
-    FacebookUser {
-        id: user
+    FacebookGroup {
+        id: group
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
@@ -89,7 +89,7 @@ Page {
                         id: image
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectCrop
-                        url: user.cover.source
+                         url: group.cover.source
                     }
 
                     ShaderEffect {
@@ -126,11 +126,11 @@ Page {
                         font.pixelSize: Theme.fontSizeLarge
                         states: [
                             State {
-                                name: "visible"; when: user.name != ""
+                                name: "visible"; when: group.name != ""
                                 PropertyChanges {
                                     target: nameText
                                     opacity: 1
-                                    text: user.name
+                                    text: group.name
                                 }
                                 PropertyChanges {
                                     target: gradient
@@ -141,37 +141,6 @@ Page {
                         Behavior on opacity {
                             NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
                         }
-                    }
-                }
-
-                Rectangle {
-                    id: pictureContainer
-                    opacity: 0
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    anchors.verticalCenter: coverBackground.bottom
-                    color: Theme.primaryColor
-                    width: Theme.itemSizeSmall * 2 + Theme.paddingSmall
-                    height: Theme.itemSizeSmall * 2 + Theme.paddingSmall
-
-                    states: [
-                        State {
-                            name: "visible"; when: picture.status == Image.Ready
-                            PropertyChanges {
-                                target: pictureContainer
-                                opacity: 1
-                            }
-                        }
-                    ]
-                    Behavior on opacity {
-                        NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
-                    }
-
-                    FacebookPicture {
-                        id: picture
-                        identifier: user.identifier
-                        anchors.centerIn: parent
-                        pictureWidth: Theme.itemSizeSmall * 2
-                        pictureHeight: Theme.itemSizeSmall * 2
                     }
                 }
             }
@@ -203,9 +172,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no posts from an user to be displayed
+            //: Text shown on the placeholder, where there is no posts from a group to be displayed
             //% "No posts"
-            text: qsTrId("friends_user_placeholder")
+            text: qsTrId("friends_group_placeholder")
         }
 
         PullDownMenu {
@@ -213,36 +182,9 @@ Page {
             busy: model.status == SocialNetwork.Busy
 
             MenuItem {
-                //: Action that shows the user's photos
-                //% "Photos"
-                text: qsTrId("friends_user_action_photos")
-                onClicked: {
-                    var page = pageStack.push(Qt.resolvedUrl("PhotosPage.qml"),
-                                              {"identifier": user.identifier,
-                                               "name": qsTrId("friends_photos_of_someone").arg(user.firstName),
-                                               "isUserPhotos": true})
-                    page.load()
-                }
-            }
-
-            MenuItem {
-                //: Action that shows the user's albums
-                //% "Albums"
-                text: qsTrId("friends_user_action_albums")
-                onClicked: {
-                    var page = pageStack.push(Qt.resolvedUrl("AlbumsPage.qml"),
-                                              {"identifier": user.identifier})
-                    page.load()
-                }
-            }
-
-            MenuItem {
                 //: Action that shows the current user's personnal informations
-                //% "Personal information"
-                text: user.identifier == me.identifier ? qsTrId("friends_user_action_about_me")
-                 //: Action that shows the personnal informations of a given user. %1 contains the name of the user.
-                 //% "About %1"
-                                                       : qsTrId("friends_user_action_about").arg(user.firstName)
+                //% "Group information"
+                text: qsTrId("friends_group_action_about")
                 enabled: false
             }
 
