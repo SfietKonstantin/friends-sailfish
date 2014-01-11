@@ -118,9 +118,10 @@ Page {
             }
 
             onClicked: {
-                 var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                           {"identifier": background.identifier})
-                 page.load()
+                model.contentItem.markAsRead()
+                var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                          {"identifier": background.identifier})
+                page.load()
             }
         }
 
