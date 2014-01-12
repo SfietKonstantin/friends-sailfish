@@ -43,17 +43,21 @@ bool versionGreater(const QString &version1, const QString &version2)
     QStringList firstVersionList = version1.split(".", QString::SkipEmptyParts);
     QStringList secondVersionList = version2.split(".", QString::SkipEmptyParts);
 
-    if (firstVersionList.count() != 3 || secondVersionList.count() != 3) {
+    if (firstVersionList.count() != 3) {
         return false;
     }
 
+    if (secondVersionList.count() != 3) {
+        return true;
+    }
+
     int first1 = firstVersionList.at(0).toInt();
-    int first2 = firstVersionList.at(0).toInt();
-    int first3 = firstVersionList.at(0).toInt();
+    int first2 = firstVersionList.at(1).toInt();
+    int first3 = firstVersionList.at(2).toInt();
 
     int second1 = secondVersionList.at(0).toInt();
-    int second2 = secondVersionList.at(0).toInt();
-    int second3 = secondVersionList.at(0).toInt();
+    int second2 = secondVersionList.at(1).toInt();
+    int second3 = secondVersionList.at(2).toInt();
 
     if (first1 != second1) {
         return first1 > second1;
@@ -63,8 +67,7 @@ bool versionGreater(const QString &version1, const QString &version2)
         return first2 > second2;
     }
 
-    return first3 >= second3;
-
+    return first3 > second3;
 }
 
 struct ChangeLogModelData
@@ -75,7 +78,7 @@ struct ChangeLogModelData
 };
 
 ChangeLogModel::ChangeLogModel(QObject *parent) :
-    QAbstractListModel(parent), m_onlyCurrent(false)
+    QAbstractListModel(parent), m_all(true)
 {
     load();
 }
@@ -129,16 +132,30 @@ int ChangeLogModel::count() const
     return rowCount();
 }
 
-bool ChangeLogModel::isOnlyCurrent() const
+bool ChangeLogModel::isAll() const
 {
-    return m_onlyCurrent;
+    return m_all;
 }
 
-void ChangeLogModel::setOnlyCurrent(bool onlyCurrent)
+void ChangeLogModel::setAll(bool all)
 {
-    if (m_onlyCurrent != onlyCurrent) {
-        m_onlyCurrent = onlyCurrent;
-        emit onlyCurrentChanged();
+    if (m_all != all) {
+        m_all = all;
+        emit allChanged();
+        load();
+    }
+}
+
+QString ChangeLogModel::fromVersion() const
+{
+    return m_fromVersion;
+}
+
+void ChangeLogModel::setFromVersion(const QString &fromVersion)
+{
+    if (m_fromVersion != fromVersion) {
+        m_fromVersion = fromVersion;
+        emit fromVersionChanged();
         load();
     }
 }
@@ -164,13 +181,22 @@ void ChangeLogModel::load()
     file.close();
 
     QJsonObject object = document.object();
-    if (m_onlyCurrent) {
-        addVersion(VERSION, object.value(VERSION).toArray());
-    } else {
-        QStringList keys = object.keys();
-        std::sort(keys.begin(), keys.end(), versionGreater);
+    QStringList keys = object.keys();
+    std::sort(keys.begin(), keys.end(), versionGreater);
+    if (m_all) {
         foreach (const QString &key, keys) {
             addVersion(key, object.value(key).toArray());
+        }
+    } else {
+        foreach (const QString &key, keys) {
+            if (versionGreater(key, m_fromVersion)) {
+                addVersionAndType(key, "feature", object.value(key).toArray());
+            }
+        }
+        foreach (const QString &key, keys) {
+            if (versionGreater(key, m_fromVersion)) {
+                addVersionAndType(key, "bug", object.value(key).toArray());
+            }
         }
     }
 }
@@ -184,5 +210,20 @@ void ChangeLogModel::addVersion(const QString &version, const QJsonArray &data)
         data->type = entry.value("type").toString();
         data->text = entry.value("text").toString();
         m_data.append(data);
+    }
+}
+
+void ChangeLogModel::addVersionAndType(const QString &version, const QString &type, const QJsonArray &data)
+{
+    foreach (const QJsonValue &value, data) {
+        QJsonObject entry = value.toObject();
+        QString parsedType = entry.value("type").toString();
+        if (type == parsedType) {
+            ChangeLogModelData *data = new ChangeLogModelData;
+            data->version = version;
+            data->type = parsedType;
+            data->text = entry.value("text").toString();
+            m_data.append(data);
+        }
     }
 }

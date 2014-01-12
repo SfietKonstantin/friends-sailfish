@@ -33,11 +33,11 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Dialog {
+    property alias fromVersion: view.fromVersion
     ChangeLogView {
         id: view
         anchors.fill: parent
-        onlyCurrent: true
-
+        all: false
 
         header: Item {
             width: view.width

@@ -35,7 +35,8 @@ import harbour.friends 1.0
 
 SilicaListView {
     id: view
-    property alias onlyCurrent: model.onlyCurrent
+    property alias fromVersion: model.fromVersion
+    property alias all: model.all
     model: ChangeLogModel {
         id: model
     }

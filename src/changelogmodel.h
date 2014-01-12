@@ -40,7 +40,8 @@ class ChangeLogModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(int count READ count NOTIFY countChanged)
-    Q_PROPERTY(bool onlyCurrent READ isOnlyCurrent WRITE setOnlyCurrent NOTIFY onlyCurrentChanged)
+    Q_PROPERTY(bool all READ isAll WRITE setAll NOTIFY allChanged)
+    Q_PROPERTY(QString fromVersion READ fromVersion WRITE setFromVersion NOTIFY fromVersionChanged)
 public:
     enum Roles {
         VersionRole,
@@ -57,15 +58,20 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
 
     int count() const;
-    bool isOnlyCurrent() const;
-    void setOnlyCurrent(bool onlyCurrent);
+    bool isAll() const;
+    void setAll(bool all);
+    QString fromVersion() const;
+    void setFromVersion(const QString &fromVersion);
 Q_SIGNALS:
     void countChanged();
-    void onlyCurrentChanged();
+    void allChanged();
+    void fromVersionChanged();
 private:
     void load();
     void addVersion(const QString &version, const QJsonArray &data);
-    bool m_onlyCurrent;
+    void addVersionAndType(const QString &version, const QString &type, const QJsonArray &data);
+    bool m_all;
+    QString m_fromVersion;
     QList<ChangeLogModelData *> m_data;
 };
 

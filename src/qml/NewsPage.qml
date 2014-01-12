@@ -64,8 +64,9 @@ Page {
                 settingsManager.version = VERSION
                 pageStack.push(Qt.resolvedUrl("WelcomeDialog.qml"))
             } else if (VERSION != settingsManager.version) {
+                var fromVersion = settingsManager.version
                 settingsManager.version = VERSION
-                pageStack.push(Qt.resolvedUrl("UpdatedDialog.qml"))
+                pageStack.push(Qt.resolvedUrl("UpdatedDialog.qml"), {"fromVersion": fromVersion})
             }
         }
     }
