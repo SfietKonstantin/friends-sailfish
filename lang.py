@@ -131,8 +131,8 @@ if percentage is not None:
     if percentage < 0 or percentage > 100:
         parser.print_help()
         sys.exit(1)
-    else:
-        percentage = 100
+else:
+    percentage = 100
 if push:
     do_push()
     sys.exit(0)

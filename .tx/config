@@ -8,6 +8,6 @@ source_lang = en@lolcat
 type = QT
 
 [friends.launcher]
-source_file = src/translations/harbour-friends.desktop
+source_file = src/harbour-friends.desktop
 source_lang = en@lolcat
 type = DESKTOP

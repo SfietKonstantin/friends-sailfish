@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=Friends
-Icon=harbour-friends
-Exec=harbour-friends
-X-Nemo-Application-Type=silica-qt5
-Comment=Friends Facebook client
