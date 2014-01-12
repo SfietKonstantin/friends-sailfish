@@ -50,5 +50,11 @@
       "text": "Friends won't prompt that it is updated just after showing the welcome dialog.", 
       "type": "bug"
     }
+  ], 
+  "0.1.13": [
+    {
+      "text": "Updated languages for ca, zh_CN, cs, nl_NL, en, fi, fr, de, hu_HU, it_IT, nb_NO, pt_PT, ru and es_ES.", 
+      "type": "bug"
+    }
   ]
 }
