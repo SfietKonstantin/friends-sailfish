@@ -89,8 +89,10 @@ Page {
         }
 
         function showUnsolvableObject() {
-            console.debug("Unknown type: " + objectType + " and as string: " + objectTypeString)
-            unsupported.enabled = true
+            if (item.status == SocialNetwork.Idle) {
+                console.debug("Unknown type: " + objectType + " and as string: " + objectTypeString)
+                unsupported.enabled = true
+            }
         }
 
         function solveObjectType() {
@@ -182,11 +184,6 @@ Page {
         }
     }
 
-    StateIndicator {
-        id: indicator
-        item: item
-    }
-
     SilicaFlickable {
         anchors.fill: parent
 
@@ -196,6 +193,11 @@ Page {
             //% "Friends cannot load this yet. This feature has not been implemented."
             text: qsTrId("friends_type_unsupported")
         }
+    }
+
+    StateIndicator {
+        id: indicator
+        item: item
     }
 }
 

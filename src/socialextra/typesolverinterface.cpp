@@ -180,7 +180,15 @@ bool TypeSolverFilterInterface::performSetItemDataImpl(IdentifiableContentItemIn
         // Create an artificial data
         QString type = properties.value(TYPE_KEY).toString();
         QVariantMap newDataMap;
-        QVariantMap object = dataMap.value(FACEBOOK_ONTOLOGY_METADATA_DATA).toList().first().toMap();
+        QVariantList data = dataMap.value(FACEBOOK_ONTOLOGY_METADATA_DATA).toList();
+        if (data.isEmpty()) {
+            QString message = "Code: 10000. Custom error telling that Facebook did not returned "\
+                              "anything when querying the Facebook Object of a FQL Object";
+            item->setError(SocialNetworkInterface::SocialNetworkError, message);
+            return false;
+        }
+
+        QVariantMap object = data.first().toMap();
         newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_ID, object.value("object_id"));
         newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_TYPE, type);
         dataMap = newDataMap;
