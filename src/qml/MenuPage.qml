@@ -163,5 +163,7 @@ Page {
                 onClicked: pageStack.push(Qt.resolvedUrl("AboutPage.qml"))
             }
         }
+
+        VerticalScrollDecorator {}
     }
 }
