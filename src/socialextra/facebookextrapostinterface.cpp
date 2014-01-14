@@ -31,6 +31,7 @@
 
 #include "facebookextrapostinterface.h"
 #include "facebook/facebookpostinterface_p.h"
+#include <QtCore/QDebug>
 
 class FacebookExtraPostInterfacePrivate: public FacebookPostInterfacePrivate
 {

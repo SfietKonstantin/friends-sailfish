@@ -99,16 +99,16 @@ Page {
             console.debug("Object Type:" + objectType + " " + objectTypeString)
 
             if (objectType == Facebook.Album) {
-                item.pushPage("PhotosPage.qml", {"identifier": item.identifier}, true)
+                item.pushPage("PhotosPage.qml", {"identifier": item.identifier}, true, [])
                 return
             } else if(objectType == Facebook.Group) {
-                item.pushPage("GroupPage.qml", {"identifier": item.identifier}, true)
+                item.pushPage("GroupPage.qml", {"identifier": item.identifier}, true, [])
                 return
             } else if (objectType == Facebook.Post) {
                 if (objectTypeString == "post") {
-                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,link,picture,name,caption,description"
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,story_tags,link,picture,name,caption,description,object_id"
                 } else if (objectTypeString == "location") {
-                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags,"
+                    post.filter.fields = "id,from,to,message,story,likes,comments,created_time,tags"
                 } else if (objectTypeString == "link") {
                     post.filter.fields = "id,from,to,message,story,likes,comments,created_time,link,picture,name,caption,description"
                 } else if (objectTypeString == "status") {
@@ -120,13 +120,13 @@ Page {
                 indicator.item = post
                 post.load()
             } else if (objectType == Facebook.Page) {
-                item.pushPage("PagePage.qml", {"identifier": item.identifier}, true)
+                item.pushPage("PagePage.qml", {"identifier": item.identifier}, true, [])
                 return
             } else if (objectType == Facebook.Photo) {
                 indicator.item = photo
                 photo.load()
             } else if (objectType == Facebook.User) {
-                item.pushPage("UserPage.qml", {"identifier": item.identifier}, true)
+                item.pushPage("UserPage.qml", {"identifier": item.identifier}, true, [])
                 return
             } else {
                 showUnsolvableObject()
@@ -179,7 +179,7 @@ Page {
 
                 item.pushPage(Qt.resolvedUrl("PhotoPage.qml"),
                               {"currentIndex": 0, "model": photoModel,
-                               "isFacebookModel": false}, true, [photoModel, photo])
+                               "isFacebookModel": false}, false, [photoModel, photo])
             }
         }
     }

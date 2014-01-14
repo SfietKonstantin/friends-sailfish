@@ -53,6 +53,7 @@ Component {
         }
 
         SocialButtons {
+            visible: delegate.hasFooter
             item: container.post
             anchors.leftMargin: Theme.paddingMedium; anchors.rightMargin: Theme.paddingMedium
             onShowComments: container.parent.focusCommentField()

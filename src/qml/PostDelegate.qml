@@ -37,6 +37,7 @@ import harbour.friends.social 1.0
 
 Item {
     id: container
+    property alias hasFooter: helper.hasFooter
     property alias post: helper.object
     property alias to: helper.to
     property alias fancy: helper.fancy
@@ -177,16 +178,23 @@ Item {
 
             MouseArea {
                 id: imagesContainerMouseArea
-                enabled: post.source != "" || post.facebookObjectId != ""
+                enabled: post.source != "" || post.facebookObjectId != "" || post.objectIdentifier != ""
                 anchors.fill: parent
                 onClicked: {
                     if (post.source != "") {
                         Qt.openUrlExternally(post.source)
                     } else {
+                        var objectId = post.facebookObjectId
+                        var fql = true
+                        if (objectId == "") {
+                            objectId = post.objectIdentifier
+                            fql = false
+                        }
+
                         var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                  {"identifier": post.facebookObjectId,
+                                                  {"identifier": objectId,
                                                    "type": post.facebookObjectType,
-                                                   "fql": true})
+                                                   "fql": fql})
                         page.load()
                     }
                 }
@@ -273,6 +281,7 @@ Item {
 
         // Likes comments
         Label {
+            visible: helper.hasFooter
             anchors.left: parent.left; anchors.right: parent.right
             font.pixelSize: Theme.fontSizeExtraSmall
             color: Theme.secondaryColor

@@ -55,6 +55,7 @@ PostHelper::PostHelper(QObject *parent)
     , m_fancy(true)
     , m_story(false)
     , m_hasContent(false)
+    , m_hasFooter(true)
 {
 }
 
@@ -114,6 +115,11 @@ bool PostHelper::isStory() const
 bool PostHelper::hasContent() const
 {
     return m_hasContent;
+}
+
+bool PostHelper::hasFooter() const
+{
+    return m_hasFooter;
 }
 
 QString PostHelper::name() const
@@ -229,7 +235,7 @@ void PostHelper::performCreationImpl()
         emit messageChanged();
     }
 
-        // Has content ?
+    // Has content ?
     bool newHasContent = !get(object(), "picture").isNull() && !get(object(), "name").isNull();
     if (m_hasContent != newHasContent) {
         m_hasContent = newHasContent;
@@ -237,6 +243,17 @@ void PostHelper::performCreationImpl()
     }
 
     // Footer
+    bool hasFooter = true;
+    QVariantMap data = get(object(), "data").toMap();
+    if (!data.contains("likes") || !data.contains("comments")) {
+        hasFooter = false;
+    }
+
+    if (m_hasFooter != hasFooter) {
+        m_hasFooter = hasFooter;
+        emit hasFooterChanged();
+    }
+
     int likesCount = get(object(), "likesCount").toInt();
     int commentsCount = get(object(), "commentsCount").toInt();
     QString footer = FooterHelper::makeFooter(likesCount, commentsCount);

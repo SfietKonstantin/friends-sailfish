@@ -189,8 +189,10 @@ bool TypeSolverFilterInterface::performSetItemDataImpl(IdentifiableContentItemIn
         }
 
         QVariantMap object = data.first().toMap();
+        QVariantMap metadata;
+        metadata.insert(FACEBOOK_ONTOLOGY_METADATA_TYPE, type);
         newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_ID, object.value("object_id"));
-        newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA_TYPE, type);
+        newDataMap.insert(FACEBOOK_ONTOLOGY_METADATA, metadata);
         dataMap = newDataMap;
     }
 
@@ -225,7 +227,8 @@ void TypeSolverInterfacePrivate::emitPropertyChangeSignals(const QVariantMap &ol
     QVariantMap metadata = newData.value(FACEBOOK_ONTOLOGY_METADATA).toMap();
     QString type = metadata.value(FACEBOOK_ONTOLOGY_METADATA_TYPE).toString();
     if (type.isEmpty()) {
-        type = newData.value(FACEBOOK_ONTOLOGY_METADATA_TYPE).toString();
+        // It seems that no type is related to posts
+        type = "post";
     }
 
     FacebookInterface::ContentItemType newObjectType = FacebookInterface::Unknown;
