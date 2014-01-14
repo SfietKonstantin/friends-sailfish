@@ -31,86 +31,31 @@
 
 #include "posthelper.h"
 #include "footerhelper.h"
+#include "objecthelper_p.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
-#include <QtCore/QMetaObject>
-#include <QtCore/QMetaProperty>
 #include <QtCore/QRegularExpression>
 #include <QtCore/QUrl>
 
 static const int ELIDE_COUNT = 50;
 
-static const char *RICH_TEXT_NAME
-    = "<a style=\"text-decoration:none; color:%1\" href=\"item----%2\">%3</a>";
-
-static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?]*)";
-static const char *RICH_TEXT_URL
-    = "<a style=\"text-decoration:none; color:%1\" href=\"url----%2\">%3</a>";
-
-inline QVariant get(QObject *object, const char *property)
-{
-    const QMetaObject *metaObject = object->metaObject();
-    int index = metaObject->indexOfProperty(property);
-    if (index == -1) {
-        return QVariant();
-    }
-
-    QMetaProperty metaProperty = metaObject->property(index);
-    return metaProperty.read(object);
-}
-
+static const char *ITEM_TEMPLATE = "item----%1";
+static const char *URL_TEMPLATE = "url----%1";
+static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?=]*)";
 
 bool tagLesser(QObject *tag1, QObject *tag2)
 {
     return get(tag1, "offset").toInt() < get(tag2, "offset").toInt();
 }
 
-PostHelper::PostHelper(QObject *parent) :
-    QObject(parent)
+PostHelper::PostHelper(QObject *parent)
+    : AbstractDisplayHelper(parent)
+    , m_to(0)
+    , m_fancy(true)
+    , m_story(false)
+    , m_hasContent(false)
 {
-    m_post = 0;
-    m_from = 0;
-    m_to = 0;
-    m_fancy = true;
-    m_story = false;
-    m_hasContent = false;
-}
-
-QObject * PostHelper::post() const
-{
-    return m_post;
-}
-
-void PostHelper::setPost(QObject *post)
-{
-    if (m_post != post) {
-        if (m_post) {
-            m_post->disconnect(this);
-        }
-
-        m_post = post;
-        emit postChanged();
-
-        connect(m_post, SIGNAL(likesCountChanged()), this, SLOT(createPost()));
-        connect(m_post, SIGNAL(commentsCountChanged()), this, SLOT(createPost()));
-
-        createPost();
-    }
-}
-
-QObject * PostHelper::from() const
-{
-    return m_from;
-}
-
-void PostHelper::setFrom(QObject *from)
-{
-    if (m_from != from) {
-        m_from = from;
-        emit fromChanged();
-        createPost();
-    }
 }
 
 QObject * PostHelper::to() const
@@ -123,7 +68,7 @@ void PostHelper::setTo(QObject *to)
     if (m_to != to) {
         m_to = to;
         emit toChanged();
-        createPost();
+        create();
     }
 }
 
@@ -137,35 +82,7 @@ void PostHelper::setFancy(bool fancy)
     if (m_fancy != fancy) {
         m_fancy = fancy;
         emit fancyChanged();
-        createPost();
-    }
-}
-
-QString PostHelper::userIdentifier() const
-{
-    return m_userIdentifier;
-}
-
-void PostHelper::setUserIdentifier(const QString &userIdentifier)
-{
-    if (m_userIdentifier != userIdentifier) {
-        m_userIdentifier = userIdentifier;
-        emit userIdentifierChanged();
-        createPost();
-    }
-}
-
-QString PostHelper::highlightColor() const
-{
-    return m_highlightColor;
-}
-
-void PostHelper::setHighlightColor(const QString &highlightColor)
-{
-    if (m_highlightColor != highlightColor) {
-        m_highlightColor = highlightColor;
-        emit highlightColorChanged();
-        createPost();
+        create();
     }
 }
 
@@ -217,51 +134,30 @@ QString PostHelper::description() const
 void PostHelper::clearMessageTags()
 {
     m_messageTags.clear();
+    create();
 }
 
 void PostHelper::addMessageTag(QObject *messageTag)
 {
     m_messageTags.append(messageTag);
-    createPost();
+    create();
 }
 
 void PostHelper::clearStoryTags()
 {
     m_storyTags.clear();
+    create();
 }
 
 void PostHelper::addStoryTag(QObject *storyTag)
 {
     m_storyTags.append(storyTag);
-    createPost();
+    create();
 }
 
-bool PostHelper::event(QEvent *e)
+void PostHelper::performCreationImpl()
 {
-    if (e->type() == QEvent::User) {
-        performPostCreation();
-        return true;
-    }
-    return QObject::event(e);
-}
-
-void PostHelper::createPost()
-{
-    QCoreApplication::instance()->postEvent(this, new QEvent(QEvent::User));
-}
-
-
-void PostHelper::performPostCreation()
-{
-    if (!m_post) {
-        return;
-    }
-
-    if (!m_from) {
-        return;
-    }
-
-    QString story = get(m_post, "story").toString();
+    QString story = get(object(), "story").toString();
     if (!story.isEmpty()) {
         m_story = true;
         emit storyChanged();
@@ -272,7 +168,7 @@ void PostHelper::performPostCreation()
 
     performHeaderCreation();
 
-    QString message = get(m_post, !m_story ? "message" : "story").toString();
+    QString message = get(object(), !m_story ? "message" : "story").toString();
     message.replace("<", "&lt;");
     message.replace(">", "&gt;");
     message.replace("\n", "<br/>");
@@ -301,7 +197,7 @@ void PostHelper::performPostCreation()
             message.append(remainingMessage.left(offset - previousOffset));
             remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
             previousOffset = offset + length;
-            message.append(QString(RICH_TEXT_NAME).arg(m_highlightColor, identifier, name));
+            message.append(decorate(name, QString(ITEM_TEMPLATE).arg(identifier)));
         }
         message.append(remainingMessage);
 
@@ -323,7 +219,7 @@ void PostHelper::performPostCreation()
             message.append(remainingMessage.mid(previousIndex, match.capturedStart(1) - previousIndex));
             previousIndex = match.capturedEnd(1);
 
-            message.append(QString(RICH_TEXT_URL).arg(m_highlightColor, url, captured));
+            message.append(decorate(captured, QString(URL_TEMPLATE).arg(url)));
         }
         message.append(remainingMessage.right(remainingMessage.length() - previousIndex));
     }
@@ -333,53 +229,16 @@ void PostHelper::performPostCreation()
         emit messageChanged();
     }
 
-    // Process message
-//    QString message;
-//    if (m_fancy) {
-//        QString endMessage = get(m_post, "message").toString();
-////        QList<QFB::PostTag *> messageTags = m_post->messageTags();
-////        qSort(messageTags.begin(), messageTags.end(), tagLesser);
-
-//        int previousOffset = 0;
-//        foreach (QFB::PostTag *tag, messageTags) {
-//            message.append(endMessage.left(tag->offset() - previousOffset));
-//            endMessage = endMessage.remove(0, tag->offset() + tag->length() - previousOffset);
-//            previousOffset = tag->offset() + tag->length();
-//            message.append(QString(RICH_TEXT_NAME).arg(tag->facebookId(), tag->name(),
-//                                                       tag->name()));
-//        }
-//        message.append(endMessage);
-
-//        // Parse links
-//        endMessage = message;
-//        message.clear();
-
-//        QRegExp urlRegExp(URL_REGEXP);
-//        int nextUrlIndex = endMessage.indexOf(urlRegExp);
-//        while (nextUrlIndex != -1) {
-//            QString captured = urlRegExp.cap(1);
-//            QString url = captured;
-//            if (!url.startsWith("http://")) {
-//                url.prepend("http://");
-//            }
-//            message.append(endMessage.left(nextUrlIndex));
-//            endMessage = endMessage.remove(0, nextUrlIndex + captured.size());
-//            message.append(QString(RICH_TEXT_URL).arg(url, captured));
-//            nextUrlIndex = endMessage.indexOf(urlRegExp);
-//        }
-//        message.append(endMessage);
-//    } else {
-
-    // Has content ?
-    bool newHasContent = !get(m_post, "picture").isNull() && !get(m_post, "name").isNull();
+        // Has content ?
+    bool newHasContent = !get(object(), "picture").isNull() && !get(object(), "name").isNull();
     if (m_hasContent != newHasContent) {
         m_hasContent = newHasContent;
         emit hasContentChanged();
     }
 
     // Footer
-    int likesCount = get(m_post, "likesCount").toInt();
-    int commentsCount = get(m_post, "commentsCount").toInt();
+    int likesCount = get(object(), "likesCount").toInt();
+    int commentsCount = get(object(), "commentsCount").toInt();
     QString footer = FooterHelper::makeFooter(likesCount, commentsCount);
 
     if (m_footer != footer) {
@@ -388,10 +247,10 @@ void PostHelper::performPostCreation()
     }
 
     // Name / description / content
-    bool havePicture = !get(m_post, "picture").toUrl().isEmpty();
-    QString name = elideText(get(m_post, "name").toString(), havePicture ? 30 : 70);
-    QString caption = elideText(get(m_post, "caption").toString(), havePicture ? 50 : 120);
-    QString description = elideText(get(m_post, "description").toString(), havePicture ? 50 : 120);
+    bool havePicture = !get(object(), "picture").toUrl().isEmpty();
+    QString name = elideText(get(object(), "name").toString(), havePicture ? 30 : 70);
+    QString caption = elideText(get(object(), "caption").toString(), havePicture ? 50 : 120);
+    QString description = elideText(get(object(), "description").toString(), havePicture ? 50 : 120);
 
     if (m_name != name) {
         m_name = name;
@@ -409,7 +268,7 @@ void PostHelper::performPostCreation()
 
     // Via
     QString via;
-    QObject *application = get(m_post, "application").value<QObject *>();
+    QObject *application = get(object(), "application").value<QObject *>();
     QString applicationName;
     if (application) {
         applicationName = get(application, "objectName").toString();
@@ -435,23 +294,24 @@ void PostHelper::performHeaderCreation()
         toIdentifier = get(m_to, "objectIdentifier").toString();
         toName = get(m_to, "objectName").toString();
     }
-    QString toHeader = RICH_TEXT_NAME;
+    QString toHeader;
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         QString elidedTo = elideText(toName, ELIDE_COUNT);
-        toHeader = toHeader.arg(m_highlightColor, toIdentifier, elidedTo);
+        toHeader = decorate(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
     }
     QString elidedFrom;
     QString fromName;
     QString fromIdentifier;
-    fromName = get(m_from, "objectName").toString();
-    fromIdentifier = get(m_from, "objectIdentifier").toString();
+
+    QObject *from = get(object(), "from").value<QObject *>();
+    fromName = get(from, "objectName").toString();
+    fromIdentifier = get(from, "objectIdentifier").toString();
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         elidedFrom = elideText(fromName, ELIDE_COUNT);
     } else {
         elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
     }
-    QString header = RICH_TEXT_NAME;
-    header = header.arg(m_highlightColor, fromIdentifier, elidedFrom);
+    QString header = decorate(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
 
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         header.append(" &gt; ");

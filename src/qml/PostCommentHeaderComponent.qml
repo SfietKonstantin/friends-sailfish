@@ -46,7 +46,6 @@ Component {
             PostDelegate {
                 id: delegate
                 fancy: true
-                from: post.from
                 to: post.to.length > 0 ? post.to[0] : null
                 anchors.left: parent.left; anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter

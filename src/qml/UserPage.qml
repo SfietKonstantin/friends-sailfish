@@ -153,7 +153,6 @@ Page {
 
         delegate: PostDelegate {
             post: model.contentItem
-            from: model.contentItem.from
             to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
             fancy: false
         }

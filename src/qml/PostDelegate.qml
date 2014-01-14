@@ -37,8 +37,7 @@ import harbour.friends.social 1.0
 
 Item {
     id: container
-    property alias post: helper.post
-    property alias from: helper.from
+    property alias post: helper.object
     property alias to: helper.to
     property alias fancy: helper.fancy
     width: parent.width
@@ -54,7 +53,6 @@ Item {
 
         function solveLink(link) {
             var splitted = link.split("----")
-            console.debug(splitted)
             if (splitted.length !== 2) {
                 return
             }
@@ -114,7 +112,7 @@ Item {
             height: childrenRect.height
             FacebookPicture {
                 id: picture
-                identifier: container.from.objectIdentifier
+                identifier: container.post.from.objectIdentifier
                 pictureWidth: Theme.iconSizeMedium
                 pictureHeight: Theme.iconSizeMedium
             }

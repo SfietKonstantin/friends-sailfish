@@ -86,6 +86,10 @@ void ImageManager::save(const QUrl &url, const QImage &image)
 
 QUrl ImageManager::pictureUrl(const QString &id, const QString &token, const QString &type)
 {
+    if (id.isEmpty()) {
+        return QUrl();
+    }
+
     QUrl url = QUrl(QString("https://graph.facebook.com/%1/picture").arg(id));
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     url.addQueryItem("access_token", token);
@@ -105,6 +109,10 @@ QUrl ImageManager::pictureUrl(const QString &id, const QString &token, const QSt
 
 QUrl ImageManager::pictureUrl(const QString &id, const QString &token, int width, int height)
 {
+    if (id.isEmpty()) {
+        return QUrl();
+    }
+
     QUrl url = QUrl(QString("https://graph.facebook.com/%1/picture").arg(id));
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     url.addQueryItem("access_token", token);

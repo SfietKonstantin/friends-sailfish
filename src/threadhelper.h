@@ -29,79 +29,40 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef POSTHELPER_H
-#define POSTHELPER_H
+#ifndef THREADHELPER_H
+#define THREADHELPER_H
 
 #include "abstractdisplayhelper.h"
-#include <QtCore/QDateTime>
 
-class PostHelper : public AbstractDisplayHelper
+class ThreadHelper : public AbstractDisplayHelper
 {
     Q_OBJECT
-    Q_PROPERTY(QObject * to READ to WRITE setTo NOTIFY toChanged)
-    Q_PROPERTY(bool fancy READ fancy WRITE setFancy NOTIFY fancyChanged)
-
+    Q_PROPERTY(bool valid READ isValid NOTIFY validChanged)
     Q_PROPERTY(QString header READ header NOTIFY headerChanged)
-    Q_PROPERTY(QString footer READ footer NOTIFY footerChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
-    Q_PROPERTY(QString via READ via NOTIFY viaChanged)
-    Q_PROPERTY(bool story READ isStory NOTIFY storyChanged)
-    Q_PROPERTY(bool hasContent READ hasContent NOTIFY hasContentChanged)
-
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString caption READ caption NOTIFY captionChanged)
-    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(QString pictureIdentifier READ pictureIdentifier NOTIFY pictureIdentifierChanged)
 public:
-    explicit PostHelper(QObject *parent = 0);
-    QObject * to() const;
-    void setTo(QObject *to);
-    bool fancy() const;
-    void setFancy(bool fancy);
-
+    explicit ThreadHelper(QObject *parent = 0);
+    bool isValid() const;
     QString header() const;
-    QString footer() const;
     QString message() const;
-    QString via() const;
-    bool isStory() const;
-    bool hasContent() const;
-    QString name() const;
-    QString caption() const;
-    QString description() const;
+    QString pictureIdentifier() const;
 public slots:
-    void clearMessageTags();
-    void addMessageTag(QObject *messageTag);
-    void clearStoryTags();
-    void addStoryTag(QObject *storyTag);
+    void clearTo();
+    void addTo(QObject *to);
 signals:
-    void toChanged();
-    void fancyChanged();
-    void footerChanged();
+    void validChanged();
     void headerChanged();
     void messageChanged();
-    void viaChanged();
-    void storyChanged();
-    void hasContentChanged();
-    void nameChanged();
-    void captionChanged();
-    void descriptionChanged();
+    void pictureIdentifierChanged();
 protected:
     void performCreationImpl();
 private:
-    void performHeaderCreation();
-    static QString elideText(const QString &text, int count);
-    QObject *m_to;
-    bool m_fancy;
-    QList<QObject *> m_messageTags;
-    QList<QObject *> m_storyTags;
+    QList<QObject *> m_to;
+    bool m_valid;
     QString m_header;
-    QString m_footer;
     QString m_message;
-    QString m_via;
-    bool m_story;
-    bool m_hasContent;
-    QString m_name;
-    QString m_caption;
-    QString m_description;
+    QString m_pictureIdentifier;
 };
 
-#endif // POSTHELPER_H
+#endif // THREADHELPER_H

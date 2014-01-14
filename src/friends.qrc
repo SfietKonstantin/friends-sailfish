@@ -40,5 +40,6 @@
         <file>qml/PagesPage.qml</file>
         <file>qml/PagePage.qml</file>
         <file>qml/CoverImage.qml</file>
+        <file>qml/ThreadsPage.qml</file>
     </qresource>
 </RCC>

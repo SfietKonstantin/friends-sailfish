@@ -47,6 +47,8 @@ HEADERS += \
     ../social/src/facebook/facebookphotointerface_p.h \
     ../social/src/facebook/facebookpostinterface.h \
     ../social/src/facebook/facebookpostinterface_p.h \
+    ../social/src/facebook/facebookthreadinterface.h \
+    ../social/src/facebook/facebookthreadinterface_p.h \
     ../social/src/facebook/facebookuserinterface.h \
     ../social/src/facebook/facebookuserinterface_p.h \
     ../social/src/facebook/facebookcoverinterface.h \
@@ -71,6 +73,7 @@ SOURCES += \
     ../social/src/facebook/facebookpageinterface.cpp \
     ../social/src/facebook/facebookphotointerface.cpp \
     ../social/src/facebook/facebookpostinterface.cpp \
+    ../social/src/facebook/facebookthreadinterface.cpp \
     ../social/src/facebook/facebookuserinterface.cpp \
     ../social/src/facebook/facebookcoverinterface.cpp \
     ../social/src/facebook/facebooklikeinterface.cpp \

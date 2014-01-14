@@ -103,12 +103,6 @@ Page {
                 page: "PagesPage.qml"
             }
             ListElement {
-                //: Menu entry to show the messages page, where the user can chat.
-                //% "Messages"
-                text: QT_TRID_NOOP("friends_menu_messages")
-                page: ""
-            }
-            ListElement {
                 //: Menu entry to show the notifications page, where the user can read notifications.
                 //% "Notifications"
                 text: QT_TRID_NOOP("friends_menu_notifications")
