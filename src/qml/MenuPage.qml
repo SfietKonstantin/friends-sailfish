@@ -88,7 +88,7 @@ Page {
                 //: Menu entry to show the events page, with the events where the user is invited.
                 //% "Events"
                 text: QT_TRID_NOOP("friends_menu_events")
-                page: ""
+                page: "EventsPage.qml"
             }
             ListElement {
                 //: Menu entry to show the groups page, with list of groups where the user is.

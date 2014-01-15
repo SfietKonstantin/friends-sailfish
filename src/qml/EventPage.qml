@@ -31,12 +31,18 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
+import harbour.friends 1.0
 import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
+import "UiConstants.js" as Ui
 
 Page {
     id: container
     property string identifier
     function load() {
+        if (event.status == SocialNetwork.Idle || event.status == SocialNetwork.Error) {
+            event.load()
+        }
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
         }
@@ -50,56 +56,51 @@ Page {
 
     StateIndicator {
         model: model
+        item: event
+    }
+
+    FacebookExtraEvent {
+        id: event
+        socialNetwork: facebook
+        filter: EventFilter {
+            identifier: container.identifier
+        }
     }
 
     SilicaListView {
         id: view
         anchors.fill: parent
-        visible: model.status == SocialNetwork.Idle || model.count > 0
+        visible: (model.status == SocialNetwork.Idle) || model.count > 0
+        header: Item {
+            width: view.width
+            height: childrenRect.height
+            Item {
+                anchors.left: parent.left; anchors.right: parent.right
+                height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
+
+                CoverHeader {
+                    id: coverImage
+                    anchors.left: parent.left; anchors.right: parent.right
+                    height: 2 * Theme.itemSizeExtraLarge
+                    coverUrl: event.cover.source
+                    name: event.name
+                }
+            }
+        }
+
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            filter: FacebookRelatedDataFilter {
+            filter: NewsFeedFilter {
+                type: NewsFeedFilter.Feed
                 identifier: container.identifier
-                connection: Facebook.LikedPages
-                fields: "id,name,category"
-                limit: 20
             }
         }
 
-        header: PageHeader {
-            //: Title of the page showing the list of pages
-            //% "Pages"
-            title: qsTrId("friends_pages_title")
-        }
-
-        delegate: BackgroundItem {
-            height: Theme.itemSizeLarge
-            Rectangle {
-                anchors.fill: icon
-                color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
-            }
-
-            FacebookPicture {
-                id: icon
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                anchors.verticalCenter: parent.verticalCenter
-                identifier: model.contentItem !== undefined ? model.contentItem.identifier : ""
-            }
-
-            Label {
-                anchors.left: icon.right; anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                anchors.verticalCenter: parent.verticalCenter
-                text: model.contentItem !== undefined ? model.contentItem.name : ""
-                truncationMode: TruncationMode.Fade
-            }
-
-            onClicked: {
-                var page = pageStack.push(Qt.resolvedUrl("PagePage.qml"),
-                                          {"identifier": model.contentItem.identifier})
-                page.load()
-            }
+        delegate: PostDelegate {
+            post: model.contentItem
+            to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
+            fancy: false
         }
 
         onAtYEndChanged: {
@@ -110,11 +111,14 @@ Page {
 
         VerticalScrollDecorator {}
 
-        ViewPlaceholder {
-            enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no groups to be displayed
-            //% "No groups"
-            text: qsTrId("friends_groups_placeholder")
+        PullDownMenu {
+            z: 1000
+            busy: model.status == SocialNetwork.Busy
+
+            MenuItem {
+                text: qsTrId("friends_action_refresh")
+                onClicked: model.loadPrevious()
+            }
         }
     }
 }

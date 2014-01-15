@@ -76,7 +76,9 @@ OTHER_FILES += qml/friends.qml \
     qml/PagesPage.qml \
     qml/PagePage.qml \
     qml/CoverImage.qml \
-    qml/ThreadsPage.qml
+    qml/ThreadsPage.qml \
+    qml/EventsPage.qml \
+    qml/EventPage.qml
 
 target.path = $$TARGETPATH
 

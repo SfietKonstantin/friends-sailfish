@@ -77,6 +77,7 @@
 #include "facebook/facebookobjectreferenceinterface.h"
 #include "facebook/facebookalbuminterface.h"
 #include "facebook/facebookcommentinterface.h"
+#include "facebook/facebookeventinterface.h"
 #include "facebook/facebookgroupinterface.h"
 #include "facebook/facebooknotificationinterface.h"
 #include "facebook/facebookpageinterface.h"
@@ -91,6 +92,9 @@
 #include "socialextra/facebookextrapostinterface.h"
 #include "socialextra/typesolverinterface.h"
 #include "socialextra/filterablefacebookrelateddatafilterinterface.h"
+#include "socialextra/eventfilterinterface.h"
+#include "socialextra/facebookextraeventinterface.h"
+#include "socialextra/facebookextrainterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -184,6 +188,7 @@ void importSocial()
     qmlRegisterType<FacebookObjectReferenceInterface>(URI_SOCIAL, 1, 0, "FacebookObjectReference");
     qmlRegisterType<FacebookAlbumInterface>(URI_SOCIAL, 1, 0, "FacebookAlbum");
     qmlRegisterType<FacebookCommentInterface>(URI_SOCIAL, 1, 0, "FacebookComment");
+    qmlRegisterType<FacebookEventInterface>(URI_SOCIAL, 1, 0, "FacebookEvent");
     qmlRegisterType<FacebookGroupInterface>(URI_SOCIAL, 1, 0, "FacebookGroup");
     qmlRegisterType<FacebookNotificationInterface>(URI_SOCIAL, 1, 0, "FacebookNotification");
     qmlRegisterType<FacebookPageInterface>(URI_SOCIAL, 1, 0, "FacebookPage");
@@ -211,6 +216,9 @@ void importSocialExtra()
     qmlRegisterType<TypeSolverInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolver");
     qmlRegisterType<TypeSolverFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolverFilter");
     qmlRegisterType<FilterableFacebookRelatedDataFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "FilterableFacebookRelatedDataFilter");
+    qmlRegisterType<EventFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "EventFilter");
+    qmlRegisterType<FacebookExtraEventInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraEvent");
+    qmlRegisterType<FacebookExtraInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtra");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

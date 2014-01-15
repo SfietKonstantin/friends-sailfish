@@ -33,6 +33,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
 import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 
 ApplicationWindow {
     id: app
@@ -56,7 +57,7 @@ ApplicationWindow {
         id: settingsManager
     }
 
-    Facebook {
+    FacebookExtra {
         id: facebook
         accessToken: tokenManager.token
         //: Set the locale that will be used for Facebook API. See http://www.facebook.com/translations/FacebookLocales.xml for a list of locales supported by Facebook

@@ -41,5 +41,7 @@
         <file>qml/PagePage.qml</file>
         <file>qml/CoverImage.qml</file>
         <file>qml/ThreadsPage.qml</file>
+        <file>qml/EventsPage.qml</file>
+        <file>qml/EventPage.qml</file>
     </qresource>
 </RCC>

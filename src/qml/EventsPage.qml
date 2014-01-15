@@ -32,6 +32,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 
 Page {
     id: container
@@ -59,18 +60,13 @@ Page {
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
-            filter: FacebookRelatedDataFilter {
-                identifier: container.identifier
-                connection: Facebook.LikedPages
-                fields: "id,name,category"
-                limit: 20
-            }
+            filter: EventFilter {}
         }
 
         header: PageHeader {
-            //: Title of the page showing the list of pages
-            //% "Pages"
-            title: qsTrId("friends_pages_title")
+            //: Title of the page showing the list of events
+            //% "Events"
+            title: qsTrId("friends_events_title")
         }
 
         delegate: BackgroundItem {
@@ -96,7 +92,7 @@ Page {
             }
 
             onClicked: {
-                var page = pageStack.push(Qt.resolvedUrl("PagePage.qml"),
+                var page = pageStack.push(Qt.resolvedUrl("EventPage.qml"),
                                           {"identifier": model.contentItem.identifier})
                 page.load()
             }
@@ -112,9 +108,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no groups to be displayed
-            //% "No groups"
-            text: qsTrId("friends_groups_placeholder")
+            //: Text shown on the placeholder, where there is no events to be displayed
+            //% "No events"
+            text: qsTrId("friends_events_placeholder")
         }
     }
 }

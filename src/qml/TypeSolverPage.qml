@@ -41,6 +41,7 @@ Page {
     property string type
     property bool fql: false
     function load() {
+        console.debug(identifier + " " + type)
         if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
             if (!item.load()) {
                 console.debug("FQL type not supported: " + type)
@@ -100,6 +101,9 @@ Page {
 
             if (objectType == Facebook.Album) {
                 item.pushPage("PhotosPage.qml", {"identifier": item.identifier}, true, [])
+                return
+            } else if (objectType == Facebook.Event) {
+                item.pushPage("EventPage.qml", {"identifier": item.identifier}, true, [])
                 return
             } else if(objectType == Facebook.Group) {
                 item.pushPage("GroupPage.qml", {"identifier": item.identifier}, true, [])
