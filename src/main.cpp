@@ -119,7 +119,11 @@ DateHelper::DateHelper(QObject *parent)
 
 QDateTime DateHelper::fromString(const QString &date)
 {
-    return QDateTime::fromString(date, Qt::ISODate).toTimeSpec(Qt::LocalTime);
+    QDateTime dateTime = QDateTime::fromString(date, Qt::ISODate);
+    QDate dateTimeDate = dateTime.date();
+    QTime time = dateTime.time();
+    QDateTime newDateTime = QDateTime(dateTimeDate, time, Qt::UTC); // Ensuring UTC time
+    return newDateTime.toTimeSpec(Qt::LocalTime);
 }
 
 static QObject *imagemanager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
