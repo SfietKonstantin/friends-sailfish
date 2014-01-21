@@ -88,6 +88,11 @@ Page {
             }
         }
 
+        section.property: "section"
+        section.delegate: SectionHeader {
+            text: section
+        }
+
         delegate: BackgroundItem {
             height: Theme.itemSizeLarge
             Rectangle {

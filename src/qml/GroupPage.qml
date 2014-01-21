@@ -76,7 +76,7 @@ Page {
             height: childrenRect.height
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
-                height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
+                height: 2 * Theme.itemSizeExtraLarge + 0.5 * Theme.paddingSmall
 
                 CoverImage {
                     id: coverImage
@@ -122,7 +122,6 @@ Page {
 
         delegate: PostDelegate {
             post: model.contentItem
-            from: model.contentItem.from
             to: model.contentItem.to.length > 0 ? model.contentItem.to[0] : null
             fancy: false
         }
