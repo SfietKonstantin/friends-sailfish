@@ -63,7 +63,7 @@ Page {
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
-            fields: "name,cover"
+            fields: "name,cover,about"
         }
     }
 
@@ -73,7 +73,7 @@ Page {
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
         header: Item {
             width: view.width
-            height: childrenRect.height
+            height: childrenRect.height + Theme.paddingMedium
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
                 height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
@@ -107,6 +107,16 @@ Page {
                             NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
                         }
                     }
+                }
+
+                Label {
+                    id: about
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: pictureContainer.left; anchors.rightMargin: Theme.paddingMedium
+                    anchors.top: coverImage.bottom; anchors.topMargin: Theme.paddingMedium
+                    text: page.about
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    wrapMode: Text.WordWrap
                 }
 
                 Rectangle {
@@ -173,13 +183,6 @@ Page {
         PullDownMenu {
             z: 1000
             busy: model.status == SocialNetwork.Busy
-
-            MenuItem {
-                //: Action that shows information about the page. %1 contains the name of the page.
-                //% "About %1"
-                text: qsTrId("friends_page_action_about").arg(page.name)
-                enabled: false
-            }
 
             MenuItem {
                 text: qsTrId("friends_action_refresh")
