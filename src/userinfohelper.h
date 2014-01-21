@@ -29,41 +29,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef OBJECTHELPER_P_H
-#define OBJECTHELPER_P_H
+#ifndef USERINFOHELPER_H
+#define USERINFOHELPER_H
 
-#include <QtCore/QMetaObject>
-#include <QtCore/QMetaProperty>
-#include <QtCore/QVariant>
+#include "abstractdisplayhelper.h"
 
-inline QVariant getValue(const QObject *object, const char *property)
+class UserInfoHelper : public AbstractDisplayHelper
 {
-    const QMetaObject *metaObject = object->metaObject();
-    int index = metaObject->indexOfProperty(property);
-    if (index == -1) {
-        return QVariant();
-    }
+    Q_OBJECT
+    Q_PROPERTY(QString gender READ gender NOTIFY genderChanged)
+    Q_PROPERTY(QString interestedIn READ interestedIn NOTIFY interestedInChanged)
+    Q_PROPERTY(QString birthday READ birthday NOTIFY birthdayChanged)
+    Q_PROPERTY(QString religion READ religion NOTIFY religionChanged)
+    Q_PROPERTY(QString political READ political NOTIFY politicalChanged)
+    Q_PROPERTY(QString location READ location NOTIFY locationChanged)
+    Q_PROPERTY(QString hometown READ hometown NOTIFY hometownChanged)
+public:
+    explicit UserInfoHelper(QObject *parent = 0);
+    Q_INVOKABLE QString colorText(const QString &text);
+    QString gender() const;
+    QString interestedIn() const;
+    QString birthday() const;
+    QString religion() const;
+    QString political() const;
+    QString location() const;
+    QString hometown() const;
+signals:
+    void genderChanged();
+    void interestedInChanged();
+    void birthdayChanged();
+    void religionChanged();
+    void politicalChanged();
+    void locationChanged();
+    void hometownChanged();
+protected:
+    void performCreationImpl();
+private:
+    QString labeledText(const QString &label, const QString &text);
+    QString m_gender;
+    QString m_interestedIn;
+    QString m_birthday;
+    QString m_religion;
+    QString m_political;
+    QString m_location;
+    QString m_hometown;
+};
 
-    QMetaProperty metaProperty = metaObject->property(index);
-    return metaProperty.read(object);
-}
-
-inline QMetaEnum getEnum(const QObject *object, const char *enumName)
-{
-    const QMetaObject *metaObject = object->metaObject();
-    int index = metaObject->indexOfEnumerator(enumName);
-    return metaObject->enumerator(index);
-}
-
-inline bool validateEnum(const QMetaEnum &enumerator, int value, const char *enumValue)
-{
-    return QByteArray(enumerator.valueToKey(value)) == QByteArray(enumValue);
-}
-
-inline bool validateFlag(const QMetaEnum &enumerator, int value, const char *enumValue)
-{
-    int flag = enumerator.keysToValue(enumValue);
-    return (value & flag) == flag;
-}
-
-#endif // OBJECTHELPER_P_H
+#endif // USERINFOHELPER_H

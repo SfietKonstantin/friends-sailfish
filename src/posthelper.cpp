@@ -46,7 +46,7 @@ static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?=
 
 bool tagLesser(QObject *tag1, QObject *tag2)
 {
-    return get(tag1, "offset").toInt() < get(tag2, "offset").toInt();
+    return getValue(tag1, "offset").toInt() < getValue(tag2, "offset").toInt();
 }
 
 PostHelper::PostHelper(QObject *parent)
@@ -163,7 +163,7 @@ void PostHelper::addStoryTag(QObject *storyTag)
 
 void PostHelper::performCreationImpl()
 {
-    QString story = get(object(), "story").toString();
+    QString story = getValue(object(), "story").toString();
     if (!story.isEmpty()) {
         m_story = true;
         emit storyChanged();
@@ -174,7 +174,7 @@ void PostHelper::performCreationImpl()
 
     performHeaderCreation();
 
-    QString message = get(object(), !m_story ? "message" : "story").toString();
+    QString message = getValue(object(), !m_story ? "message" : "story").toString();
     message.replace("<", "&lt;");
     message.replace(">", "&gt;");
     message.replace("\n", "<br/>");
@@ -195,10 +195,10 @@ void PostHelper::performCreationImpl()
 
         int previousOffset = 0;
         foreach (QObject *tag, tags) {
-            int offset = get(tag, "offset").toInt();
-            int length = get(tag, "length").toInt();
-            QString identifier = get(tag, "userIdentifier").toString();
-            QString name = get(tag, "userName").toString();
+            int offset = getValue(tag, "offset").toInt();
+            int length = getValue(tag, "length").toInt();
+            QString identifier = getValue(tag, "userIdentifier").toString();
+            QString name = getValue(tag, "userName").toString();
 
             message.append(remainingMessage.left(offset - previousOffset));
             remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
@@ -236,7 +236,7 @@ void PostHelper::performCreationImpl()
     }
 
     // Has content ?
-    bool newHasContent = !get(object(), "picture").isNull() && !get(object(), "name").isNull();
+    bool newHasContent = !getValue(object(), "picture").isNull() && !getValue(object(), "name").isNull();
     if (m_hasContent != newHasContent) {
         m_hasContent = newHasContent;
         emit hasContentChanged();
@@ -244,7 +244,7 @@ void PostHelper::performCreationImpl()
 
     // Footer
     bool hasFooter = true;
-    QVariantMap data = get(object(), "data").toMap();
+    QVariantMap data = getValue(object(), "data").toMap();
     if (!data.contains("likes") || !data.contains("comments")) {
         hasFooter = false;
     }
@@ -254,8 +254,8 @@ void PostHelper::performCreationImpl()
         emit hasFooterChanged();
     }
 
-    int likesCount = get(object(), "likesCount").toInt();
-    int commentsCount = get(object(), "commentsCount").toInt();
+    int likesCount = getValue(object(), "likesCount").toInt();
+    int commentsCount = getValue(object(), "commentsCount").toInt();
     QString footer = FooterHelper::makeFooter(likesCount, commentsCount);
 
     if (m_footer != footer) {
@@ -264,10 +264,10 @@ void PostHelper::performCreationImpl()
     }
 
     // Name / description / content
-    bool havePicture = !get(object(), "picture").toUrl().isEmpty();
-    QString name = elideText(get(object(), "name").toString(), havePicture ? 30 : 70);
-    QString caption = elideText(get(object(), "caption").toString(), havePicture ? 50 : 120);
-    QString description = elideText(get(object(), "description").toString(), havePicture ? 50 : 120);
+    bool havePicture = !getValue(object(), "picture").toUrl().isEmpty();
+    QString name = elideText(getValue(object(), "name").toString(), havePicture ? 30 : 70);
+    QString caption = elideText(getValue(object(), "caption").toString(), havePicture ? 50 : 120);
+    QString description = elideText(getValue(object(), "description").toString(), havePicture ? 50 : 120);
 
     if (m_name != name) {
         m_name = name;
@@ -285,10 +285,10 @@ void PostHelper::performCreationImpl()
 
     // Via
     QString via;
-    QObject *application = get(object(), "application").value<QObject *>();
+    QObject *application = getValue(object(), "application").value<QObject *>();
     QString applicationName;
     if (application) {
-        applicationName = get(application, "objectName").toString();
+        applicationName = getValue(application, "objectName").toString();
     }
     if (!applicationName.isEmpty()) {
         //: Translate the "via <appication> footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.
@@ -308,8 +308,8 @@ void PostHelper::performHeaderCreation()
     QString toIdentifier;
     QString toName;
     if (m_to) {
-        toIdentifier = get(m_to, "objectIdentifier").toString();
-        toName = get(m_to, "objectName").toString();
+        toIdentifier = getValue(m_to, "objectIdentifier").toString();
+        toName = getValue(m_to, "objectName").toString();
     }
     QString toHeader;
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
@@ -320,9 +320,9 @@ void PostHelper::performHeaderCreation()
     QString fromName;
     QString fromIdentifier;
 
-    QObject *from = get(object(), "from").value<QObject *>();
-    fromName = get(from, "objectName").toString();
-    fromIdentifier = get(from, "objectIdentifier").toString();
+    QObject *from = getValue(object(), "from").value<QObject *>();
+    fromName = getValue(from, "objectName").toString();
+    fromIdentifier = getValue(from, "objectIdentifier").toString();
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         elidedFrom = elideText(fromName, ELIDE_COUNT);
     } else {

@@ -43,5 +43,6 @@
         <file>qml/ThreadsPage.qml</file>
         <file>qml/EventsPage.qml</file>
         <file>qml/EventPage.qml</file>
+        <file>qml/UserInfoPage.qml</file>
     </qresource>
 </RCC>

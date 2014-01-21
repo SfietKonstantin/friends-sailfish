@@ -207,7 +207,11 @@ Page {
                  //: Action that shows the personnal informations of a given user. %1 contains the name of the user.
                  //% "About %1"
                                                        : qsTrId("friends_user_action_about").arg(user.firstName)
-                enabled: false
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("UserInfoPage.qml"),
+                                              {"identifier": user.identifier})
+                    page.load()
+                }
             }
 
             MenuItem {

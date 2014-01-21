@@ -28,7 +28,8 @@ HEADERS += cachehelper_p.h \
     changelogmodel.h \
     threadhelper.h \
     objecthelper_p.h \
-    abstractdisplayhelper.h
+    abstractdisplayhelper.h \
+    userinfohelper.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
@@ -39,7 +40,8 @@ SOURCES += main.cpp \
     imagemanager.cpp \
     changelogmodel.cpp \
     threadhelper.cpp \
-    abstractdisplayhelper.cpp
+    abstractdisplayhelper.cpp \
+    userinfohelper.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -78,7 +80,8 @@ OTHER_FILES += qml/friends.qml \
     qml/CoverImage.qml \
     qml/ThreadsPage.qml \
     qml/EventsPage.qml \
-    qml/EventPage.qml
+    qml/EventPage.qml \
+    qml/UserInfoPage.qml
 
 target.path = $$TARGETPATH
 
