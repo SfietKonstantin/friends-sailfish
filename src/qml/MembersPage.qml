@@ -36,6 +36,7 @@ import harbour.friends.social.extra 1.0
 
 Page {
     id: container
+    property string identifier
     function load() {
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
@@ -60,8 +61,8 @@ Page {
             id: model
             socialNetwork: facebook
             filter: FilterableFacebookRelatedDataFilter {
-                identifier: facebook.currentUserIdentifier
-                connection: Facebook.Friends
+                identifier: container.identifier
+                connection: Facebook.Members
                 limit: 500
                 fields: "id,first_name,name"
                 sectionField: "first_name"
@@ -78,9 +79,9 @@ Page {
         header: Column {
             width: view.width
             PageHeader {
-                //: Title of the page showing the list of friends
-                //% "Friends"
-                title: qsTrId("friends_friends_title")
+                //: Title of the page showing the list of members in a group
+                //% "Members"
+                title: qsTrId("friends_members_title")
             }
             SearchField {
                 anchors.left: parent.left; anchors.right: parent.right
@@ -126,9 +127,9 @@ Page {
 
         ViewPlaceholder {
             enabled: model.status == SocialNetwork.Idle && model.count == 0
-            //: Text shown on the placeholder, where there is no friends to be displayed
-            //% "No Friends"
-            text: qsTrId("friends_friends_placeholder")
+            //: Text shown on the placeholder, where there is no members to be displayed
+            //% "No members"
+            text: qsTrId("friends_members_placeholder")
         }
     }
 }

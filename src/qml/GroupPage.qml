@@ -144,10 +144,25 @@ Page {
             busy: model.status == SocialNetwork.Busy
 
             MenuItem {
-                //: Action that shows the current user's personnal informations
+                //: Action that shows the members in the group
+                //% "Members"
+                text: qsTrId("friends_group_action_members")
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("MembersPage.qml"),
+                                              {"identifier": container.identifier})
+                    page.load()
+                }
+            }
+
+            MenuItem {
+                //: Action that shows the information of the group
                 //% "Group information"
                 text: qsTrId("friends_group_action_about")
-                enabled: false
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("GroupInfoPage.qml"),
+                                              {"identifier": container.identifier})
+                    page.load()
+                }
             }
 
             MenuItem {
