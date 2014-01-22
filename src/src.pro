@@ -29,7 +29,8 @@ HEADERS += cachehelper_p.h \
     threadhelper.h \
     objecthelper_p.h \
     abstractdisplayhelper.h \
-    userinfohelper.h
+    userinfohelper.h \
+    datehelper.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
@@ -41,7 +42,8 @@ SOURCES += main.cpp \
     changelogmodel.cpp \
     threadhelper.cpp \
     abstractdisplayhelper.cpp \
-    userinfohelper.cpp
+    userinfohelper.cpp \
+    datehelper.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \

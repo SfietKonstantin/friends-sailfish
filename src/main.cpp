@@ -55,6 +55,7 @@
 #include "changelogmodel.h"
 #include "threadhelper.h"
 #include "userinfohelper.h"
+#include "datehelper.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -104,28 +105,6 @@ static const char *REASON = "Cannot be created";
 static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsqt";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
                                    "hosted_button_id=R6AJV4U2G33XG";
-
-class DateHelper : public QObject
-{
-    Q_OBJECT
-public:
-    explicit DateHelper(QObject *parent = 0);
-    Q_INVOKABLE static QDateTime fromString(const QString &date);
-};
-
-DateHelper::DateHelper(QObject *parent)
-    : QObject(parent)
-{
-}
-
-QDateTime DateHelper::fromString(const QString &date)
-{
-    QDateTime dateTime = QDateTime::fromString(date, Qt::ISODate);
-    QDate dateTimeDate = dateTime.date();
-    QTime time = dateTime.time();
-    QDateTime newDateTime = QDateTime(dateTimeDate, time, Qt::UTC); // Ensuring UTC time
-    return newDateTime.toTimeSpec(Qt::LocalTime);
-}
 
 static QObject *imagemanager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
@@ -301,5 +280,3 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     app->removeTranslator(engineeringEnglish.data());
     return result;
 }
-
-#include "main.moc"

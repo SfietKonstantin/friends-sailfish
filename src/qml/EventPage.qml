@@ -71,19 +71,72 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
-        header: Item {
+        header: Column {
             width: view.width
-            height: childrenRect.height
+            spacing: Theme.paddingMedium
+            CoverHeader {
+                id: coverImage
+                anchors.left: parent.left; anchors.right: parent.right
+                height: 2 * Theme.itemSizeExtraLarge
+                coverUrl: event.cover.source
+                name: event.name
+            }
+
+            Rectangle {
+                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                height: childrenRect.height + 2 * Theme.paddingMedium
+                color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+                visible: event.description != ""
+
+                Label {
+                    anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    text: event.description
+                    font.pixelSize: Theme.fontSizeSmall
+                    wrapMode: Text.WordWrap
+                }
+            }
+
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
-                height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
+                height: infoContainer.height + 0.5 * Theme.paddingMedium
 
-                CoverHeader {
-                    id: coverImage
-                    anchors.left: parent.left; anchors.right: parent.right
-                    height: 2 * Theme.itemSizeExtraLarge
-                    coverUrl: event.cover.source
-                    name: event.name
+                Rectangle {
+                    id: infoContainer
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    height: childrenRect.height + 2 * Theme.paddingMedium
+                    color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+
+                    Column {
+                        anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
+                        anchors.left: parent.left; anchors.right: parent.right
+                        spacing: Theme.paddingMedium
+                        Label {
+                            anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                            anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                            //: Text indicating the organizer. %1 is replaced by the name of the organizer.
+                            //% "Organized by %1"
+                            text: qsTrId("friends_event_organizer").arg(event.owner.objectName)
+                            font.pixelSize: Theme.fontSizeSmall
+                        }
+                        Label {
+                            anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                            anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                            text: DateHelper.formatDateTime(event.startTime, Qt.DefaultLocaleShortDate)
+                            font.pixelSize: Theme.fontSizeSmall
+                        }
+                        Label {
+                            visible: event.endTime != ""
+                            anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                            anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                            text: DateHelper.formatDateTime(event.endTime, Qt.DefaultLocaleShortDate)
+                            color: Theme.secondaryColor
+                            font.pixelSize: Theme.fontSizeSmall
+                        }
+                    }
                 }
             }
         }
