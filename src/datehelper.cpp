@@ -51,6 +51,7 @@ QDateTime DateHelper::fromString(const QString &date, bool *isDateOnly)
     } else {
         QDateTime dateTime = QDateTime::fromString(date, Qt::ISODate);
         newDateTime = QDateTime(dateTime.date(), dateTime.time(), Qt::UTC); // Ensuring UTC time
+        qDebug() << date << dateTime << newDateTime;
     }
     return newDateTime.toTimeSpec(Qt::LocalTime);
 }

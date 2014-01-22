@@ -453,11 +453,13 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
         // CreatedTime
         uint createdTimestamp = postMap.value(FACEBOOK_ONTOLOGY_POST_CREATEDTIME).toUInt();
         QDateTime createdTime = QDateTime::fromTime_t(createdTimestamp);
+        createdTime = createdTime.toTimeSpec(Qt::UTC);
         postData.insert(FACEBOOK_ONTOLOGY_POST_CREATEDTIME, createdTime.toString(Qt::ISODate));
 
         // UpdatedTime
         uint updatedTimestamp = postMap.value(FACEBOOK_ONTOLOGY_POST_UPDATEDTIME).toUInt();
         QDateTime updatedTime = QDateTime::fromTime_t(updatedTimestamp);
+        updatedTime = updatedTime.toTimeSpec(Qt::UTC);
         postData.insert(FACEBOOK_ONTOLOGY_POST_UPDATEDTIME, updatedTime.toString(Qt::ISODate));
 
         // Shares

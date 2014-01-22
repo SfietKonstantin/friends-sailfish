@@ -41,8 +41,15 @@ class FacebookExtraEventInterface : public FacebookEventInterface
     Q_OBJECT
     Q_ENUMS(RsvpStatus)
     Q_PROPERTY(FacebookCoverInterface * cover READ cover NOTIFY coverChanged)
+    Q_PROPERTY(RsvpStatus rsvpStatus READ rsvpStatus NOTIFY rsvpStatusChanged)
+    Q_PROPERTY(int allMembersCount READ allMembersCount NOTIFY allMembersCountChanged)
+    Q_PROPERTY(int notRepliedCount READ notRepliedCount NOTIFY notRepliedCountChanged)
+    Q_PROPERTY(int attendingCount READ attendingCount NOTIFY attendingCountChanged)
+    Q_PROPERTY(int unsureCount READ unsureCount NOTIFY unsureCountChanged)
+    Q_PROPERTY(int declinedCount READ declinedCount NOTIFY declinedCountChanged)
 public:
     enum RsvpStatus {
+        InvalidRsvpStatus,
         NotReplied,
         Attending,
         Unsure,

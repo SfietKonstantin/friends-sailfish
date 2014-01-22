@@ -104,7 +104,9 @@ Page {
 
         onAtYEndChanged: {
             if (atYEnd && model.hasNext) {
-                model.loadNext()
+                if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                    model.loadNext()
+                }
             }
         }
 

@@ -128,7 +128,9 @@ Page {
 
         onAtYEndChanged: {
             if (atYEnd && model.hasNext) {
-                model.loadNext()
+                if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                    model.loadNext()
+                }
             }
         }
 
@@ -148,8 +150,12 @@ Page {
                 //% "Members"
                 text: qsTrId("friends_group_action_members")
                 onClicked: {
-                    var page = pageStack.push(Qt.resolvedUrl("MembersPage.qml"),
-                                              {"identifier": container.identifier})
+                    var page = pageStack.push(Qt.resolvedUrl("UsersPage.qml"),
+                                              {"identifier": container.identifier,
+                                               //: Title of the page showing the list of members in a group
+                                               //% "Members"
+                                               "title": qsTrId("friends_group_members_title"),
+                                               "connection": Facebook.Members})
                     page.load()
                 }
             }

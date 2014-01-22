@@ -8,7 +8,6 @@
         <file>qml/FacebookImage.qml</file>
         <file>qml/FacebookPicture.qml</file>
         <file>qml/UiConstants.js</file>
-        <file>qml/FriendsPage.qml</file>
         <file>qml/StateIndicator.qml</file>
         <file>qml/AlbumsPage.qml</file>
         <file>qml/UserPage.qml</file>
@@ -44,7 +43,7 @@
         <file>qml/EventsPage.qml</file>
         <file>qml/EventPage.qml</file>
         <file>qml/UserInfoPage.qml</file>
-        <file>qml/MembersPage.qml</file>
         <file>qml/GroupInfoPage.qml</file>
+        <file>qml/UsersPage.qml</file>
     </qresource>
 </RCC>

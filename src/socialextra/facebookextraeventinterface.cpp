@@ -105,8 +105,10 @@ void FacebookExtraEventInterfacePrivate::emitPropertyChangeSignals(const QVarian
             rsvpStatus = FacebookExtraEventInterface::Unsure;
         } else if (rsvpStatusString == "declined") {
             rsvpStatus = FacebookExtraEventInterface::Declined;
-        } else {
+        } else if (rsvpStatusString == "not_replied") {
             rsvpStatus = FacebookExtraEventInterface::NotReplied;
+        } else {
+            rsvpStatus = FacebookExtraEventInterface::InvalidRsvpStatus;
         }
         emit q->rsvpStatusChanged();
     }

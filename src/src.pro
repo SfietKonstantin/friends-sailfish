@@ -54,7 +54,6 @@ OTHER_FILES += qml/friends.qml \
     qml/LoginPage.qml \
     qml/FacebookImage.qml \
     qml/FacebookPicture.qml \
-    qml/FriendsPage.qml \
     qml/StateIndicator.qml \
     qml/AlbumsPage.qml \
     qml/UserPage.qml \
@@ -84,8 +83,8 @@ OTHER_FILES += qml/friends.qml \
     qml/EventsPage.qml \
     qml/EventPage.qml \
     qml/UserInfoPage.qml \
-    qml/MembersPage.qml \
-    qml/GroupInfoPage.qml
+    qml/GroupInfoPage.qml \
+    qml/UsersPage.qml \
 
 target.path = $$TARGETPATH
 

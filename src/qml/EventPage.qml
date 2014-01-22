@@ -55,15 +55,25 @@ Page {
     }
 
     StateIndicator {
+        id: stateIndicator
         model: model
         item: event
     }
 
     FacebookExtraEvent {
         id: event
+        property bool isOrganizedByYou: facebook.currentUserIdentifier == owner.objectIdentifier
         socialNetwork: facebook
         filter: EventFilter {
             identifier: container.identifier
+        }
+        onLoaded: stateIndicator.visible = true
+
+        onActionComplete: {
+            if (ok) {
+                stateIndicator.visible = false
+                event.load()
+            }
         }
     }
 
@@ -71,40 +81,39 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
-        header: Column {
-            width: view.width
-            spacing: Theme.paddingMedium
-            CoverHeader {
-                id: coverImage
+        header: Item {
+            anchors.left: parent.left; anchors.right: parent.right
+            height: childrenRect.height + 0.5 * Theme.paddingMedium
+
+            Column {
                 anchors.left: parent.left; anchors.right: parent.right
-                height: 2 * Theme.itemSizeExtraLarge
-                coverUrl: event.cover.source
-                name: event.name
-            }
-
-            Rectangle {
-                anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                height: childrenRect.height + 2 * Theme.paddingMedium
-                color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
-                visible: event.description != ""
-
-                Label {
-                    anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    text: event.description
-                    font.pixelSize: Theme.fontSizeSmall
-                    wrapMode: Text.WordWrap
+                spacing: Theme.paddingMedium
+                CoverHeader {
+                    id: coverImage
+                    anchors.left: parent.left; anchors.right: parent.right
+                    height: 2 * Theme.itemSizeExtraLarge
+                    coverUrl: event.cover.source
+                    name: event.name
                 }
-            }
-
-            Item {
-                anchors.left: parent.left; anchors.right: parent.right
-                height: infoContainer.height + 0.5 * Theme.paddingMedium
 
                 Rectangle {
-                    id: infoContainer
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    height: childrenRect.height + 2 * Theme.paddingMedium
+                    color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+                    visible: event.description != ""
+
+                    Label {
+                        anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
+                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                        text: event.description
+                        font.pixelSize: Theme.fontSizeSmall
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                Rectangle {
                     anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                     anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                     height: childrenRect.height + 2 * Theme.paddingMedium
@@ -117,9 +126,12 @@ Page {
                         Label {
                             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                            //: Text indicating that the user is organizing the event
+                            //% "You are organizing this event"
+                            text: event.isOrganizedByYou ? qsTrId("friends_event_organizer_me")
                             //: Text indicating the organizer. %1 is replaced by the name of the organizer.
                             //% "Organized by %1"
-                            text: qsTrId("friends_event_organizer").arg(event.owner.objectName)
+                                                         : qsTrId("friends_event_organizer").arg(event.owner.objectName)
                             font.pixelSize: Theme.fontSizeSmall
                         }
                         Label {
@@ -136,6 +148,86 @@ Page {
                             color: Theme.secondaryColor
                             font.pixelSize: Theme.fontSizeSmall
                         }
+                    }
+                }
+
+                ListItem {
+                    id: rsvpButton
+                    menu: rsvpMenu
+                    showMenuOnPressAndHold: false
+                    onClicked: !menuOpen ? showMenu() : hideMenu()
+                    visible: !event.isOrganizedByYou
+                    enabled: event.actionStatus != Facebook.Busy
+                    function update() {
+                        switch (event.rsvpStatus) {
+                        case FacebookExtraEvent.NotReplied:
+                            //: Displayed on the RSV button, asking for a reply from the user
+                            //% "Will you attend this event ?"
+                            rsvpButtonText.text = qsTrId("friends_event_rsvp_rsvp")
+                            break
+                        case FacebookExtraEvent.Attending:
+                            //: Displayed on the RSV button, informing that the user is attending
+                            //% "You are attending"
+                            rsvpButtonText.text = qsTrId("friends_event_rsvp_attending")
+                            break
+                        case FacebookExtraEvent.Unsure:
+                            //: Displayed on the RSV button, informing that the user is unsure
+                            //% "You are unsure"
+                            rsvpButtonText.text = qsTrId("friends_event_rsvp_unsure")
+                            break
+                        case FacebookExtraEvent.Declined:
+                            //: Displayed on the RSV button, informing that the user declined
+                            //% "You declined"
+                            rsvpButtonText.text = qsTrId("friends_event_rsvp_declined")
+                            break
+                        default:
+                            break
+                        }
+                    }
+
+                    BusyIndicator {
+                        id: rsvpButtonSpinner
+                        visible: event.actionStatus == Facebook.Busy
+                        running: visible
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    }
+
+                    Label {
+                        id: rsvpButtonText
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: rsvpButtonSpinner.right; anchors.leftMargin: Theme.paddingMedium
+                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    }
+
+                    Component {
+                        id: rsvpMenu
+                        ContextMenu {
+                            MenuItem {
+                                //: A menu action to attend to an event
+                                //% "Attend"
+                                text: qsTrId("friend_event_action_attend")
+                                onClicked: event.attend()
+                            }
+                            MenuItem {
+                                //: A menu action to indicate that you are unsure to attend to an event
+                                //% "Unsure"
+                                text: qsTrId("friend_event_action_unsure")
+                                onClicked: event.maybe()
+                            }
+                            MenuItem {
+                                //: A menu action to decline an event
+                                //% "Decline"
+                                text: qsTrId("friend_event_action_decline")
+                                onClicked: event.decline()
+                            }
+                        }
+                    }
+
+                    Connections {
+                        target: event
+                        onRsvpStatusChanged: rsvpButton.update()
+                        onStatusChanged: rsvpButton.update()
                     }
                 }
             }
@@ -158,7 +250,9 @@ Page {
 
         onAtYEndChanged: {
             if (atYEnd && model.hasNext) {
-                model.loadNext()
+                if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                    model.loadNext()
+                }
             }
         }
 
@@ -167,6 +261,23 @@ Page {
         PullDownMenu {
             z: 1000
             busy: model.status == SocialNetwork.Busy
+
+            MenuItem {
+                //: Action that shows the invited people
+                //% "Invited"
+                text: qsTrId("friends_event_action_invited")
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("UsersPage.qml"),
+                                              {"identifier": container.identifier,
+                                               //: Title of the page showing the list of members in a group
+                                               //% "Members"
+                                               "title": qsTrId("friends_event_invited_title"),
+                                               "connection": Facebook.Invited,
+                                               "fields": "id,name,rsvp_status",
+                                               "sectionField": "rsvp_status"})
+                    page.load()
+                }
+            }
 
             MenuItem {
                 text: qsTrId("friends_action_refresh")

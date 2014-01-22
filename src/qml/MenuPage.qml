@@ -70,7 +70,7 @@ Page {
                 //: Menu entry to show the friends page, with the user's friends
                 //% "Friends"
                 text: QT_TRID_NOOP("friends_menu_friends")
-                page: "FriendsPage.qml"
+                page: "UsersPage.qml"
             }
             ListElement {
                 //: Menu entry to show the albums page, with the user's albums
@@ -133,6 +133,13 @@ Page {
                 // we are still in the menu
                 pageStack.clear()
                 var properties = {"identifier": facebook.currentUserIdentifier}
+                if (model.page = "UsersPage.qml") {
+                    //: Title of the page showing the list of friends
+                    //% "Friends"
+                    properties.title = qsTrId("friends_friends_title")
+                    properties.identifier = facebook.currentUserIdentifier
+                    properties.connection = Facebook.Friends
+                }
                 if (model.page = "PhotosPage.qml") {
                     //: Specific title for the photos page, since it can display "Photos of someone" and the album's title. This title translates the "Photos of someone". %1 contains the name of the user who have the photos.
                     //% "Photos of %1"

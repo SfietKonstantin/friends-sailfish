@@ -36,6 +36,11 @@ import harbour.friends.social.extra 1.0
 
 Page {
     id: container
+    property string identifier
+    property string title
+    property int connection
+    property string sectionField: "first_name"
+    property string fields: "id,first_name,name"
     function load() {
         if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
             model.load()
@@ -60,14 +65,14 @@ Page {
             id: model
             socialNetwork: facebook
             filter: FilterableFacebookRelatedDataFilter {
-                identifier: facebook.currentUserIdentifier
-                connection: Facebook.Friends
+                identifier: container.identifier
+                connection: container.connection
                 limit: 500
-                fields: "id,first_name,name"
-                sectionField: "first_name"
+                fields: container.fields
+                sectionField: container.sectionField
                 filterField: "name"
             }
-            sorters: AlphabeticalSorter {field: "first_name"}
+            sorters: AlphabeticalSorter {field: container.sectionField}
             onStatusChanged: {
                 if (status == Facebook.Idle && hasNext) {
                     loadNext()
@@ -78,9 +83,7 @@ Page {
         header: Column {
             width: view.width
             PageHeader {
-                //: Title of the page showing the list of friends
-                //% "Friends"
-                title: qsTrId("friends_friends_title")
+                title: container.title
             }
             SearchField {
                 anchors.left: parent.left; anchors.right: parent.right

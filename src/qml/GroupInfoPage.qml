@@ -92,7 +92,7 @@ Page {
         VerticalScrollDecorator {}
 
         ViewPlaceholder {
-            enabled: group.description == ""
+            enabled: group.status == Facebook.Idle && group.description == ""
             //: Text shown on the placeholder, where there is no information about a group
             //% "There is no information to be displayed"
             text: qsTrId("friends_group_info_placeholder")

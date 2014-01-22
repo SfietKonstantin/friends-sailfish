@@ -87,7 +87,34 @@ QString FilterableFacebookRelatedDataFilterInterface::dataSection(const QVariant
         return QString();
     }
 
-    return data.value(sectionField()).toString().left(1);
+    QString section = data.value(sectionField()).toString();
+
+    if (sectionField() == "rsvp_status") {
+        QString trueSection;
+
+
+        if (section == "attending") {
+            //: A section header for people attending an event
+            //% "Attending"
+            trueSection = qtTrId("facebook_event_attending");
+        } else if (section == "unsure") {
+            //: A section header for people that are unsure about attending to an event
+            //% "Unsure"
+            trueSection = qtTrId("facebook_event_unsure");
+        } else if (section == "declined") {
+            //: A section header for people who declined an event
+            //% "Declined"
+            trueSection = qtTrId("facebook_event_declined");
+        } else if (section == "not_replied") {
+            //: A section header for people who did not replied yet
+            //% "Not replied"
+            trueSection = qtTrId("facebook_event_not_replied");
+        }
+
+        return trueSection;
+    }
+
+    return section.left(1);
 }
 
 bool FilterableFacebookRelatedDataFilterInterface::performSetModelDataImpl(SocialNetworkModelInterface *model,
