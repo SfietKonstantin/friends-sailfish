@@ -99,8 +99,8 @@ void ThreadHelper::performCreationImpl()
         QString identifier2 = getValue(second, "objectIdentifier").toString();
         //: Display two names. Like "Jack and Jane". %1 is replaced by the first name, %2 by the second
         //% "%1 and %2"
-        header = qtTrId("friends_threadhelper_header_two", toList.count() - 1).arg(decorate(name1, pictureIdentifier),
-                                                                                   decorate(name2, identifier2));
+        header = qtTrId("friends_threadhelper_header_two").arg(decorate(name1, pictureIdentifier),
+                                                               decorate(name2, identifier2));
     } else if (toList.count() == 1) {
         const QObject *first = toList.first();
         QString name = getValue(first, "objectName").toString();
