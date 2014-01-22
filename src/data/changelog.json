@@ -56,5 +56,23 @@
       "text": "Updated languages for ca, zh_CN, cs, nl_NL, en, fi, fr, de, hu_HU, it_IT, nb_NO, pt_PT, ru and es_ES.", 
       "type": "bug"
     }
+  ], 
+  "0.5.0": [
+    {
+      "text": "You can now access to user profiles.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "It is possible to access to events in Friends.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "You can now access information of groups.", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Time shown are no wrong (one or several hours early depending on timezone)", 
+      "type": "bug"
+    }
   ]
 }
