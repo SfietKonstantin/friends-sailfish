@@ -55,12 +55,17 @@ Page {
     SocialNetworkModel {
         id: model
         signal performFocusCommentField()
+        property int offsetCount: Math.floor((item.commentsCount - 1) / filter.limit)
 
         socialNetwork: facebook
         filter: FacebookRelatedDataFilter {
+            id: filter
             identifier: container.identifier
             connection: Facebook.Comments
             fields: "from,message,created_time"
+            limit: 10
+            offset: model.offsetCount * limit
+            useOffsetCursors: true
         }
     }
 
@@ -70,10 +75,11 @@ Page {
 
     SilicaListView {
         id: view
+        property bool posting: false
         anchors.fill: parent
         model: model
         spacing: Theme.paddingLarge
-        visible: model.status == SocialNetwork.Idle || model.count > 0
+        visible: model.status == SocialNetwork.Idle || model.count > 0 || posting
         header: Column {
             width: view.width
             PageHeader {
@@ -98,10 +104,59 @@ Page {
                 }
                 Component.onDestruction: object.destroy()
             }
+
+            Item {
+                anchors.left: parent.left; anchors.right: parent.right
+                height: previousLoader.height + Theme.paddingMedium
+                visible: previousLoader.offsetCount > 0
+                BackgroundItem {
+                    id: previousLoader
+                    property int offsetCount
+                    property bool loadingPrevious: false
+                    Component.onCompleted: offsetCount = model.offsetCount
+                    enabled: model.status == Facebook.Idle
+                    onClicked: {
+                        if (model.hasPrevious) {
+                            if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                                loadingPrevious = true
+                                model.loadPrevious()
+                            }
+                       }
+                    }
+
+                    BusyIndicator {
+                        id: previousLoaderSpinner
+                        visible: model.status == Facebook.Busy
+                        running: visible
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    }
+
+                    Label {
+                        anchors.left: previousLoaderSpinner.right
+                        anchors.leftMargin: Theme.paddingMedium
+                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: model.status != Facebook.Busy ? Theme.primaryColor : Theme.secondaryColor
+                        //: Action that allows to load previous comments
+                        //% "Load previous comments"
+                        text: qsTrId("friends_comments_action_load_previous")
+                    }
+
+                    Connections {
+                        target: model
+                        onStatusChanged: {
+                            if (model.status == Facebook.Idle && previousLoader.loadingPrevious) {
+                                previousLoader.loadingPrevious = false
+                                previousLoader.offsetCount --
+                            }
+                        }
+                    }
+                }
+            }
         }
         footer: Item {
             id: footer
-            property bool posting: false
             property bool displayMargins: model.count > 0
             enabled: item.status == SocialNetwork.Idle
                      && item.actionStatus == SocialNetwork.Idle
@@ -114,10 +169,18 @@ Page {
             Connections {
                 target: item
                 onActionStatusChanged: {
-                    if (item.actionStatus == SocialNetwork.Idle && footer.posting) {
-                        model.load()
+                    if (item.actionStatus == SocialNetwork.Idle && view.posting) {
+                        if (model.hasNext) {
+                            model.loadNext()
+                        } else {
+                            model.load()
+                        }
                         textField.text = ""
-                        footer.posting = false
+                    }
+                }
+                onStatusChanged: {
+                    if (item.statusStatus != SocialNetwork.Busy) {
+                        view.posting = false
                     }
                 }
             }
@@ -129,11 +192,17 @@ Page {
                 identifier: facebook.currentUserIdentifier
                 pictureWidth: Theme.iconSizeMedium
                 pictureHeight: Theme.iconSizeMedium
-
             }
 
             TextField {
                 id: textField
+                function postComment() {
+                    if (textField.text.length > 0) {
+                        item.uploadComment(textField.text)
+                        view.posting = true
+                    }
+                }
+
                 anchors {
                     top: parent.top
                     topMargin: footer.displayMargins ? Theme.paddingLarge : 0
@@ -148,12 +217,7 @@ Page {
 
                 EnterKey.highlighted: text.length > 0
                 EnterKey.iconSource: "image://theme/icon-m-enter-" + (text.length > 0 ? "accept" : "close")
-                EnterKey.onClicked: {
-                    if (textField.text.length > 0) {
-                        item.uploadComment(textField.text)
-                        footer.posting = true
-                    }
-                }
+                EnterKey.onClicked: textField.postComment()
             }
         }
 
@@ -201,7 +265,7 @@ Page {
             }
         }
 
-        ScrollDecorator {}
+        VerticalScrollDecorator {}
 
         PullDownMenu {
             MenuItem {
@@ -212,6 +276,22 @@ Page {
                     var page = pageStack.push(Qt.resolvedUrl("LikesPage.qml"),
                                               {"identifier": container.identifier})
                     page.load()
+                }
+            }
+        }
+
+        PushUpMenu {
+            MenuItem {
+                //: Action that allows to load more comments
+                //% "Load more comments"
+                text: qsTrId("friends_comments_action_load_more")
+                enabled: model.status == SocialNetwork.Idle
+                onClicked: {
+                    if (model.hasNext) {
+                        if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                            model.loadNext()
+                        }
+                    }
                 }
             }
         }
