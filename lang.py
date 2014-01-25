@@ -100,7 +100,6 @@ def do_push():
 
 def do_pull(perc):
     subprocess.call(["rm *.ts"], cwd="%s/src/translations" % current_dir, shell=True)
-    subprocess.call(["rm *.qm"], cwd="%s/src/translations" % current_dir, shell=True)
     subprocess.call(["tx", "pull", "-a", "--minimum-perc=%s" % perc])
     subprocess.call(["%s -idbased *.ts" % lrelease], cwd="%s/src/translations" % current_dir, shell=True)
     subprocess.call(["rm *.ts"], cwd="%s/src/translations" % current_dir, shell=True)
