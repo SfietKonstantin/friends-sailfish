@@ -62,12 +62,16 @@ Page {
 
     FacebookExtraEvent {
         id: event
+        property bool isLoaded: false
         property bool isOrganizedByYou: facebook.currentUserIdentifier == owner.objectIdentifier
         socialNetwork: facebook
         filter: EventFilter {
             identifier: container.identifier
         }
-        onLoaded: stateIndicator.visible = true
+        onLoaded: {
+            stateIndicator.visible = true
+            isLoaded = true
+        }
 
         onActionComplete: {
             if (ok) {
@@ -80,12 +84,21 @@ Page {
     SilicaListView {
         id: view
         anchors.fill: parent
+        property bool moved: false
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
+
         header: Item {
             anchors.left: parent.left; anchors.right: parent.right
-            height: childrenRect.height + 0.5 * Theme.paddingMedium
+            height: column.height + 0.5 * Theme.paddingMedium
+            // Workaround a bug not showing the full header at start-up
+            onHeightChanged: {
+                if (container.status != PageStatus.Active) {
+                    view.contentY = -height
+                }
+            }
 
             Column {
+                id: column
                 anchors.left: parent.left; anchors.right: parent.right
                 spacing: Theme.paddingMedium
                 CoverHeader {

@@ -71,44 +71,10 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
-        header: Item {
-            width: view.width
-            height: childrenRect.height
-            Item {
-                anchors.left: parent.left; anchors.right: parent.right
-                height: 2 * Theme.itemSizeExtraLarge + 0.5 * Theme.paddingSmall
-
-                CoverImage {
-                    id: coverImage
-                    anchors.left: parent.left; anchors.right: parent.right
-                    height: 2 * Theme.itemSizeExtraLarge
-                    coverUrl: group.cover.source
-
-                    Label {
-                        id: nameText
-                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                        anchors.right: parent.right
-                        anchors.rightMargin: Theme.paddingMedium + Theme.itemSizeSmall * 2
-                        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-                        opacity: 0
-                        wrapMode: Text.WordWrap
-                        font.pixelSize: Theme.fontSizeLarge
-                        states: [
-                            State {
-                                name: "visible"; when: group.name != ""
-                                PropertyChanges {
-                                    target: nameText
-                                    opacity: 1
-                                    text: group.name
-                                }
-                            }
-                        ]
-                        Behavior on opacity {
-                            NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
-                        }
-                    }
-                }
-            }
+        header: CoverHeader {
+            anchors.left: parent.left; anchors.right: parent.right
+            name: group.name
+            coverUrl: group.cover.source
         }
 
         model: SocialNetworkModel {
