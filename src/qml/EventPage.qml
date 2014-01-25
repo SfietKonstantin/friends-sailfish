@@ -62,20 +62,20 @@ Page {
 
     FacebookExtraEvent {
         id: event
-        property bool isLoaded: false
+        property bool postActionLoading: false
         property bool isOrganizedByYou: facebook.currentUserIdentifier == owner.objectIdentifier
         socialNetwork: facebook
         filter: EventFilter {
             identifier: container.identifier
         }
         onLoaded: {
-            stateIndicator.visible = true
-            isLoaded = true
+            stateIndicator.visible = false
+            postActionLoading = false
         }
 
         onActionComplete: {
             if (ok) {
-                stateIndicator.visible = false
+                postActionLoading = true
                 event.load()
             }
         }
@@ -170,7 +170,7 @@ Page {
                     showMenuOnPressAndHold: false
                     onClicked: !menuOpen ? showMenu() : hideMenu()
                     visible: !event.isOrganizedByYou
-                    enabled: event.actionStatus != Facebook.Busy
+                    enabled: (event.actionStatus != Facebook.Busy && event.status != Facebook.Busy)
                     function update() {
                         switch (event.rsvpStatus) {
                         case FacebookExtraEvent.NotReplied:
@@ -198,20 +198,21 @@ Page {
                         }
                     }
 
-                    BusyIndicator {
-                        id: rsvpButtonSpinner
-                        visible: event.actionStatus == Facebook.Busy
-                        running: visible
-                        anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    }
-
                     Label {
                         id: rsvpButtonText
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: rsvpButtonSpinner.right; anchors.leftMargin: Theme.paddingMedium
+                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                        anchors.right: rsvpButtonSpinner.left; anchors.rightMargin: Theme.paddingMedium
+                        color: (event.actionStatus != Facebook.Busy && !event.postActionLoading)
+                               ? Theme.primaryColor : Theme.secondaryColor
+                    }
+
+                    BusyIndicator {
+                        id: rsvpButtonSpinner
+                        visible: (event.actionStatus == Facebook.Busy || event.postActionLoading)
+                        running: visible
+                        anchors.verticalCenter: parent.verticalCenter
                         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                        color: event.actionStatus != Facebook.Busy ? Theme.primaryColor : Theme.secondaryColor
                     }
 
                     Component {

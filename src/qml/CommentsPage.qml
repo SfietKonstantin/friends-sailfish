@@ -67,19 +67,26 @@ Page {
             offset: model.offsetCount * limit
             useOffsetCursors: true
         }
+
+        onStatusChanged: {
+            if (status == SocialNetwork.Idle) {
+                view.visible = true
+                stateIndicator.visible = false
+            }
+        }
     }
 
     StateIndicator {
+        id: stateIndicator
         model: model
     }
 
     SilicaListView {
         id: view
-        property bool posting: false
         anchors.fill: parent
         model: model
         spacing: Theme.paddingLarge
-        visible: model.status == SocialNetwork.Idle || model.count > 0 || posting
+        visible: false
         header: Column {
             width: view.width
             PageHeader {
@@ -129,13 +136,13 @@ Page {
                         visible: model.status == Facebook.Busy
                         running: visible
                         anchors.verticalCenter: parent.verticalCenter
-                        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                     }
 
                     Label {
-                        anchors.left: previousLoaderSpinner.right
+                        anchors.left: parent.left
                         anchors.leftMargin: Theme.paddingMedium
-                        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                        anchors.right: previousLoaderSpinner.left; anchors.rightMargin: Theme.paddingMedium
                         anchors.verticalCenter: parent.verticalCenter
                         color: model.status != Facebook.Busy ? Theme.primaryColor : Theme.secondaryColor
                         //: Action that allows to load previous comments
@@ -168,19 +175,14 @@ Page {
 
             Connections {
                 target: item
-                onActionStatusChanged: {
-                    if (item.actionStatus == SocialNetwork.Idle && view.posting) {
+                onActionComplete: {
+                    if (ok) {
                         if (model.hasNext) {
                             model.loadNext()
                         } else {
                             model.load()
                         }
                         textField.text = ""
-                    }
-                }
-                onStatusChanged: {
-                    if (item.statusStatus != SocialNetwork.Busy) {
-                        view.posting = false
                     }
                 }
             }
@@ -199,7 +201,6 @@ Page {
                 function postComment() {
                     if (textField.text.length > 0) {
                         item.uploadComment(textField.text)
-                        view.posting = true
                     }
                 }
 
