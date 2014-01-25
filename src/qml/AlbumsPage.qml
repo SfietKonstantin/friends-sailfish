@@ -55,6 +55,7 @@ Page {
     SilicaListView {
         anchors.fill: parent
         visible: model.status == SocialNetwork.Idle || model.count > 0
+        spacing: Theme.paddingMedium
         model: SocialNetworkModel {
             id: model
             socialNetwork: facebook
@@ -74,7 +75,7 @@ Page {
 
         delegate: Item {
             width: parent.width
-            height: 2 * Theme.itemSizeExtraLarge + Theme.paddingMedium
+            height: 2 * Theme.itemSizeExtraLarge
 
             BackgroundItem {
                 id: background
@@ -90,11 +91,11 @@ Page {
 
                 Item {
                     id: image
-                    opacity: background.down ? Theme.highlightBackgroundOpacity : 1
+                    opacity: background.highlighted ? Theme.highlightBackgroundOpacity : 1
                     anchors.left: parent.left; anchors.right: parent.right
                     height: childrenRect.height
                     Rectangle {
-                        visible: !background.down
+                        visible: !background.highlighted
                         anchors.fill: parent
                         color: Theme.rgba(Theme.highlightBackgroundColor, 0.2)
                     }
@@ -137,6 +138,7 @@ Page {
                 anchors.bottom: gradient.bottom; anchors.bottomMargin: Theme.paddingMedium
                 text: model.contentItem.name
                 truncationMode: TruncationMode.Fade
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
         }
 

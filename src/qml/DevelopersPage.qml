@@ -93,6 +93,7 @@ Page {
         }
 
         delegate: ListItem {
+            id: background
             width: view.width
             contentHeight: column.height + 2 * Theme.paddingMedium
             menu: contextMenu
@@ -114,12 +115,13 @@ Page {
                 spacing: Theme.paddingSmall
                 Label {
                     text: model.name + (model.nickname != "" ? " (" + model.nickname + ")" : "")
+                    color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
 
                 Label {
                     font.pixelSize: Theme.fontSizeSmall
                     text: model.description
-                    color: Theme.secondaryColor
+                    color: background.highlighted ? Theme.secondaryHighlightColor : Theme.secondaryColor
                 }
             }
 

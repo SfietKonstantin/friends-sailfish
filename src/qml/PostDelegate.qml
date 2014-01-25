@@ -44,7 +44,7 @@ Item {
     property bool pushComments: true
     signal clicked()
     width: parent.width
-    height: background.height + Theme.paddingMedium
+    height: background.height
 
     Rectangle {
         anchors.fill: background
@@ -98,6 +98,7 @@ Item {
 
         PostHelper {
             id: helper
+            primaryColor: Theme.primaryColor
             highlightColor: Theme.highlightColor
         }
 
@@ -145,7 +146,7 @@ Item {
                     text: Format.formatDate(DateHelper.fromString(container.post.createdTime),
                                             Formatter.DurationElapsed)
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.secondaryColor
+                    color: Theme.secondaryHighlightColor
                 }
             }
         }
@@ -291,7 +292,7 @@ Item {
             visible: helper.hasFooter
             anchors.left: parent.left; anchors.right: parent.right
             font.pixelSize: Theme.fontSizeExtraSmall
-            color: Theme.secondaryColor
+            color: Theme.secondaryHighlightColor
             text: helper.footer
         }
     }

@@ -59,6 +59,7 @@ Dialog {
                 text: qsTrId("friends_welcome_description")
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
+                color: Theme.highlightColor
             }
 
             Label {
@@ -69,6 +70,7 @@ Dialog {
                 text: qsTrId("friends_welcome_please_donate")
                 wrapMode: Text.WordWrap
                 font.pixelSize: Theme.fontSizeSmall
+                color: Theme.highlightColor
             }
 
             Button {

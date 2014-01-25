@@ -35,8 +35,8 @@
 #include <QtCore/QStringList>
 #include <QtCore/QDebug>
 
-static const char *COLORED_TEXT = "<span style=\"text-decoration:none; color:%1\">%2</span>";
-static const char *LABELLED_TEXT = "<span style=\"text-decoration:none; color:%1\">%2</span>: %3";
+static const char *COLORED_TEXT = "<span style=\"text-decoration:none; color:%1; opacity:0.2\">%2</span>";
+static const char *LABELLED_TEXT = "<span style=\"text-decoration:none; color:%1; opacity:0.2\">%2</span>: %3";
 
 UserInfoHelper::UserInfoHelper(QObject *parent) :
     AbstractDisplayHelper(parent)
@@ -176,7 +176,7 @@ void UserInfoHelper::performCreationImpl()
         //: Label indicating the current location of the user. It appears before the actual location
         //% "Current location"
         QString location = labeledText(qtTrId("friends_user_info_location"),
-                                       decorate(name, identifier));
+                                       interactive(name, identifier));
 
         if (m_location != location) {
             m_location = location;
@@ -191,7 +191,7 @@ void UserInfoHelper::performCreationImpl()
         //: Label indicating the hometown of the user. It appears before the actual location
         //% "Hometown"
         QString hometown = labeledText(qtTrId("friends_user_info_hometown"),
-                                       decorate(name, identifier));
+                                       interactive(name, identifier));
 
         if (m_hometown != hometown) {
             m_hometown = hometown;

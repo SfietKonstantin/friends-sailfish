@@ -71,12 +71,13 @@ Dialog {
                         text: qsTrId("friends_updated_title")
                         wrapMode: Text.WordWrap
                         font.pixelSize: Theme.fontSizeExtraLarge
+                        color: Theme.highlightColor
                     }
 
                     Label {
                         anchors.horizontalCenter: parent.horizontalCenter
                         font.pixelSize: Theme.fontSizeExtraSmall
-                        color: Theme.secondaryColor
+                        color: Theme.secondaryHighlightColor
                         wrapMode: Text.WordWrap
                         text: qsTrId("friends_version").arg(VERSION)
                     }
@@ -97,6 +98,7 @@ Dialog {
                 //: Changelog title in the "Friends updated" dialog
                 //% "ChangeLog"
                 text: qsTrId("friends_updated_changelog")
+                color: Theme.highlightColor
             }
         }
     }

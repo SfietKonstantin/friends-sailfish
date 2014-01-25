@@ -51,7 +51,7 @@ SilicaListView {
             text: model.text
             wrapMode: Text.WordWrap
             font.pixelSize: Theme.fontSizeSmall
-            color: model.type === "feature" ? Theme.primaryColor: Theme.secondaryColor
+            color: model.type === "feature" ? Theme.highlightColor: Theme.secondaryHighlightColor
         }
     }
 

@@ -61,12 +61,13 @@ Page {
                     //: Name of the application. Should be "Friends"
                     //% "Friends"
                     text: qsTrId("friends_app_name")
+                    color: Theme.highlightColor
                 }
 
                 Label {
                     anchors.horizontalCenter: parent.horizontalCenter
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.secondaryColor
+                    color: Theme.secondaryHighlightColor
                     wrapMode: Text.WordWrap
                     //: Version of Friends. %1 will be replaced by the version. Please add "powered by Nemo Social"
                     //% "Version %1, powered by Nemo Social"
@@ -81,6 +82,7 @@ Page {
                 //: Description of Friends
                 //% "Friends is a simple and elegant Facebook client for Sailfish OS. It is an Open Source software, meaning that it can be modified and enhanced by anybody. If you like Friends, please consider a donation. It will help improving the software, while keeping it free and Open Source."
                 text: qsTrId("friends_about_text")
+                color: Theme.highlightColor
             }
         }
 
@@ -89,6 +91,7 @@ Page {
             anchors.top: mainColumn.bottom; anchors.topMargin: Theme.paddingLarge
             anchors.left: parent.left; anchors.right: parent.right
             BackgroundItem {
+                id: pageBackground
                 anchors.left: parent.left; anchors.right: parent.right
                 onClicked: {
                     var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
@@ -104,9 +107,11 @@ Page {
                     //: Caption of a button that shows the Facebook page of the application
                     //% "Facebook page"
                     text: qsTrId("friends_about_button_facebook_page")
+                    color: pageBackground.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
             }
             BackgroundItem {
+                id: donateBackground
                 anchors.left: parent.left; anchors.right: parent.right
                 onClicked: Qt.openUrlExternally(PAYPAL_DONATE)
                 Label {
@@ -116,9 +121,11 @@ Page {
                     //: Caption of a button that shows a Paypal donation page
                     //% "Donate"
                     text: qsTrId("friends_button_donate")
+                    color: donateBackground.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
             }
             BackgroundItem {
+                id: developersBackground
                 anchors.left: parent.left; anchors.right: parent.right
                 onClicked: pageStack.push(Qt.resolvedUrl("DevelopersPage.qml"))
                 Label {
@@ -128,9 +135,11 @@ Page {
                     //: Caption of a button that shows the list of developers
                     //% "Developers"
                     text: qsTrId("friends_about_button_developers")
+                    color: developersBackground.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
             }
             BackgroundItem {
+                id: changelogBackground
                 anchors.left: parent.left; anchors.right: parent.right
                 onClicked: pageStack.push(Qt.resolvedUrl("ChangeLogPage.qml"))
                 Label {
@@ -140,6 +149,7 @@ Page {
                     //: Caption of a button that leads to the changelog
                     //% "ChangeLog"
                     text: qsTrId("friends_about_button_changelog")
+                    color: changelogBackground.highlighted ? Theme.highlightColor : Theme.primaryColor
                 }
             }
         }

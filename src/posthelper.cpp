@@ -180,7 +180,7 @@ void PostHelper::performCreationImpl()
     message.replace("\n", "<br/>");
 
     if (!m_fancy) {
-        message = elideText(message, 120);
+        message = nonInteractive(elideText(message, 120));
     } else {
         QList<QObject *> tags;
         if (!m_story) {
@@ -200,12 +200,12 @@ void PostHelper::performCreationImpl()
             QString identifier = getValue(tag, "userIdentifier").toString();
             QString name = getValue(tag, "userName").toString();
 
-            message.append(remainingMessage.left(offset - previousOffset));
+            message.append(nonInteractive(remainingMessage.left(offset - previousOffset)));
             remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
             previousOffset = offset + length;
-            message.append(decorate(name, QString(ITEM_TEMPLATE).arg(identifier)));
+            message.append(interactive(name, QString(ITEM_TEMPLATE).arg(identifier)));
         }
-        message.append(remainingMessage);
+        message.append(nonInteractive(remainingMessage));
 
         QRegularExpression urlRegExp(URL_REGEXP);
         remainingMessage = message;
@@ -225,7 +225,7 @@ void PostHelper::performCreationImpl()
             message.append(remainingMessage.mid(previousIndex, match.capturedStart(1) - previousIndex));
             previousIndex = match.capturedEnd(1);
 
-            message.append(decorate(captured, QString(URL_TEMPLATE).arg(url)));
+            message.append(interactive(captured, QString(URL_TEMPLATE).arg(url)));
         }
         message.append(remainingMessage.right(remainingMessage.length() - previousIndex));
     }
@@ -314,7 +314,7 @@ void PostHelper::performHeaderCreation()
     QString toHeader;
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
         QString elidedTo = elideText(toName, ELIDE_COUNT);
-        toHeader = decorate(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
+        toHeader = interactive(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
     }
     QString elidedFrom;
     QString fromName;
@@ -328,10 +328,10 @@ void PostHelper::performHeaderCreation()
     } else {
         elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
     }
-    QString header = decorate(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
+    QString header = interactive(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
 
     if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
-        header.append(" &gt; ");
+        header.append(nonInteractive(" &gt; "));
         header.append(toHeader);
     }
 

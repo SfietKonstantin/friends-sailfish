@@ -37,11 +37,13 @@ Item {
     id: container
     property string name
     property alias coverUrl: coverImage.coverUrl
-    height: 2 * Theme.itemSizeExtraLarge
+    height: 2 * Theme.itemSizeExtraLarge + Theme.paddingMedium
 
     CoverImage {
         id: coverImage
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.left: parent.left; anchors.right: parent.right
+        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
 
         Label {
             id: nameText
@@ -51,6 +53,7 @@ Item {
             opacity: 0
             truncationMode: TruncationMode.Fade
             font.pixelSize: Theme.fontSizeLarge
+            color: Theme.highlightColor
             states: [
                 State {
                     name: "visible"; when: container.name != ""
@@ -61,9 +64,7 @@ Item {
                     }
                 }
             ]
-            Behavior on opacity {
-                NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
-            }
+            Behavior on opacity { FadeAnimation {} }
         }
     }
 }

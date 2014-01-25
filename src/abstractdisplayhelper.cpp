@@ -33,7 +33,8 @@
 #include <QtCore/QEvent>
 #include <QtCore/QCoreApplication>
 
-static const char *RICH_TEXT = "<a style=\"text-decoration:none; color:%1\" href=\"%2\">%3</a>";
+static const char *NON_INTERACTIVE_TEXT = "<span style=\"color:%1\">%2</span>";
+static const char *INTERACTIVE_TEXT = "<a style=\"text-decoration:none; color:%1\" href=\"%2\">%3</a>";
 
 AbstractDisplayHelper::AbstractDisplayHelper(QObject *parent) :
     QObject(parent), m_object(0)
@@ -72,6 +73,20 @@ void AbstractDisplayHelper::setUserIdentifier(const QString &userIdentifier)
     }
 }
 
+QString AbstractDisplayHelper::primaryColor() const
+{
+    return m_primaryColor;
+}
+
+void AbstractDisplayHelper::setPrimaryColor(const QString &primaryColor)
+{
+    if (m_primaryColor != primaryColor) {
+        m_primaryColor = primaryColor;
+        emit primaryColorChanged();
+        create();
+    }
+}
+
 QString AbstractDisplayHelper::highlightColor() const
 {
     return m_highlightColor;
@@ -86,9 +101,14 @@ void AbstractDisplayHelper::setHighlightColor(const QString &highlightColor)
     }
 }
 
-QString AbstractDisplayHelper::decorate(const QString &text, const QString &url)
+QString AbstractDisplayHelper::interactive(const QString &text, const QString &url)
 {
-    return QString(RICH_TEXT).arg(m_highlightColor, url, text);
+    return QString(INTERACTIVE_TEXT).arg(m_primaryColor, url, text);
+}
+
+QString AbstractDisplayHelper::nonInteractive(const QString &text)
+{
+    return QString(NON_INTERACTIVE_TEXT).arg(m_highlightColor, text);
 }
 
 bool AbstractDisplayHelper::event(QEvent *e)

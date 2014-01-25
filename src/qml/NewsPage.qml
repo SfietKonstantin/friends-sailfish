@@ -82,6 +82,7 @@ Page {
         property bool ready: facebook.currentUserIdentifier != "me"
         property bool queued: false
         visible: (model.status == SocialNetwork.Idle && view.ready) || model.count > 0
+        spacing: Theme.paddingMedium
         onReadyChanged: {
             if (ready && queued) {
                 queued = false

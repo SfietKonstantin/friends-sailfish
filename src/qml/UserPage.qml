@@ -71,9 +71,10 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
+        spacing: Theme.paddingMedium
         header: Item {
             width: view.width
-            height: childrenRect.height
+            height: childrenRect.height + Theme.paddingMedium
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
                 height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
@@ -93,6 +94,7 @@ Page {
                         opacity: 0
                         wrapMode: Text.WordWrap
                         font.pixelSize: Theme.fontSizeLarge
+                        color: Theme.highlightColor
                         states: [
                             State {
                                 name: "visible"; when: user.name != ""

@@ -71,6 +71,7 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
+        spacing: Theme.paddingMedium
         header: Item {
             width: view.width
             height: childrenRect.height + Theme.paddingMedium
@@ -78,7 +79,7 @@ Page {
                 anchors.left: parent.left; anchors.right: parent.right
                 height: Math.max(2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall
                                  + 0.5 * Theme.paddingSmall,
-                                 2 * Theme.itemSizeExtraLarge + about.height)
+                                 2 * Theme.itemSizeExtraLarge + about.height + Theme.paddingMedium)
 
                 CoverImage {
                     id: coverImage
@@ -95,6 +96,7 @@ Page {
                         opacity: 0
                         wrapMode: Text.WordWrap
                         font.pixelSize: Theme.fontSizeLarge
+                        color: Theme.highlightColor
                         states: [
                             State {
                                 name: "visible"; when: page.name != ""
@@ -119,6 +121,7 @@ Page {
                     text: page.about
                     font.pixelSize: Theme.fontSizeExtraSmall
                     wrapMode: Text.WordWrap
+                    color: Theme.highlightColor
                 }
 
                 Rectangle {

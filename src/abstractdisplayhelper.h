@@ -40,6 +40,8 @@ class AbstractDisplayHelper : public QObject
     Q_PROPERTY(QObject * object READ object WRITE setObject NOTIFY objectChanged)
     Q_PROPERTY(QString userIdentifier READ userIdentifier WRITE setUserIdentifier
                NOTIFY userIdentifierChanged)
+    Q_PROPERTY(QString primaryColor READ primaryColor WRITE setPrimaryColor
+               NOTIFY primaryColorChanged)
     Q_PROPERTY(QString highlightColor READ highlightColor WRITE setHighlightColor
                NOTIFY highlightColorChanged)
 public:
@@ -48,14 +50,18 @@ public:
     void setObject(QObject *object);
     QString userIdentifier() const;
     void setUserIdentifier(const QString &userIdentifier);
+    QString primaryColor() const;
+    void setPrimaryColor(const QString &primaryColor);
     QString highlightColor() const;
     void setHighlightColor(const QString &highlightColor);
 signals:
     void objectChanged();
     void userIdentifierChanged();
+    void primaryColorChanged();
     void highlightColorChanged();
 protected:
-    QString decorate(const QString &text, const QString &url);
+    QString interactive(const QString &text, const QString &url);
+    QString nonInteractive(const QString &text);
     bool event(QEvent *e);
     virtual void performCreationImpl() = 0;
 protected slots:
@@ -65,6 +71,7 @@ private:
 private:
     QObject *m_object;
     QString m_userIdentifier;
+    QString m_primaryColor;
     QString m_highlightColor;
 };
 

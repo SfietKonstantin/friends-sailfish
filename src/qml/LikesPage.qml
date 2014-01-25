@@ -75,6 +75,7 @@ Page {
         }
 
         delegate: BackgroundItem {
+            id: background
             height: Theme.itemSizeLarge
             Rectangle {
                 anchors.fill: icon
@@ -94,6 +95,7 @@ Page {
                 anchors.verticalCenter: parent.verticalCenter
                 text: model.contentItem.userName
                 truncationMode: TruncationMode.Fade
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
 
             onClicked: {

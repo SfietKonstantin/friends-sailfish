@@ -73,13 +73,14 @@ Page {
         }
 
         delegate: BackgroundItem {
-            height: Theme.itemSizeLarge
+            id: background
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
                 text: model.contentItem !== undefined ? model.contentItem.name : ""
                 truncationMode: TruncationMode.Fade
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
 
             onClicked: {

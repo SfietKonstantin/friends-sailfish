@@ -89,7 +89,7 @@ void ThreadHelper::performCreationImpl()
         pictureIdentifier = getValue(first, "objectIdentifier").toString();
         //: Display one name and a number of other persons. Like "Jack and 7 others". %1 is replaced by the first name, %n by the number of others.
         //% "%1 and %n others"
-        header = qtTrId("friends_threadhelper_header_many", toList.count() - 1).arg(decorate(name, pictureIdentifier));
+        header = qtTrId("friends_threadhelper_header_many", toList.count() - 1).arg(interactive(name, pictureIdentifier));
     } else if (toList.count() == 2) {
         const QObject *first = toList.first();
         const QObject *second = toList.at(1);
@@ -99,13 +99,13 @@ void ThreadHelper::performCreationImpl()
         QString identifier2 = getValue(second, "objectIdentifier").toString();
         //: Display two names. Like "Jack and Jane". %1 is replaced by the first name, %2 by the second
         //% "%1 and %2"
-        header = qtTrId("friends_threadhelper_header_two").arg(decorate(name1, pictureIdentifier),
-                                                               decorate(name2, identifier2));
+        header = qtTrId("friends_threadhelper_header_two").arg(interactive(name1, pictureIdentifier),
+                                                               interactive(name2, identifier2));
     } else if (toList.count() == 1) {
         const QObject *first = toList.first();
         QString name = getValue(first, "objectName").toString();
         pictureIdentifier = getValue(first, "objectIdentifier").toString();
-        header = decorate(name, pictureIdentifier);
+        header = interactive(name, pictureIdentifier);
     } else {
         valid = false;
     }

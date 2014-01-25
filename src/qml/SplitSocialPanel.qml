@@ -90,6 +90,7 @@ Rectangle {
             maximumLineCount: 4
             elide: Text.ElideRight
             visible: text.length > 0
+            color: Theme.highlightColor
         }
 
         Label {
@@ -97,7 +98,7 @@ Rectangle {
             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
             wrapMode: Text.WordWrap
             font.pixelSize: Theme.fontSizeSmall
-            color: Theme.secondaryColor
+            color: Theme.secondaryHighlightColor
             //: Display a message about the last updated time. %1 will be replaced by the elapsed time, like "6 weeks ago"
             //% "Last update %1"
             text: qsTrId("friends_splitsocial_last_update").arg(Format.formatDate(DateHelper.fromString(item === null ? "" : item.updatedTime), Formatter.DurationElapsed))

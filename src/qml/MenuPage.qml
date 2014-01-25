@@ -116,13 +116,14 @@ Page {
         }
 
         delegate: BackgroundItem {
+            id: background
             enabled: model.page != ""
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTrId(model.text)
-                color: model.page != "" ? Theme.primaryColor : Theme.secondaryColor
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
             onClicked: {
                 if (model.page == "") {

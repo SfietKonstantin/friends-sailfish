@@ -31,7 +31,6 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UiConstants.js" as Ui
 import harbour.friends 1.0
 
 Image {
@@ -55,9 +54,7 @@ Image {
         }
     }
 
-    Behavior on opacity {
-        NumberAnimation {duration: Ui.ANIMATION_DURATION_FAST}
-    }
+    Behavior on opacity { FadeAnimation {} }
 
     ImageHelper {
         image: picture

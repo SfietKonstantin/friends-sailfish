@@ -33,7 +33,6 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends.social 1.0
 import harbour.friends.social.extra 1.0
-import "UiConstants.js" as Ui
 
 Page {
     id: container
@@ -71,6 +70,7 @@ Page {
         id: view
         anchors.fill: parent
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
+        spacing: Theme.paddingMedium
         header: CoverHeader {
             anchors.left: parent.left; anchors.right: parent.right
             name: group.name

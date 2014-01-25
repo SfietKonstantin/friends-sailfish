@@ -103,6 +103,7 @@ Page {
                 font.pixelSize: Theme.fontSizeSmall
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.Wrap
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
 
             Label {
@@ -115,6 +116,7 @@ Page {
                 font.pixelSize: Theme.fontSizeExtraSmall
                 text: Format.formatDate(DateHelper.fromString(model.contentItem.createdTime),
                                         Formatter.DurationElapsed)
+                color: background.highlighted ? Theme.highlightColor : Theme.primaryColor
             }
 
             onClicked: {

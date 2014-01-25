@@ -51,6 +51,11 @@ Page {
         }
     }
 
+    Component.onCompleted: {
+        console.debug(Theme.highlightColor)
+        console.debug(Theme.secondaryHighlightColor)
+    }
+
     UserInfoHelper {
         id: helper
         object: user

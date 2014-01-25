@@ -86,6 +86,7 @@ Page {
                 text: group.description
                 font.pixelSize: Theme.fontSizeSmall
                 wrapMode: Text.WordWrap
+                color: Theme.highlightColor
             }
         }
 

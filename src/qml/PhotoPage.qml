@@ -165,6 +165,7 @@ Page {
                             text: photo.name
                             visible: photo.name.length > 0
                             wrapMode: Text.Wrap
+                            color: Theme.highlightColor
                         }
                     }
                 }
@@ -174,7 +175,7 @@ Page {
                     anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                     anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.secondaryColor
+                    color: Theme.secondaryHighlightColor
                     text: FooterHelper.makeFooter(photo.likesCount, photo.commentsCount)
                 }
             }

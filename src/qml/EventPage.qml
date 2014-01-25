@@ -86,10 +86,10 @@ Page {
         anchors.fill: parent
         property bool moved: false
         visible: (model.status == SocialNetwork.Idle) || model.count > 0
-
+        spacing: Theme.paddingMedium
         header: Item {
             anchors.left: parent.left; anchors.right: parent.right
-            height: column.height + 0.5 * Theme.paddingMedium
+            height: column.height + Theme.paddingMedium
             // Workaround a bug not showing the full header at start-up
             onHeightChanged: {
                 if (container.status != PageStatus.Active) {
@@ -146,19 +146,21 @@ Page {
                             //% "Organized by %1"
                                                          : qsTrId("friends_event_organizer").arg(event.owner.objectName)
                             font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.highlightColor
                         }
                         Label {
                             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                             text: DateHelper.formatDateTime(event.startTime, Qt.DefaultLocaleShortDate)
                             font.pixelSize: Theme.fontSizeSmall
+                            color: Theme.highlightColor
                         }
                         Label {
                             visible: event.endTime != ""
                             anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                             anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                             text: DateHelper.formatDateTime(event.endTime, Qt.DefaultLocaleShortDate)
-                            color: Theme.secondaryColor
+                            color: Theme.secondaryHighlightColor
                             font.pixelSize: Theme.fontSizeSmall
                         }
                     }
@@ -204,7 +206,9 @@ Page {
                         anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                         anchors.right: rsvpButtonSpinner.left; anchors.rightMargin: Theme.paddingMedium
                         color: (event.actionStatus != Facebook.Busy && !event.postActionLoading)
-                               ? Theme.primaryColor : Theme.secondaryColor
+                               ? (rsvpButton.highlighted ? Theme.highlightColor
+                                                         : Theme.primaryColor)
+                               : Theme.secondaryHighlightColor
                     }
 
                     BusyIndicator {
