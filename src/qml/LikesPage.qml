@@ -55,6 +55,7 @@ Page {
         filter: FacebookRelatedDataFilter {
             identifier: container.identifier
             connection: Facebook.Likes
+            limit: 100
         }
     }
 
@@ -102,7 +103,15 @@ Page {
             }
         }
 
-        ScrollDecorator {}
+        onAtYEndChanged: {
+            if (atYEnd && model.hasNext) {
+                if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                    model.loadNext()
+                }
+            }
+        }
+
+        VerticalScrollDecorator {}
 
         ViewPlaceholder {
             enabled: model.count == 0

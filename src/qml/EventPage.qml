@@ -211,6 +211,7 @@ Page {
                         anchors.verticalCenter: parent.verticalCenter
                         anchors.left: rsvpButtonSpinner.right; anchors.leftMargin: Theme.paddingMedium
                         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                        color: event.actionStatus != Facebook.Busy ? Theme.primaryColor : Theme.secondaryColor
                     }
 
                     Component {
