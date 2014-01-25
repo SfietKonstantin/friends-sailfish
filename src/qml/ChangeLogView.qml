@@ -54,4 +54,6 @@ SilicaListView {
             color: model.type === "feature" ? Theme.primaryColor: Theme.secondaryColor
         }
     }
+
+    VerticalScrollDecorator {}
 }

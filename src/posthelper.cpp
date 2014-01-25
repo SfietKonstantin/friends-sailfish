@@ -42,7 +42,7 @@ static const int ELIDE_COUNT = 50;
 
 static const char *ITEM_TEMPLATE = "item----%1";
 static const char *URL_TEMPLATE = "url----%1";
-static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#?=]*)";
+static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#  ?=&]*)";
 
 bool tagLesser(QObject *tag1, QObject *tag2)
 {

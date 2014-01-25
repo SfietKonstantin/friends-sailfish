@@ -102,7 +102,7 @@ static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
 static const char *URI_SOCIAL_EXTRA = "harbour.friends.social.extra";
 static const char *REASON = "Cannot be created";
-static const char *FACEBOOK_PAGE = "https://m.facebook.com/friendsqt";
+static const char *FRIENDS_QT = "friendsqt";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
                                    "hosted_button_id=R6AJV4U2G33XG";
 
@@ -241,7 +241,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     view->engine()->rootContext()->setContextProperty("CLIENT_ID", clientId);
     view->engine()->rootContext()->setContextProperty("VERSION", VERSION);
-    view->engine()->rootContext()->setContextProperty("FACEBOOK_PAGE", FACEBOOK_PAGE);
+    view->engine()->rootContext()->setContextProperty("FRIENDS_QT", FRIENDS_QT);
     view->engine()->rootContext()->setContextProperty("PAYPAL_DONATE", PAYPAL_DONATE);
 
     importMisc();

@@ -66,7 +66,6 @@ Rectangle {
                 color: Theme.highlightColor
                 text: item === null ? "" : item.likesCount
                 anchors.verticalCenter: parent.verticalCenter
-                width: Theme.paddingLarge
             }
 
             Image {
@@ -80,7 +79,6 @@ Rectangle {
                 color: Theme.highlightColor
                 text: item === null ? "" : item.commentsCount
                 anchors.verticalCenter: parent.verticalCenter
-                width: Theme.paddingLarge
             }
         }
 

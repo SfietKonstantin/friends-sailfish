@@ -90,7 +90,13 @@ Page {
             anchors.left: parent.left; anchors.right: parent.right
             BackgroundItem {
                 anchors.left: parent.left; anchors.right: parent.right
-                onClicked: Qt.openUrlExternally(FACEBOOK_PAGE)
+                onClicked: {
+                    var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                              {"identifier": FRIENDS_QT})
+                    page.load()
+                }
+
+
                 Label {
                     anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                     anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
