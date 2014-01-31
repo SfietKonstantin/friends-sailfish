@@ -97,7 +97,7 @@ Page {
             }
 
             onClicked: {
-                var page = pageStack.push(Qt.resolvedUrl("UserPage.qml"),
+                var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
                                           {"identifier": model.contentItem.userIdentifier})
                 page.load()
             }
