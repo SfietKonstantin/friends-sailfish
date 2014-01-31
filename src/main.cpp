@@ -97,6 +97,7 @@
 #include "socialextra/eventfilterinterface.h"
 #include "socialextra/facebookextraeventinterface.h"
 #include "socialextra/facebookextrainterface.h"
+#include "socialextra/commentfilterinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_SOCIAL = "harbour.friends.social";
@@ -204,6 +205,7 @@ void importSocialExtra()
     qmlRegisterType<EventFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "EventFilter");
     qmlRegisterType<FacebookExtraEventInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraEvent");
     qmlRegisterType<FacebookExtraInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtra");
+    qmlRegisterType<CommentFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "CommentFilter");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

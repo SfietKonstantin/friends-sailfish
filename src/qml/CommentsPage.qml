@@ -33,6 +33,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
 import harbour.friends.social 1.0
+import harbour.friends.social.extra 1.0
 
 Page {
     id: container
@@ -55,17 +56,13 @@ Page {
     SocialNetworkModel {
         id: model
         signal performFocusCommentField()
-        property int offsetCount: Math.floor((item.commentsCount - 1) / filter.limit)
 
         socialNetwork: facebook
-        filter: FacebookRelatedDataFilter {
+        filter: CommentFilter {
             id: filter
             identifier: container.identifier
-            connection: Facebook.Comments
-            fields: "from,message,created_time"
+            isPost: item.type == Facebook.Post
             limit: 10
-            offset: model.offsetCount * limit
-            useOffsetCursors: true
         }
 
         onStatusChanged: {
@@ -115,12 +112,11 @@ Page {
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
                 height: previousLoader.height + Theme.paddingMedium
-                visible: previousLoader.offsetCount > 0
+                visible: model.hasPrevious
                 BackgroundItem {
                     id: previousLoader
-                    property int offsetCount
                     property bool loadingPrevious: false
-                    Component.onCompleted: offsetCount = model.offsetCount
+
                     enabled: model.status == Facebook.Idle
                     onClicked: {
                         if (model.hasPrevious) {
@@ -155,7 +151,6 @@ Page {
                         onStatusChanged: {
                             if (model.status == Facebook.Idle && previousLoader.loadingPrevious) {
                                 previousLoader.loadingPrevious = false
-                                previousLoader.offsetCount --
                             }
                         }
                     }

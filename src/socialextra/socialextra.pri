@@ -9,7 +9,8 @@ HEADERS += $$PWD/alphabeticalsorterinterface.h \
     socialextra/filterablefacebookrelateddatafilterinterface.h \
     socialextra/eventfilterinterface.h \
     socialextra/facebookextraeventinterface.h \
-    socialextra/facebookextrainterface.h
+    socialextra/facebookextrainterface.h \
+    socialextra/commentfilterinterface.h
 
 SOURCES += $$PWD/alphabeticalsorterinterface.cpp \
     $$PWD/newsfeedfilterinterface.cpp \
@@ -18,4 +19,5 @@ SOURCES += $$PWD/alphabeticalsorterinterface.cpp \
     socialextra/filterablefacebookrelateddatafilterinterface.cpp \
     socialextra/eventfilterinterface.cpp \
     socialextra/facebookextraeventinterface.cpp \
-    socialextra/facebookextrainterface.cpp
+    socialextra/facebookextrainterface.cpp \
+    socialextra/commentfilterinterface.cpp
