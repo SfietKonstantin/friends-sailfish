@@ -74,5 +74,15 @@
       "text": "Time shown are no wrong (one or several hours early depending on timezone)", 
       "type": "bug"
     }
+  ], 
+  "0.7.0": [
+    {
+      "text": "Commenting something is more reliable, and you can navigate through long list of comments.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "Many UI fixes, that removes annoying issues.", 
+      "type": "bug"
+    }
   ]
 }
