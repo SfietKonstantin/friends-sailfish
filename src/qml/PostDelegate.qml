@@ -162,7 +162,7 @@ Item {
                 return text.replace(/\n/g, " ")
             }
 
-            visible: post.media.length > 0
+            visible: post.media.length > 0 || post.name.length > 0
             property real cellWidth: post.media.length <= 1 ? grid.width : grid.width / 3
             property real cellHeight: post.media.length <= 1 ? grid.width * (small ? 1 : 2 / 3)
                                                              : grid.width / 3
@@ -203,6 +203,7 @@ Item {
 
             Grid {
                 id: grid
+                visible: post.media.length > 0
                 columns: post.media.length <= 1 ? 1 : 3
                 rows: post.media.length <= 1 ? 1 : 2
                 anchors.left: parent.left

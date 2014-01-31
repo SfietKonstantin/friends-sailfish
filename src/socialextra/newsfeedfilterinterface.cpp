@@ -313,11 +313,6 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
             bool wrongMediaFound = false;
             QVariantList media = attachment.value("media").toList();
 
-            // If the media is empty (but exists) we discard
-            if (media.isEmpty()) {
-                continue;
-            }
-
             foreach (QVariant medium, media) {
                 QVariantMap mediumMap = medium.toMap();
                 if (mediumMap.contains("video")) {
@@ -356,7 +351,6 @@ bool NewsFeedFilterInterface::performSetModelDataImpl(SocialNetworkModelInterfac
                 continue;
             }
         }
-
 
         // Discard stories without attachments
         if (!hasMedia && !story.isEmpty() && message.isEmpty()) {
