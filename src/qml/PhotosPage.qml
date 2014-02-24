@@ -74,7 +74,7 @@ Page {
         id: drawer
         property int imageSize: Math.max(Screen.width, Screen.height)
         anchors.fill: parent
-        dock: container.orientation == Orientation.Portrait ? Dock.Bottom: Dock.Left
+        dock: container.isPortrait ? Dock.Bottom: Dock.Left
         background: SplitSocialPanel {
             item: album
             description: album.description

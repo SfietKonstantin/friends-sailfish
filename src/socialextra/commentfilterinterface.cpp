@@ -37,8 +37,6 @@
 #include "identifiablecontentiteminterface_p.h"
 #include "facebook/facebookcommentinterface.h"
 
-//"ORDER BY time LIMIT %3,%4\","
-
 static const char *QUERY = "{"\
     "\"query1\": \"SELECT id, fromid, text, time, likes, can_comment, "\
                   "comment_count, user_likes, parent_id FROM comment "\
@@ -258,7 +256,7 @@ bool CommentFilterInterface::performSetModelDataImpl(SocialNetworkModelInterface
         fromData.insert(FACEBOOK_ONTOLOGY_OBJECTREFERENCE_OBJECTNAME, fromName);
         commentData.insert(FACEBOOK_ONTOLOGY_COMMENT_FROM, fromData);
         commentData.insert(FACEBOOK_ONTOLOGY_COMMENT_MESSAGE, commentMap.value("text").toString());
-        uint timestamp = commentMap.value("created_time").toUInt();
+        uint timestamp = commentMap.value("time").toUInt();
         QDateTime time = QDateTime::fromTime_t(timestamp);
         time = time.toTimeSpec(Qt::UTC);
         commentData.insert(FACEBOOK_ONTOLOGY_COMMENT_CREATEDTIME, time.toString(Qt::ISODate));

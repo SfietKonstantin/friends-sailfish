@@ -54,7 +54,7 @@ Page {
     Drawer {
         id: drawer
         anchors.fill: parent
-        dock: container.orientation == Orientation.Portrait ? Dock.Top: Dock.Left
+        dock: container.isPortrait ? Dock.Top: Dock.Left
 
         background: SplitSocialPanel {
             property int realIndex: view.currentIndex < 0 || view.currentIndex >= container.model.count ? 0 : view.currentIndex
