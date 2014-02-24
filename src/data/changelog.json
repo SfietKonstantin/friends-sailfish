@@ -84,5 +84,19 @@
       "text": "Many UI fixes, that removes annoying issues.", 
       "type": "bug"
     }
+  ], 
+  "1.0.0": [
+    {
+      "text": "Fixed a bug that changed all comment time to 530 month ago", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Refreshed translations", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Fixed portrait inverted bug in photos-related views", 
+      "type": "bug"
+    }
   ]
 }
