@@ -98,5 +98,11 @@
       "text": "Fixed portrait inverted bug in photos-related views", 
       "type": "bug"
     }
+  ], 
+  "1.0.1": [
+    {
+      "text": "Fixes to pass harbour validation.", 
+      "type": "bug"
+    }
   ]
 }
