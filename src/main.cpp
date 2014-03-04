@@ -217,7 +217,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(new QGuiApplication(argc, argv));
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
-    app->setOrganizationName("SfietKonstantin");
+    app->setOrganizationName("harbour-friends");
     app->setApplicationName("Friends");
 
     QObject::connect(view->engine(), SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
