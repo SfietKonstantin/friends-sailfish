@@ -91,6 +91,14 @@ ApplicationWindow {
         onStatusChanged: {
             loadMe()
         }
+
+        onLoaded: {
+            if (REQUESTED_FACEBOOK_ID != "") {
+                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                                    {"identifier": REQUESTED_FACEBOOK_ID})
+                typeSolverPage.load()
+            }
+        }
     }
 
     Component {
@@ -105,9 +113,10 @@ ApplicationWindow {
 
     Component.onCompleted: {
         if (tokenManager.token.length > 0) {
-            var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
-            page.load()
-
+            if (REQUESTED_FACEBOOK_ID == "") {
+                var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
+                page.load()
+            }
         } else {
             app.performLogin()
         }

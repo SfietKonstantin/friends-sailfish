@@ -236,7 +236,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
         }
     }
 #else
-    if (app->arguments().count() == 2) {
+    if (app->arguments().count() <= 2) {
         clientId = app->arguments().at(1);
         qDebug() << "Client id loaded: " << clientId;
     }
@@ -246,6 +246,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     view->engine()->rootContext()->setContextProperty("VERSION", VERSION);
     view->engine()->rootContext()->setContextProperty("FRIENDS_QT", FRIENDS_QT);
     view->engine()->rootContext()->setContextProperty("PAYPAL_DONATE", PAYPAL_DONATE);
+
+    QString requestedFacebookId;
+#ifndef DESKTOP
+    if (app->arguments().count() == 2) {
+        requestedFacebookId = app->arguments().at(1);
+    }
+#else
+    if (app->arguments().count() == 3) {
+        requestedFacebookId = app->arguments().at(2);
+    }
+#endif
+    view->engine()->rootContext()->setContextProperty("REQUESTED_FACEBOOK_ID", requestedFacebookId);
 
     importMisc();
     importSocial();
@@ -276,7 +288,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #else
     view->show();
 #endif
-
 
     int result = app->exec();
     app->removeTranslator(translator.data());
