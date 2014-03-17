@@ -51,6 +51,8 @@
 #else
 #include <QtCore/QStandardPaths>
 #endif
+#include <QtCore/QCoreApplication>
+#include "defines_p.h"
 
 /**
  * @internal
@@ -59,11 +61,32 @@
  */
 inline QString cacheFolderPath()
 {
+    QString oldOrganizationName = QCoreApplication::instance()->organizationName();
+    QString oldApplicationName = QCoreApplication::instance()->applicationName();
+    if (oldOrganizationName != ORGANIZATION_NAME) {
+        QCoreApplication::instance()->setOrganizationName(ORGANIZATION_NAME);
+    }
+
+    if (oldApplicationName != APPLICATION_NAME) {
+        QCoreApplication::instance()->setOrganizationName(APPLICATION_NAME);
+    }
+
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-    return QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
+    QString location = QDesktopServices::storageLocation(QDesktopServices::CacheLocation);
 #else
-    return QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    QString location = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
 #endif
+
+    if (oldOrganizationName != ORGANIZATION_NAME) {
+        QCoreApplication::instance()->setOrganizationName(oldOrganizationName);
+    }
+
+    if (oldApplicationName != APPLICATION_NAME) {
+        QCoreApplication::instance()->setOrganizationName(oldApplicationName);
+    }
+
+    return location;
 }
 
 #endif // QFB_CACHEHELPER_P_H

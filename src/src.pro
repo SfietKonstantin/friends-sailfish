@@ -30,7 +30,8 @@ HEADERS += cachehelper_p.h \
     objecthelper_p.h \
     abstractdisplayhelper.h \
     userinfohelper.h \
-    datehelper.h
+    datehelper.h \
+    defines_p.h
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \

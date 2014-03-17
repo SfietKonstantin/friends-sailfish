@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>
+ * Copyright (C) 2014 Lucien XU <sfietkonstantin@free.fr>
  *
  * You may use this file under the terms of the BSD license as follows:
  *
@@ -29,54 +29,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#include "tokenmanager.h"
-#include <QtCore/QSettings>
-#include <QtCore/QDebug>
-#include <QtCore/QStandardPaths>
-#include <QtCore/QDir>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QCoreApplication>
-#include "defines_p.h"
+#ifndef DEFINES_P_H
+#define DEFINES_P_H
 
-static const char *TOKEN_KEY = "login/token";
+// Some global defines
+#define ORGANIZATION_NAME "harbour-friends"
+#define APPLICATION_NAME "Friends"
 
-TokenManager::TokenManager(QObject *parent) :
-    QObject(parent)
-{
-    QSettings settings (ORGANIZATION_NAME, APPLICATION_NAME);
-    setToken(settings.value(TOKEN_KEY, QString()).toString());
-}
-
-QString TokenManager::token() const
-{
-    return m_token;
-}
-
-void TokenManager::disconnect()
-{
-    setToken(QString());
-
-    // We need to remove the cache TODO: move this as independant of app names ?
-    QString sharePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-    if (!sharePath.contains(QCoreApplication::instance()->applicationName())) {
-        return;
-    }
-
-    if (!sharePath.contains(QCoreApplication::instance()->organizationName())) {
-        return;
-    }
-
-    QDir dataDir (sharePath);
-    dataDir.removeRecursively();
-
-}
-
-void TokenManager::setToken(const QString &token)
-{
-    if (m_token != token) {
-        m_token = token;
-        emit tokenChanged();
-        QSettings settings;
-        settings.setValue(TOKEN_KEY, token);
-    }
-}
+#endif // DEFINES_P_H

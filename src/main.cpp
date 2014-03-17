@@ -45,6 +45,7 @@
 #include <MDeclarativeCache>
 #endif
 
+#include "defines_p.h"
 #include "tokenmanager.h"
 #include "settingsmanager.h"
 #include "posthelper.h"
@@ -217,8 +218,8 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     QScopedPointer<QGuiApplication> app(new QGuiApplication(argc, argv));
     QScopedPointer<QQuickView> view(new QQuickView);
 #endif
-    app->setOrganizationName("harbour-friends");
-    app->setApplicationName("Friends");
+    app->setOrganizationName(ORGANIZATION_NAME);
+    app->setApplicationName(APPLICATION_NAME);
 
     QObject::connect(view->engine(), SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
