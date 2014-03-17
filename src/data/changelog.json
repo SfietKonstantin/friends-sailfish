@@ -104,5 +104,11 @@
       "text": "Fixes to pass harbour validation.", 
       "type": "bug"
     }
+  ], 
+  "1.0.2": [
+    {
+      "text": "Friends can be opened from outside to show a Facebook entity.", 
+      "type": "bug"
+    }
   ]
 }
