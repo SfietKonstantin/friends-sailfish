@@ -31,12 +31,12 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import "UiConstants.js" as Ui
 
 Rectangle {
     id: coverBackground
     color: Theme.secondaryHighlightColor
     clip: true
+    property string name
     property alias coverUrl: image.url
 
     FacebookImage {
@@ -66,32 +66,5 @@ Rectangle {
             gl_FragColor = (1. - smoothstep(_boundary, 1., qt_TexCoord0.y)) * textureColor * qt_Opacity;
         }
         "
-    }
-
-    Label {
-        id: nameText
-        anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
-        opacity: 0
-        truncationMode: TruncationMode.Fade
-        font.pixelSize: Theme.fontSizeLarge
-        states: [
-            State {
-                name: "visible"; when: container.name != ""
-                PropertyChanges {
-                    target: nameText
-                    opacity: 1
-                    text: container.name
-                }
-                PropertyChanges {
-                    target: gradient
-                    opacity: 0.8
-                }
-            }
-        ]
-        Behavior on opacity {
-            NumberAnimation {duration: Ui.ANIMATION_DURATION_NORMAL}
-        }
     }
 }

@@ -41,6 +41,8 @@ Item {
     property alias post: helper.object
     property alias to: helper.to
     property alias fancy: helper.fancy
+    property bool pushComments: true
+    signal clicked()
     width: parent.width
     height: background.height + Theme.paddingMedium
 
@@ -72,13 +74,17 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         height: column.height + 2 * Theme.paddingMedium
         onClicked: {
-            var headerProperties = {"post": container.post}
-            var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
-                                      {"identifier": container.post.identifier,
-                                       "item": container.post,
-                                       "headerComponent": postHeaderComponent,
-                                       "headerProperties": headerProperties})
-            page.load()
+            if (container.pushComments) {
+                var headerProperties = {"post": container.post}
+                var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
+                                          {"identifier": container.post.identifier,
+                                           "item": container.post,
+                                           "headerComponent": postHeaderComponent,
+                                           "headerProperties": headerProperties})
+                page.load()
+            } else {
+                container.clicked()
+            }
         }
         enabled: !container.fancy
     }
