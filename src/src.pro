@@ -1,6 +1,7 @@
 include(social.pri)
 include(socialextra/socialextra.pri)
 include(login/login.pri)
+include(dbus/dbus.pri)
 include(../version.pri)
 
 TEMPLATE = app
@@ -12,7 +13,7 @@ DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clie
 include(data/data.pri)
 include(translations/translations.pri)
 
-QT += qml quick quick-private
+QT += qml quick quick-private dbus
 
 CONFIG += link_pkgconfig
 
@@ -32,6 +33,7 @@ HEADERS += cachehelper_p.h \
     userinfohelper.h \
     datehelper.h \
     defines_p.h
+
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \

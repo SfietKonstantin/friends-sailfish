@@ -12,6 +12,7 @@ Description: |
 Configure: none
 Builder: qtc5
 PkgConfigBR:
+- Qt5DBus
 - Qt5Quick
 - Qt5Qml
 - Qt5Core
@@ -24,6 +25,14 @@ PkgBR:
 Requires:
 - sailfishsilica-qt5 >= 0.10.9
 Files:
+- /usr/share/harbour-friends/qml
+- /usr/share/icons/hicolor/86x86/apps/
+- /usr/share/applications
+- /usr/share/harbour-friends/translations
+- /usr/share/harbour-friends/data
+- /usr/share/harbour-friends/lib
+- /usr/bin
+- 
 - '%{_bindir}/harbour-friends'
 - '%{_datadir}/%{name}/lib'
 - '%{_datadir}/%{name}/qml'

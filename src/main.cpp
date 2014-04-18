@@ -64,6 +64,8 @@
 // Image loader headers
 //#include "imageloader/imageloader.h"
 
+#include "dbus/friendsdbusinterface.h"
+
 // social plugin headers
 #include "socialnetworkinterface.h"
 #include "socialnetworkmodelinterface.h"
@@ -262,6 +264,15 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     importMisc();
     importSocial();
     importSocialExtra();
+    FriendsDBusInterface dbusInterface;
+#ifdef DESKTOP
+    QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
+                     view.data(), &QQuickView::show);
+#else
+    QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
+                     view.data(), &QQuickView::showFullScreen);
+#endif
+    view->engine()->rootContext()->setContextProperty("FriendsDBusInterface", &dbusInterface);
 
     // Translations
     QScopedPointer<QTranslator> engineeringEnglish(new QTranslator);

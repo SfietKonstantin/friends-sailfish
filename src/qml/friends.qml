@@ -125,6 +125,35 @@ ApplicationWindow {
     PostCommentHeaderComponent {
         id: postHeaderComponent
     }
+
+    Connections {
+        id: dbus
+        property string queuedFacebookEntity
+        target: FriendsDBusInterface
+        onOpenFacebookEntityRequested: {
+            if (!pageStack.busy) {
+                pageStack.clear()
+                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                                    {"identifier": facebookId})
+                typeSolverPage.load()
+            } else {
+                dbus.queuedFacebookEntity = facebookId
+            }
+        }
+    }
+
+    Connections {
+        target: pageStack
+        onBusyChanged: {
+            if (!pageStack.busy && dbus.queuedFacebookEntity != "") {
+                pageStack.clear()
+                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                                    {"identifier": dbus.queuedFacebookEntity})
+                typeSolverPage.load()
+                dbus.queuedFacebookEntity = ""
+            }
+        }
+    }
 }
 
 
