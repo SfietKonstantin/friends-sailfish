@@ -48,7 +48,7 @@ static const char *QUERY_QUERY2 = "query2";
 static const char *QUERY_NAME_KEY = "name";
 static const char *QUERY_RESULT_KEY = "fql_result_set";
 static const char *QUERY_ALL = "uid = me()";
-static const char *QUERY_SPECIFIC = "eid = %1";
+static const char *QUERY_SPECIFIC = "eid = %1 AND uid = me()";
 
 class EventFilterInterfacePrivate: public FilterInterfacePrivate
 {
