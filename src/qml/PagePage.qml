@@ -76,7 +76,9 @@ Page {
             height: childrenRect.height + Theme.paddingMedium
             Item {
                 anchors.left: parent.left; anchors.right: parent.right
-                height: 2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall + 0.5 * Theme.paddingSmall
+                height: Math.max(2 * Theme.itemSizeExtraLarge + Theme.itemSizeSmall
+                                 + 0.5 * Theme.paddingSmall,
+                                 2 * Theme.itemSizeExtraLarge + about.height)
 
                 CoverImage {
                     id: coverImage
