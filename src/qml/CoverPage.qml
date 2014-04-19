@@ -43,11 +43,8 @@ CoverBackground {
     }
 
     Label {
-        anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
+        id: feedEntries
         anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-        anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-        horizontalAlignment: Text.AlignHCenter
-        text: me.name
     }
 
     CoverActionList {
@@ -59,6 +56,7 @@ CoverBackground {
                 var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"), {}, PageStackAction.Immediate)
                 page.load()
                 pageStack.push(Qt.resolvedUrl("PostDialog.qml"), {"object": me})
+                activate()
             }
         }
 //        CoverAction {
