@@ -132,7 +132,7 @@ Page {
                 //: Action that allows the user to post something
                 //% "Post something"
                 text: qsTrId("friends_news_action_post")
-                onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"))
+                onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"), {"object": me})
 
                 Connections {
                     target: me

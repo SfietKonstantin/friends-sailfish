@@ -138,6 +138,23 @@ Page {
             }
 
             MenuItem {
+                enabled: group.status == SocialNetwork.Idle
+                //: Action that allows the user to post something in a group
+                //% "Post something"
+                text: qsTrId("friends_group_action_post")
+                onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"), {"object": group})
+
+                Connections {
+                    target: group
+                    onActionComplete: {
+                        if (ok) {
+                            model.loadPrevious()
+                        }
+                    }
+                }
+            }
+
+            MenuItem {
                 text: qsTrId("friends_action_refresh")
                 onClicked: model.loadPrevious()
             }

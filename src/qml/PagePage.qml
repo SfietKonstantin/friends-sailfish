@@ -63,7 +63,7 @@ Page {
         socialNetwork: facebook
         filter: FacebookItemFilter {
             identifier: container.identifier
-            fields: "name,cover,about"
+            fields: "name,cover,about,can_post"
         }
     }
 
@@ -187,6 +187,23 @@ Page {
         PullDownMenu {
             z: 1000
             busy: model.status == SocialNetwork.Busy
+
+            MenuItem {
+                enabled: (page.status == SocialNetwork.Idle) && page.canPost
+                //: Action that allows the user to post something
+                //% "Post something"
+                text: qsTrId("friends_page_action_post")
+                onClicked: pageStack.push(Qt.resolvedUrl("PostDialog.qml"), {"object": page})
+
+                Connections {
+                    target: page
+                    onActionComplete: {
+                        if (ok) {
+                            model.loadPrevious()
+                        }
+                    }
+                }
+            }
 
             MenuItem {
                 text: qsTrId("friends_action_refresh")

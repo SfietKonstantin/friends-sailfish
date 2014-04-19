@@ -34,8 +34,9 @@ import Sailfish.Silica 1.0
 
 Dialog {
     id: container
+    property QtObject object
     onAccepted: {
-        me.uploadPost(message.text.trim())
+        object.uploadPost(message.text.trim())
     }
 
     SilicaFlickable {
