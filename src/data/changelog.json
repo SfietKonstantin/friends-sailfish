@@ -110,5 +110,19 @@
       "text": "Friends can be opened from outside to show a Facebook entity.", 
       "type": "bug"
     }
+  ], 
+  "1.0.3": [
+    {
+      "text": "You can now post in groups and pages.", 
+      "type": "feature"
+    }, 
+    {
+      "text": "Correct RSVP status is now displayed in events.", 
+      "type": "bug"
+    }, 
+    {
+      "text": "Pages are now layout properly.", 
+      "type": "bug"
+    }
   ]
 }
