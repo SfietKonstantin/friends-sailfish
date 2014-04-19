@@ -1,5 +1,5 @@
 build
 install
-*.pro.user
+*.pro.user*
 src/translations/*.ts
 .tx/friends*
