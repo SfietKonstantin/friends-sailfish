@@ -32,6 +32,7 @@
 #include "friendsdbusinterface.h"
 #include <QtCore/QDebug>
 #include <QtDBus/QDBusConnection>
+#include <QtQuick/QQuickView>
 #include "adaptor.h"
 
 static const char *SERVICE = "harbour.friends";
@@ -41,12 +42,13 @@ class FriendsDBusInterfacePrivate
 {
 public:
     explicit FriendsDBusInterfacePrivate(FriendsDBusInterface *q);
+    QQuickView *view;
 protected:
     FriendsDBusInterface * const q_ptr;
 };
 
 FriendsDBusInterfacePrivate::FriendsDBusInterfacePrivate(FriendsDBusInterface *q)
-    : q_ptr(q)
+    : view(0), q_ptr(q)
 {
 }
 
@@ -72,17 +74,26 @@ FriendsDBusInterface::~FriendsDBusInterface()
     connection.unregisterService(SERVICE);
 }
 
-void FriendsDBusInterface::registerDBus()
+void FriendsDBusInterface::registerView(QQuickView *view)
 {
-
+    Q_D(FriendsDBusInterface);
+    d->view = view;
 }
 
 void FriendsDBusInterface::openFacebookEntity(const QString &facebookId)
 {
+    Q_D(FriendsDBusInterface);
+    if (d->view) {
+        d->view->raise();
+    }
     emit openFacebookEntityRequested(facebookId);
 }
 
 void FriendsDBusInterface::openNotifications()
 {
+    Q_D(FriendsDBusInterface);
+    if (d->view) {
+        d->view->raise();
+    }
     emit openNotificationsRequested();
 }

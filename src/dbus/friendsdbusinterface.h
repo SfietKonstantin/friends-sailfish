@@ -34,6 +34,7 @@
 
 #include <QtCore/QObject>
 
+class QQuickView;
 class FriendsDBusInterfacePrivate;
 class FriendsDBusInterface : public QObject
 {
@@ -41,7 +42,7 @@ class FriendsDBusInterface : public QObject
 public:
     explicit FriendsDBusInterface(QObject *parent = 0);
     virtual ~FriendsDBusInterface();
-    void registerDBus();
+    void registerView(QQuickView *view);
 public Q_SLOTS:
     void openFacebookEntity(const QString &facebookId);
     void openNotifications();

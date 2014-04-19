@@ -265,19 +265,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     importSocial();
     importSocialExtra();
     FriendsDBusInterface dbusInterface;
-
-
-#ifdef DESKTOP
-    QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
-                     view.data(), &QQuickView::show);
-    QObject::connect(&dbusInterface, &FriendsDBusInterface::openNotifications,
-                     view.data(), &QQuickView::show);
-#else
-    QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
-                     view.data(), &QQuickView::showFullScreen);
-    QObject::connect(&dbusInterface, &FriendsDBusInterface::openNotifications,
-                     view.data(), &QQuickView::showFullScreen);
-#endif
+    dbusInterface.registerView(view.data());
     view->engine()->rootContext()->setContextProperty("FriendsDBusInterface", &dbusInterface);
 
     // Translations
@@ -300,11 +288,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     path = "qrc:/qml/friends.qml";
 #endif
     view->setSource(path);
-#ifndef DESKTOP
-    view->showFullScreen();
-#else
     view->show();
-#endif
 
     int result = app->exec();
     app->removeTranslator(translator.data());
