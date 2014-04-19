@@ -3,3 +3,4 @@ install
 *.pro.user*
 src/translations/*.ts
 .tx/friends*
+src/dbus/adaptor*

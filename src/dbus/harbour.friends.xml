@@ -4,6 +4,7 @@
     <method name="openFacebookEntity">
       <arg name="facebookId" type="s" direction="in"/>
     </method>
+    <method name="openNotifications" />
   </interface>
 </node>
 

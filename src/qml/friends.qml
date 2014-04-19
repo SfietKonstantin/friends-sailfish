@@ -128,6 +128,7 @@ ApplicationWindow {
 
     Connections {
         id: dbus
+        property string queuedAction
         property string queuedFacebookEntity
         target: FriendsDBusInterface
         onOpenFacebookEntityRequested: {
@@ -137,7 +138,17 @@ ApplicationWindow {
                                                     {"identifier": facebookId})
                 typeSolverPage.load()
             } else {
+                dbus.queuedAction = "facebookEntity"
                 dbus.queuedFacebookEntity = facebookId
+            }
+        }
+        onOpenNotificationsRequested: {
+            if (!pageStack.busy) {
+                pageStack.clear()
+                var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
+                notificationsPage.load()
+            } else {
+                dbus.queuedAction = "notifications"
             }
         }
     }
@@ -145,12 +156,18 @@ ApplicationWindow {
     Connections {
         target: pageStack
         onBusyChanged: {
-            if (!pageStack.busy && dbus.queuedFacebookEntity != "") {
+            if (!pageStack.busy && dbus.queuedAction != "") {
                 pageStack.clear()
-                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                    {"identifier": dbus.queuedFacebookEntity})
-                typeSolverPage.load()
-                dbus.queuedFacebookEntity = ""
+                if (dbus.queuedAction == "facebookEntity") {
+                    var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+                                                        {"identifier": dbus.queuedFacebookEntity})
+                    typeSolverPage.load()
+                    dbus.queuedFacebookEntity = ""
+                } else if (dbus.queuedAction == "notifications") {
+                    var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
+                    notificationsPage.load()
+                }
+                dbus.queuedAction = ""
             }
         }
     }

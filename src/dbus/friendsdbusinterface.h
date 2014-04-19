@@ -38,21 +38,16 @@ class FriendsDBusInterfacePrivate;
 class FriendsDBusInterface : public QObject
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "harbour.friends")
-    Q_CLASSINFO("D-Bus Introspection", ""
-    "  <interface name=\"harbour.friends\">\n"
-    "    <method name=\"openFacebookEntity\">\n"
-    "      <arg direction=\"in\" type=\"s\" name=\"facebookId\"/>\n"
-    "    </method>\n"
-    "  </interface>\n"
-    "")
 public:
     explicit FriendsDBusInterface(QObject *parent = 0);
     virtual ~FriendsDBusInterface();
+    void registerDBus();
 public Q_SLOTS:
     void openFacebookEntity(const QString &facebookId);
+    void openNotifications();
 Q_SIGNALS:
     void openFacebookEntityRequested(const QString &facebookId);
+    void openNotificationsRequested();
 protected:
     QScopedPointer<FriendsDBusInterfacePrivate> d_ptr;
 

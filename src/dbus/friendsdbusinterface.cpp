@@ -32,6 +32,7 @@
 #include "friendsdbusinterface.h"
 #include <QtCore/QDebug>
 #include <QtDBus/QDBusConnection>
+#include "adaptor.h"
 
 static const char *SERVICE = "harbour.friends";
 static const char *PATH = "/";
@@ -52,15 +53,16 @@ FriendsDBusInterfacePrivate::FriendsDBusInterfacePrivate(FriendsDBusInterface *q
 FriendsDBusInterface::FriendsDBusInterface(QObject *parent) :
     QObject(parent), d_ptr(new FriendsDBusInterfacePrivate(this))
 {
-    // Try registering service
+    new FriendsAdaptor(this);
     QDBusConnection connection = QDBusConnection::sessionBus();
-
     if (!connection.registerService(SERVICE)) {
-        qDebug() << "Failed to register DBus service. DBus won't be available";
+        qDebug() << "Failed to register DBus service";
         return;
     }
-
-    connection.registerObject(PATH, this, QDBusConnection::ExportAllSlots);
+    if (!connection.registerObject(PATH, this)) {
+        qDebug() << "Failed to register DBus object";
+        return;
+    }
 }
 
 FriendsDBusInterface::~FriendsDBusInterface()
@@ -70,7 +72,17 @@ FriendsDBusInterface::~FriendsDBusInterface()
     connection.unregisterService(SERVICE);
 }
 
+void FriendsDBusInterface::registerDBus()
+{
+
+}
+
 void FriendsDBusInterface::openFacebookEntity(const QString &facebookId)
 {
     emit openFacebookEntityRequested(facebookId);
+}
+
+void FriendsDBusInterface::openNotifications()
+{
+    emit openNotificationsRequested();
 }

@@ -265,11 +265,17 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     importSocial();
     importSocialExtra();
     FriendsDBusInterface dbusInterface;
+
+
 #ifdef DESKTOP
     QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
                      view.data(), &QQuickView::show);
+    QObject::connect(&dbusInterface, &FriendsDBusInterface::openNotifications,
+                     view.data(), &QQuickView::show);
 #else
     QObject::connect(&dbusInterface, &FriendsDBusInterface::openFacebookEntityRequested,
+                     view.data(), &QQuickView::showFullScreen);
+    QObject::connect(&dbusInterface, &FriendsDBusInterface::openNotifications,
                      view.data(), &QQuickView::showFullScreen);
 #endif
     view->engine()->rootContext()->setContextProperty("FriendsDBusInterface", &dbusInterface);
