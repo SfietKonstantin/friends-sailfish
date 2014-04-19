@@ -33,17 +33,38 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
+    CoverPlaceholder {
+        text: qsTrId("friends_app_name")
+    }
+
     FacebookImage {
         anchors.fill: parent
         url: me.cover.source
     }
 
     Label {
-        anchors.bottom: parent.bottom; anchors.bottomMargin: Theme.paddingMedium
+        anchors.top: parent.top; anchors.topMargin: Theme.paddingMedium
         anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         horizontalAlignment: Text.AlignHCenter
         text: me.name
+    }
+
+    CoverActionList {
+        iconBackground: true
+        CoverAction {
+            iconSource: "image://theme/icon-cover-message"
+            onTriggered: {
+                pageStack.clear()
+                var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"), {}, PageStackAction.Immediate)
+                page.load()
+                pageStack.push(Qt.resolvedUrl("PostDialog.qml"), {"object": me})
+            }
+        }
+//        CoverAction {
+//            iconSource: "image://theme/icon-cover-refresh"
+//            onTriggered: {}
+//        }
     }
 }
 

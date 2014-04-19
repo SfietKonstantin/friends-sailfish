@@ -37,7 +37,7 @@ import harbour.friends.social.extra 1.0
 
 ApplicationWindow {
     id: app
-    cover: Qt.resolvedUrl("CoverPage.qml")
+    cover: CoverPage {}
 
     function performLogin() {
         me.loaded = false
