@@ -32,15 +32,17 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
-import harbour.friends.social 1.0
-import harbour.friends.social.extra 1.0
+//import harbour.friends.social 1.0
+//import harbour.friends.social.extra 1.0
+import harbour.friends.microf 1.0
 
 ApplicationWindow {
     id: app
-    cover: Qt.resolvedUrl("CoverPage.qml")
+//    cover: Qt.resolvedUrl("CoverPage.qml")
 
     function performLogin() {
         me.loaded = false
+        tokenManager.clear()
         pageStack.clear()
         pageStack.push(loginPageComponent)
     }
@@ -53,22 +55,30 @@ ApplicationWindow {
         id: tokenManager
     }
 
-    SettingsManager {
-        id: settingsManager
-    }
-
-    FacebookExtra {
+    Facebook {
         id: facebook
         accessToken: tokenManager.token
-        //: Set the locale that will be used for Facebook API. See http://www.facebook.com/translations/FacebookLocales.xml for a list of locales supported by Facebook
-        //% "en_US"
-        locale: qsTrId("friends_locale")
         onAccessTokenChanged: {
             me.loadMe()
         }
     }
 
-    FacebookUser {
+//    SettingsManager {
+//        id: settingsManager
+//    }
+
+//    FacebookExtra {
+//        id: facebook
+//        accessToken: tokenManager.token
+//        //: Set the locale that will be used for Facebook API. See http://www.facebook.com/translations/FacebookLocales.xml for a list of locales supported by Facebook
+//        //% "en_US"
+//        locale: qsTrId("friends_locale")
+//        onAccessTokenChanged: {
+//            me.loadMe()
+//        }
+//    }
+
+    SocialContentItem {
         id: me
         property bool loaded: false
         function loadMe() {
@@ -76,101 +86,123 @@ ApplicationWindow {
                 return
             }
 
-            if ((status == SocialNetwork.Idle || status == SocialNetwork.Error) && !loaded) {
-                load()
-                loaded = true
+            if (me.status !== SocialNetworkStatus.Busy && !me.loaded) {
+                me.load()
+                me.loaded = true
             }
         }
-        onErrorMessageChanged: console.debug("==== Error ====\n" + errorMessage + "\n===============")
         socialNetwork: facebook
-        filter: FacebookItemFilter {
-            identifier: "me"
-            fields: "name,first_name,cover"
-        }
-
-        onStatusChanged: {
-            loadMe()
-        }
-
-        onLoaded: {
-            if (REQUESTED_FACEBOOK_ID != "") {
-                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                    {"identifier": REQUESTED_FACEBOOK_ID})
-                typeSolverPage.load()
-            }
+        request: FacebookUserSummaryRequest { userId: tokenManager.userId }
+        builder: FacebookItemBuilder {
+            properties: [
+                FacebookProperty { path: "name"; name: "name" },
+                FacebookProperty { path: "cover_photo/photo/imageHighRes/uri"; name: "cover" }
+            ]
         }
     }
+
+
+//    FacebookUser {
+//        id: me
+//        property bool loaded: false
+//        function loadMe() {
+//            if (!facebook.accessToken.length > 0) {
+//                return
+//            }
+
+//            if ((status == SocialNetwork.Idle || status == SocialNetwork.Error) && !loaded) {
+//                load()
+//                loaded = true
+//            }
+//        }
+//        onErrorMessageChanged: console.debug("==== Error ====\n" + errorMessage + "\n===============")
+//        socialNetwork: facebook
+//        filter: FacebookItemFilter {
+//            identifier: "me"
+//            fields: "name,first_name,cover"
+//        }
+
+//        onStatusChanged: {
+//            loadMe()
+//        }
+
+//        onLoaded: {
+//            if (REQUESTED_FACEBOOK_ID != "") {
+//                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+//                                                    {"identifier": REQUESTED_FACEBOOK_ID})
+//                typeSolverPage.load()
+//            }
+//        }
+//    }
 
     Component {
         id: loginPageComponent
         LoginPage {
             onConnected: {
-                var page = pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
-                page.load()
+                pageStack.replace(Qt.resolvedUrl("WaitingPage.qml"))
             }
         }
     }
 
     Component.onCompleted: {
         if (tokenManager.token.length > 0) {
-            if (REQUESTED_FACEBOOK_ID == "") {
-                var page = pageStack.push(Qt.resolvedUrl("NewsPage.qml"))
-                page.load()
-            }
+//            if (REQUESTED_FACEBOOK_ID == "") {
+                pageStack.push(Qt.resolvedUrl("WaitingPage.qml"))
+//            }
         } else {
             app.performLogin()
         }
     }
 
-    PostCommentHeaderComponent {
-        id: postHeaderComponent
-    }
+//    PostCommentHeaderComponent {
+//        id: postHeaderComponent
+//    }
 
-    Connections {
-        id: dbus
-        property string queuedAction
-        property string queuedFacebookEntity
-        target: FriendsDBusInterface
-        onOpenFacebookEntityRequested: {
-            if (!pageStack.busy) {
-                pageStack.clear()
-                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                    {"identifier": facebookId})
-                typeSolverPage.load()
-            } else {
-                dbus.queuedAction = "facebookEntity"
-                dbus.queuedFacebookEntity = facebookId
-            }
-        }
-        onOpenNotificationsRequested: {
-            if (!pageStack.busy) {
-                pageStack.clear()
-                var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
-                notificationsPage.load()
-            } else {
-                dbus.queuedAction = "notifications"
-            }
-        }
-    }
+//    Connections {
+//        id: dbus
+//        property string queuedAction
+//        property string queuedFacebookEntity
+//        target: FriendsDBusInterface
+//        onOpenFacebookEntityRequested: {
+//            if (!pageStack.busy) {
+//                pageStack.clear()
+//                var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+//                                                    {"identifier": facebookId})
+//                typeSolverPage.load()
+//            } else {
+//                dbus.queuedAction = "facebookEntity"
+//                dbus.queuedFacebookEntity = facebookId
+//            }
+//        }
+//        onOpenNotificationsRequested: {
+//            if (!pageStack.busy) {
+//                pageStack.clear()
+//                var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
+//                notificationsPage.load()
+//            } else {
+//                dbus.queuedAction = "notifications"
+//            }
+//        }
+//    }
 
-    Connections {
-        target: pageStack
-        onBusyChanged: {
-            if (!pageStack.busy && dbus.queuedAction != "") {
-                pageStack.clear()
-                if (dbus.queuedAction == "facebookEntity") {
-                    var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                        {"identifier": dbus.queuedFacebookEntity})
-                    typeSolverPage.load()
-                    dbus.queuedFacebookEntity = ""
-                } else if (dbus.queuedAction == "notifications") {
-                    var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
-                    notificationsPage.load()
-                }
-                dbus.queuedAction = ""
-            }
-        }
-    }
+//    Connections {
+//        target: pageStack
+//        onBusyChanged: {
+//            if (!pageStack.busy && dbus.queuedAction != "") {
+//                pageStack.clear()
+//                if (dbus.queuedAction == "facebookEntity") {
+//                    var typeSolverPage = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+//                                                        {"identifier": dbus.queuedFacebookEntity})
+//                    typeSolverPage.load()
+//                    dbus.queuedFacebookEntity = ""
+//                } else if (dbus.queuedAction == "notifications") {
+//                    var notificationsPage = pageStack.push(Qt.resolvedUrl("NotificationsPage.qml"))
+//                    notificationsPage.load()
+//                }
+//                dbus.queuedAction = ""
+//            }
+//        }
+//    }
 }
 
 

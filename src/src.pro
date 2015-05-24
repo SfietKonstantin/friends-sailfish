@@ -1,5 +1,4 @@
-include(social.pri)
-include(socialextra/socialextra.pri)
+include(microf.pri)
 include(login/login.pri)
 include(dbus/dbus.pri)
 include(../version.pri)
@@ -9,12 +8,12 @@ TARGET = harbour-friends
 TARGETPATH = /usr/bin
 DEPLOYMENT_PATH = /usr/share/$$TARGET
 DEFINES *= 'VERSION=\'\"$${VERSION}\"\''
-DEFINES *= 'CLIENT_ID_PLUGIN=\'\"$${DEPLOYMENT_PATH}/lib/libharbour-friends-clientidplugin.so\"\''
 include(data/data.pri)
 include(translations/translations.pri)
 
-QT += qml quick quick-private dbus
+QT += core core-private gui qml quick quick-private dbus
 
+CONFIG += c++11
 CONFIG += link_pkgconfig
 
 HEADERS += cachehelper_p.h \
@@ -23,7 +22,7 @@ HEADERS += cachehelper_p.h \
     settingsmanager.h \
     posthelper.h \
     footerhelper.h \
-    notificationshelper.h \
+#    notificationshelper.h \
     imagehelper.h \
     imagemanager.h \
     changelogmodel.h \
@@ -32,21 +31,23 @@ HEADERS += cachehelper_p.h \
     abstractdisplayhelper.h \
     userinfohelper.h \
     datehelper.h \
-    defines_p.h
+    defines_p.h \
+    friendsproxymodel.h
 
 SOURCES += main.cpp \
     tokenmanager.cpp \
     settingsmanager.cpp \
     posthelper.cpp \
     footerhelper.cpp \
-    notificationshelper.cpp \
+#    notificationshelper.cpp \
     imagehelper.cpp \
     imagemanager.cpp \
     changelogmodel.cpp \
     threadhelper.cpp \
     abstractdisplayhelper.cpp \
     userinfohelper.cpp \
-    datehelper.cpp
+    datehelper.cpp \
+    friendsproxymodel.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \
@@ -88,6 +89,11 @@ OTHER_FILES += qml/friends.qml \
     qml/UserInfoPage.qml \
     qml/GroupInfoPage.qml \
     qml/UsersPage.qml \
+    qml/FLabel.qml \
+    qml/FListButton.qml \
+    qml/WaitingPage.qml \
+    qml/DisconnectPage.qml \
+    qml/FriendsPage.qml
 
 target.path = $$TARGETPATH
 

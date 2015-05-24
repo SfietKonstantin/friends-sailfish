@@ -34,10 +34,10 @@
 #include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
 #include <QtGui/QGuiApplication>
+#include <QtQml/QQmlContext>
 #include <QtQml/QQmlEngine>
 #include <QtQuick/QQuickView>
 #include <QtCore/QPluginLoader>
-#include "clientidplugininterface.h"
 #include <QtCore/QDebug>
 
 
@@ -50,13 +50,15 @@
 #include "settingsmanager.h"
 #include "posthelper.h"
 #include "footerhelper.h"
-#include "notificationshelper.h"
+//#include "notificationshelper.h"
 #include "imagehelper.h"
 #include "imagemanager.h"
 #include "changelogmodel.h"
 #include "threadhelper.h"
 #include "userinfohelper.h"
 #include "datehelper.h"
+#include "plugin.h"
+#include "friendsproxymodel.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -67,44 +69,43 @@
 #include "dbus/friendsdbusinterface.h"
 
 // social plugin headers
-#include "socialnetworkinterface.h"
-#include "socialnetworkmodelinterface.h"
-#include "contentiteminterface.h"
-#include "identifiablecontentiteminterface.h"
-#include "filterinterface.h"
-//#include "sorterinterface.h"
-//#include "contentitemtypefilterinterface.h"
+//#include "socialnetworkinterface.h"
+//#include "socialnetworkmodelinterface.h"
+//#include "contentiteminterface.h"
+//#include "identifiablecontentiteminterface.h"
+//#include "filterinterface.h"
+////#include "sorterinterface.h"
+////#include "contentitemtypefilterinterface.h"
 
 // facebook implementation headers
-#include "facebook/facebookinterface.h"
-#include "facebook/facebookitemfilterinterface.h"
-#include "facebook/facebookrelateddatafilterinterface.h"
-#include "facebook/facebookobjectreferenceinterface.h"
-#include "facebook/facebookalbuminterface.h"
-#include "facebook/facebookcommentinterface.h"
-#include "facebook/facebookeventinterface.h"
-#include "facebook/facebookgroupinterface.h"
-#include "facebook/facebooknotificationinterface.h"
-#include "facebook/facebookpageinterface.h"
-#include "facebook/facebookphotointerface.h"
-#include "facebook/facebookpostinterface.h"
-#include "facebook/facebookuserinterface.h"
-#include "facebook/facebooklikeinterface.h"
+//#include "facebook/facebookinterface.h"
+//#include "facebook/facebookitemfilterinterface.h"
+//#include "facebook/facebookrelateddatafilterinterface.h"
+//#include "facebook/facebookobjectreferenceinterface.h"
+//#include "facebook/facebookalbuminterface.h"
+//#include "facebook/facebookcommentinterface.h"
+//#include "facebook/facebookeventinterface.h"
+//#include "facebook/facebookgroupinterface.h"
+//#include "facebook/facebooknotificationinterface.h"
+//#include "facebook/facebookpageinterface.h"
+//#include "facebook/facebookphotointerface.h"
+//#include "facebook/facebookpostinterface.h"
+//#include "facebook/facebookuserinterface.h"
+//#include "facebook/facebooklikeinterface.h"
 
 // Social extra features
-#include "socialextra/alphabeticalsorterinterface.h"
-#include "socialextra/newsfeedfilterinterface.h"
-#include "socialextra/facebookextrapostinterface.h"
-#include "socialextra/typesolverinterface.h"
-#include "socialextra/filterablefacebookrelateddatafilterinterface.h"
-#include "socialextra/eventfilterinterface.h"
-#include "socialextra/facebookextraeventinterface.h"
-#include "socialextra/facebookextrainterface.h"
-#include "socialextra/commentfilterinterface.h"
+//#include "socialextra/alphabeticalsorterinterface.h"
+//#include "socialextra/newsfeedfilterinterface.h"
+//#include "socialextra/facebookextrapostinterface.h"
+//#include "socialextra/typesolverinterface.h"
+//#include "socialextra/filterablefacebookrelateddatafilterinterface.h"
+//#include "socialextra/eventfilterinterface.h"
+//#include "socialextra/facebookextraeventinterface.h"
+//#include "socialextra/facebookextrainterface.h"
+//#include "socialextra/commentfilterinterface.h"
 
 static const char *URI = "harbour.friends";
-static const char *URI_SOCIAL = "harbour.friends.social";
-static const char *URI_SOCIAL_EXTRA = "harbour.friends.social.extra";
+static const char *URI_MICROF = "harbour.friends.microf";
 static const char *REASON = "Cannot be created";
 static const char *FRIENDS_QT = "friendsqt";
 static const char *PAYPAL_DONATE = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&"
@@ -131,12 +132,12 @@ static QObject * footerhelper_provider(QQmlEngine *engine, QJSEngine *scriptEngi
     return new FooterHelper();
 }
 
-static QObject * notificationshelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
-{
-    Q_UNUSED(engine)
-    Q_UNUSED(scriptEngine)
-    return new NotificationsHelper();
-}
+//static QObject * notificationshelper_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+//{
+//    Q_UNUSED(engine)
+//    Q_UNUSED(scriptEngine)
+//    return new NotificationsHelper();
+//}
 
 void importMisc()
 {
@@ -147,8 +148,8 @@ void importMisc()
     // qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
     qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
     qmlRegisterSingletonType<FooterHelper>(URI, 1, 0, "FooterHelper", footerhelper_provider);
-    qmlRegisterSingletonType<NotificationsHelper>(URI, 1, 0, "NotificationsHelper",
-                                           notificationshelper_provider);
+//    qmlRegisterSingletonType<NotificationsHelper>(URI, 1, 0, "NotificationsHelper",
+//                                           notificationshelper_provider);
     qmlRegisterType<PostHelper>(URI, 1, 0, "PostHelper");
     qmlRegisterType<ImageHelper>(URI, 1, 0, "ImageHelper");
     qmlRegisterSingletonType<ImageManager>(URI, 1, 0, "ImageManager", imagemanager_provider);
@@ -156,59 +157,31 @@ void importMisc()
     qmlRegisterType<ChangeLogModel>(URI, 1, 0, "ChangeLogModel");
     qmlRegisterType<ThreadHelper>(URI, 1, 0, "ThreadHelper");
     qmlRegisterType<UserInfoHelper>(URI, 1, 0, "UserInfoHelper");
+    qmlRegisterType<FriendsProxyModel>(URI, 1, 0, "FriendsProxyModel");
 }
 
-void importSocial()
+void importMicroF()
 {
-    // @uri harbour.friends.social
-    qmlRegisterUncreatableType<SocialNetworkInterface>(URI_SOCIAL, 1, 0, "SocialNetwork", REASON);
-    qmlRegisterUncreatableType<ContentItemInterface>(URI_SOCIAL, 1, 0, "ContentItem", REASON);
-    qmlRegisterUncreatableType<IdentifiableContentItemInterface>(URI_SOCIAL, 1, 0, "IdentifiableContentItem", REASON);
-    qmlRegisterUncreatableType<FilterInterface>(URI_SOCIAL, 1, 0, "Filter", REASON);
-    qmlRegisterUncreatableType<SorterInterface>(URI_SOCIAL, 1, 0, "Sorter", REASON);
-
-    // creatable types from the social plugin
-    qmlRegisterType<SocialNetworkModelInterface>(URI_SOCIAL, 1, 0, "SocialNetworkModel");
-
-    // creatable types from the facebook implementation
-    qmlRegisterType<FacebookInterface>(URI_SOCIAL, 1, 0, "Facebook");
-    qmlRegisterType<FacebookItemFilterInterface>(URI_SOCIAL, 1, 0, "FacebookItemFilter");
-    qmlRegisterType<FacebookRelatedDataFilterInterface>(URI_SOCIAL, 1, 0, "FacebookRelatedDataFilter");
-    qmlRegisterType<FacebookObjectReferenceInterface>(URI_SOCIAL, 1, 0, "FacebookObjectReference");
-    qmlRegisterType<FacebookAlbumInterface>(URI_SOCIAL, 1, 0, "FacebookAlbum");
-    qmlRegisterType<FacebookCommentInterface>(URI_SOCIAL, 1, 0, "FacebookComment");
-    qmlRegisterType<FacebookEventInterface>(URI_SOCIAL, 1, 0, "FacebookEvent");
-    qmlRegisterType<FacebookGroupInterface>(URI_SOCIAL, 1, 0, "FacebookGroup");
-    qmlRegisterType<FacebookNotificationInterface>(URI_SOCIAL, 1, 0, "FacebookNotification");
-    qmlRegisterType<FacebookPageInterface>(URI_SOCIAL, 1, 0, "FacebookPage");
-    qmlRegisterType<FacebookPhotoInterface>(URI_SOCIAL, 1, 0, "FacebookPhoto");
-    qmlRegisterType<FacebookPostInterface>(URI_SOCIAL, 1, 0, "FacebookPost");
-    qmlRegisterType<FacebookUserInterface>(URI_SOCIAL, 1, 0, "FacebookUser");
-
-    qmlRegisterType<FacebookCoverInterface>(URI_SOCIAL, 1, 0, "FacebookCover");
-    qmlRegisterType<FacebookLikeInterface>(URI_SOCIAL, 1, 0, "FacebookLike");
-    qmlRegisterType<FacebookNameTagInterface>(URI_SOCIAL, 1, 0, "FacebookNameTag");
-    qmlRegisterType<FacebookPhotoImageInterface>(URI_SOCIAL, 1, 0, "FacebookPhotoImage");
-    qmlRegisterType<FacebookPhotoTagInterface>(URI_SOCIAL, 1, 0, "FacebookPhotoTag");
-    qmlRegisterType<FacebookPostActionInterface>(URI_SOCIAL, 1, 0, "FacebookPostAction");
-    qmlRegisterType<FacebookPostPropertyInterface>(URI_SOCIAL, 1, 0, "FacebookPostProperty");
-    qmlRegisterType<FacebookUserCoverInterface>(URI_SOCIAL, 1, 0, "FacebookUserCover");
-    qmlRegisterType<FacebookUserPictureInterface>(URI_SOCIAL, 1, 0, "FacebookUserPicture");
-}
-
-void importSocialExtra()
-{
-    // @uri harbour.friends.social.extra
-    qmlRegisterType<AlphabeticalSorterInterface>(URI_SOCIAL_EXTRA, 1, 0, "AlphabeticalSorter");
-    qmlRegisterType<NewsFeedFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "NewsFeedFilter");
-    qmlRegisterType<FacebookExtraPostInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraPost");
-    qmlRegisterType<TypeSolverInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolver");
-    qmlRegisterType<TypeSolverFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "TypeSolverFilter");
-    qmlRegisterType<FilterableFacebookRelatedDataFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "FilterableFacebookRelatedDataFilter");
-    qmlRegisterType<EventFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "EventFilter");
-    qmlRegisterType<FacebookExtraEventInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtraEvent");
-    qmlRegisterType<FacebookExtraInterface>(URI_SOCIAL_EXTRA, 1, 0, "FacebookExtra");
-    qmlRegisterType<CommentFilterInterface>(URI_SOCIAL_EXTRA, 1, 0, "CommentFilter");
+    // @uri harbour.friends.microf
+    qmlRegisterUncreatableType<SocialNetwork>(URI_MICROF, 1, 0, "SocialNetwork", REASON);
+    qmlRegisterUncreatableType<SocialNetworkStatus>(URI_MICROF, 1, 0, "SocialNetworkStatus", REASON);
+    qmlRegisterUncreatableType<SocialNetworkError>(URI_MICROF, 1, 0, "SocialNetworkError", REASON);
+    qmlRegisterUncreatableType<SocialObject>(URI_MICROF, 1, 0, "SocialObject", REASON);
+    qmlRegisterUncreatableType<SocialRequest>(URI_MICROF, 1, 0, "SocialRequest", REASON);
+    qmlRegisterUncreatableType<SocialContentItemBuilder>(URI_MICROF, 1, 0, "SocialContentItemBuilder", REASON);
+    qmlRegisterUncreatableType<SocialContentModelBuilder>(URI_MICROF, 1, 0, "SocialContentModelBuilder", REASON);
+    qmlRegisterType<SocialContentItem>(URI_MICROF, 1, 0, "SocialContentItem");
+    qmlRegisterType<SocialContentModel>(URI_MICROF, 1, 0, "SocialContentModel");
+    qmlRegisterType<Facebook>(URI_MICROF, 1, 0, "Facebook");
+    qmlRegisterType<FacebookLoginRequest>(URI_MICROF, 1, 0, "FacebookLoginRequest");
+    qmlRegisterType<FacebookLoginContentBuilder>(URI_MICROF, 1, 0, "FacebookLoginContentBuilder");
+    qmlRegisterType<FacebookLogoutRequest>(URI_MICROF, 1, 0, "FacebookLogoutRequest");
+    qmlRegisterType<FacebookConfirmationContentBuilder>(URI_MICROF, 1, 0, "FacebookConfirmationContentBuilder");
+    qmlRegisterType<FacebookProperty>(URI_MICROF, 1, 0, "FacebookProperty");
+    qmlRegisterType<FacebookItemBuilder>(URI_MICROF, 1, 0, "FacebookItemBuilder");
+    qmlRegisterType<FacebookModelBuilder>(URI_MICROF, 1, 0, "FacebookModelBuilder");
+    qmlRegisterType<FacebookFriendListRequest>(URI_MICROF, 1, 0, "FacebookFriendListRequest");
+    qmlRegisterType<FacebookUserSummaryRequest>(URI_MICROF, 1, 0, "FacebookUserSummaryRequest");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])
@@ -225,45 +198,18 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 
     QObject::connect(view->engine(), SIGNAL(quit()), QCoreApplication::instance(), SLOT(quit()));
 
-    // Client id
-    QString clientId;
-#ifndef DESKTOP
-    QPluginLoader pluginLoader (CLIENT_ID_PLUGIN);
-    if (pluginLoader.load()) {
-        QObject *plugin = pluginLoader.instance();
-        ClientIdPluginInterface *castedPlugin = qobject_cast<ClientIdPluginInterface *>(plugin);
-        if (castedPlugin) {
-            clientId = castedPlugin->clientId();
-            qDebug() << "Client id loaded";
-        }
-    }
-#else
-    if (app->arguments().count() <= 2) {
-        clientId = app->arguments().at(1);
-        qDebug() << "Client id loaded: " << clientId;
-    }
-#endif
-
-    view->engine()->rootContext()->setContextProperty("CLIENT_ID", clientId);
     view->engine()->rootContext()->setContextProperty("VERSION", VERSION);
     view->engine()->rootContext()->setContextProperty("FRIENDS_QT", FRIENDS_QT);
     view->engine()->rootContext()->setContextProperty("PAYPAL_DONATE", PAYPAL_DONATE);
 
     QString requestedFacebookId;
-#ifndef DESKTOP
     if (app->arguments().count() == 2) {
         requestedFacebookId = app->arguments().at(1);
     }
-#else
-    if (app->arguments().count() == 3) {
-        requestedFacebookId = app->arguments().at(2);
-    }
-#endif
     view->engine()->rootContext()->setContextProperty("REQUESTED_FACEBOOK_ID", requestedFacebookId);
 
     importMisc();
-    importSocial();
-    importSocialExtra();
+    importMicroF();
     FriendsDBusInterface dbusInterface;
     dbusInterface.registerView(view.data());
     view->engine()->rootContext()->setContextProperty("FriendsDBusInterface", &dbusInterface);
@@ -278,7 +224,6 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
 #endif
     engineeringEnglish->load("friends-engineering-english", translationPath);
     translator->load(QLocale(), "friends", "_", translationPath);
-
 
     app->installTranslator(engineeringEnglish.data());
     app->installTranslator(translator.data());

@@ -31,7 +31,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.friends.social 1.0
+import harbour.friends.microf 1.0
 
 Item {
     id: container
@@ -62,22 +62,21 @@ Item {
 
         function testError() {
             switch (flickable.errorType) {
-            case SocialNetwork.NetworkError:
+            case SocialNetworkError.Network:
                 flickable._errorRecoveryMode = "reload_internet"
                 break
-            case SocialNetwork.SocialNetworkError:
-                var errorMessage = flickable._modelError ? model.errorMessage : item.errorMessage
-                var code = errorMessage.match(/Code: (\d+)/)[1];
-                if (code == 190 || code == 102) {
+            case SocialNetworkError.SocialNetwork:
+                var errorCode = _modelError ? model.errorCode : (_itemError ? item.errorCode : "")
+                if (errorCode === "190" || errorCode === "102") {
                     flickable._errorRecoveryMode = "reconnect"
                 } else {
                     flickable._errorRecoveryMode = "reload_facebook"
                 }
                 break
-            case SocialNetwork.DataError:
+            case SocialNetworkError.Data:
                 flickable._errorRecoveryMode = "bad"
                 break
-            case SocialNetwork.InternalError:
+            case SocialNetworkError.Internal:
                 flickable._errorRecoveryMode = "bad"
                 break
             default:
@@ -86,19 +85,19 @@ Item {
             }
         }
 
-        property bool _itemBusy: item != null ? item.status == SocialNetwork.Busy : false
-        property bool _modelBusy: model != null ? (model.status == SocialNetwork.Busy
-                                                   && model.count == 0) : false
-        property bool _itemError: item != null ? item.status == SocialNetwork.Error : false
-        property bool _modelError: model != null ? (model.status == SocialNetwork.Error
-                                                   && model.count == 0) : false
+        property bool _itemBusy: item != null ? item.status === SocialNetworkStatus.Busy : false
+        property bool _modelBusy: model != null ? (model.status === SocialNetworkStatus.Busy
+                                                   && model.count === 0) : false
+        property bool _itemError: item != null ? item.status === SocialNetworkStatus.Error : false
+        property bool _modelError: model != null ? (model.status === SocialNetworkStatus.Error
+                                                   && model.count === 0) : false
         property string _errorRecoveryMode: ""
 
         property bool busy: (container.busy && !error) || _itemBusy || _modelBusy
         property bool error: !container.busy && (_itemError || _modelError)
 
         // Currently, the model have higher priority on error
-        property int errorType: _modelError ? model.error : (_itemError ? item.error : SocialNetwork.NoError)
+        property int errorType: _modelError ? model.error : (_itemError ? item.error : SocialNetworkError.No)
         onErrorTypeChanged: testError()
 
         anchors.fill: parent
@@ -157,15 +156,15 @@ Item {
         anchors.bottom: parent.bottom; anchors.horizontalCenter: parent.horizontalCenter
         text: getText()
         onClicked: {
-            if (flickable._errorRecoveryMode == "reload_internet"
-                || flickable._errorRecoveryMode == "reload_facebook") {
+            if (flickable._errorRecoveryMode === "reload_internet"
+                || flickable._errorRecoveryMode === "reload_facebook") {
                 if (flickable._itemError) {
-                    if (item.status == SocialNetwork.Idle || item.status == SocialNetwork.Error) {
+                    if (!flickable._itemBusy) {
                         item.load()
                     }
                 }
                 if (flickable._modelError) {
-                    if (model.status == SocialNetwork.Idle || model.status == SocialNetwork.Error) {
+                    if (!flickable.modelBusy) {
                         model.load()
                     }
                 }

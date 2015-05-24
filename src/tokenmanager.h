@@ -38,16 +38,32 @@ class TokenManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString token READ token WRITE setToken NOTIFY tokenChanged)
+    Q_PROPERTY(QString userId READ userId WRITE setUserId NOTIFY userIdChanged)
+    Q_PROPERTY(QString deviceId READ deviceId WRITE setDeviceId NOTIFY deviceIdChanged)
+    Q_PROPERTY(QString machineId READ machineId WRITE setMachineId NOTIFY machineIdChanged)
 public:
     explicit TokenManager(QObject *parent = 0);
     QString token() const;
-public slots:
     void setToken(const QString &token);
-    void disconnect();
+    QString userId() const;
+    void setUserId(const QString &userId);
+    QString deviceId() const;
+    void setDeviceId(const QString &deviceId);
+    QString machineId() const;
+    void setMachineId(const QString &machineId);
+public slots:
+    void clear();
 signals:
     void tokenChanged();
+    void userIdChanged();
+    void deviceIdChanged();
+    void machineIdChanged();
 private:
+    static QString generateMachineId();
     QString m_token;
+    QString m_userId;
+    QString m_deviceId;
+    QString m_machineId;
 };
 
 #endif // TOKENMANAGER_H

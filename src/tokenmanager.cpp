@@ -30,21 +30,27 @@
  */
 
 #include "tokenmanager.h"
-#include <QtCore/QSettings>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
-#include <QtCore/QStandardPaths>
 #include <QtCore/QDir>
-#include <QtCore/QCoreApplication>
-#include <QtCore/QCoreApplication>
+#include <QtCore/QSettings>
+#include <QtCore/QStandardPaths>
+#include <QtCore/QUuid>
 #include "defines_p.h"
 
 static const char *TOKEN_KEY = "login/token";
+static const char *USERID_KEY = "login/userId";
+static const char *DEVICEID_KEY = "login/deviceId";
+static const char *MACHINEID_KEY = "login/machineId";
 
 TokenManager::TokenManager(QObject *parent) :
     QObject(parent)
 {
     QSettings settings (ORGANIZATION_NAME, APPLICATION_NAME);
     setToken(settings.value(TOKEN_KEY, QString()).toString());
+    setUserId(settings.value(USERID_KEY, QString()).toString());
+    setDeviceId(settings.value(DEVICEID_KEY, generateMachineId()).toString());
+    setMachineId(settings.value(MACHINEID_KEY, QString()).toString());
 }
 
 QString TokenManager::token() const
@@ -52,7 +58,62 @@ QString TokenManager::token() const
     return m_token;
 }
 
-void TokenManager::disconnect()
+void TokenManager::setToken(const QString &token)
+{
+    if (m_token != token) {
+        m_token = token;
+        emit tokenChanged();
+        QSettings settings;
+        settings.setValue(TOKEN_KEY, token);
+    }
+}
+
+QString TokenManager::userId() const
+{
+    return m_userId;
+}
+
+void TokenManager::setUserId(const QString &userId)
+{
+    if (m_userId != userId) {
+        m_userId = userId;
+        emit userIdChanged();
+        QSettings settings;
+        settings.setValue(USERID_KEY, userId);
+    }
+}
+
+QString TokenManager::deviceId() const
+{
+    return m_deviceId;
+}
+
+void TokenManager::setDeviceId(const QString &deviceId)
+{
+    if (m_deviceId != deviceId) {
+        m_deviceId = deviceId;
+        emit deviceIdChanged();
+        QSettings settings;
+        settings.setValue(DEVICEID_KEY, deviceId);
+    }
+}
+
+QString TokenManager::machineId() const
+{
+    return m_machineId;
+}
+
+void TokenManager::setMachineId(const QString &machineId)
+{
+    if (m_machineId != machineId) {
+        m_machineId = machineId;
+        emit machineIdChanged();
+        QSettings settings;
+        settings.setValue(MACHINEID_KEY, machineId);
+    }
+}
+
+void TokenManager::clear()
 {
     setToken(QString());
 
@@ -68,15 +129,9 @@ void TokenManager::disconnect()
 
     QDir dataDir (sharePath);
     dataDir.removeRecursively();
-
 }
 
-void TokenManager::setToken(const QString &token)
+QString TokenManager::generateMachineId()
 {
-    if (m_token != token) {
-        m_token = token;
-        emit tokenChanged();
-        QSettings settings;
-        settings.setValue(TOKEN_KEY, token);
-    }
+    return QUuid::createUuid().toString().remove("{").remove("}");
 }

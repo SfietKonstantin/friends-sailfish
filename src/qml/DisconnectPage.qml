@@ -30,31 +30,27 @@
  */
 
 import QtQuick 2.0
-import harbour.friends 1.0
 import Sailfish.Silica 1.0
+import harbour.friends.microf 1.0
 
-Image {
-    id: image
-    property string url
-    smooth: true
-    asynchronous: true
-    fillMode: Image.PreserveAspectCrop
-    opacity: 0
-    states: State {
-        name: "visible"; when: image.status === Image.Ready
-        PropertyChanges {
-            target: image
-            opacity: 1
+Page {
+    id: containter
+
+    SocialContentItem {
+        id: loginItem
+        socialNetwork: facebook
+        request: FacebookLogoutRequest {}
+        builder: FacebookConfirmationContentBuilder {}
+        onFinished: {
+            if (ok) {
+                tokenManager.clear()
+                app.performLogin()
+            }
         }
-    }
-    Behavior on opacity {
-        FadeAnimation {}
+        Component.onCompleted: load()
     }
 
-    ImageHelper {
-        image: image
-        cached: true
-        imageManager: ImageManager
-        source: image.url
+    StateIndicator {
+        item: loginItem
     }
 }

@@ -45,5 +45,10 @@
         <file>qml/UserInfoPage.qml</file>
         <file>qml/GroupInfoPage.qml</file>
         <file>qml/UsersPage.qml</file>
+        <file>qml/FLabel.qml</file>
+        <file>qml/FListButton.qml</file>
+        <file>qml/WaitingPage.qml</file>
+        <file>qml/DisconnectPage.qml</file>
+        <file>qml/FriendsPage.qml</file>
     </qresource>
 </RCC>

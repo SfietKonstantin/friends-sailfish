@@ -31,23 +31,36 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.friends 1.0
+import harbour.friends.microf 1.0
 
 Page {
     id: container
-//    onRejected: Qt.quit()
-//    canAccept: false
     signal connected()
+    property bool busy: loginItem.status == SocialNetworkStatus.Busy
+    property bool error: loginItem.status == SocialNetworkStatus.Error
+    property bool loggedIn: tokenManager.token !== ""
 
-//    DialogHeader {
-//        id: header
-//        //: Action displayed on the cancel button for the login dialog
-//        //% "Quit"
-//        cancelText: qsTrId("friends_login_quit")
-//        //: Action displayed on the accept button for the login dialog. This button is never active, and should display "Ignore". It cannot be triggered.
-//        //% "Ignore"
-//        acceptText: qsTrId("friends_login_ignore")
-//    }
+    SocialContentItem {
+        id: loginItem
+        socialNetwork: facebook
+        request: FacebookLoginRequest {
+            email: email.text
+            password: password.text
+            deviceId: tokenManager.deviceId
+            machineId: tokenManager.machineId
+        }
+        builder: FacebookLoginContentBuilder {}
+        onFinished: {
+            if (ok) {
+                if (loginItem.object.machine_id !== null) {
+                    tokenManager.machineId = loginItem.object.machine_id
+                }
+                tokenManager.userId = loginItem.object.uid
+                tokenManager.token = loginItem.object.access_token
+                container.connected()
+            }
+        }
+    }
 
     PageHeader {
         id: header
@@ -56,81 +69,86 @@ Page {
         title: qsTrId("friends_login_title")
     }
 
-    LoginManager {
-        id: loginManager
-        uiType: LoginManager.Mobile
-        clientId: CLIENT_ID
-        friendsPermissions: LoginManager.FriendsAboutMe
-                            + LoginManager.FriendsActivities
-                            + LoginManager.FriendsBirthday
-                            + LoginManager.FriendsEducationHistory
-                            + LoginManager.FriendsEvents
-                            + LoginManager.FriendsGroups
-                            + LoginManager.FriendsHometowm
-                            + LoginManager.FriendsInterests
-                            + LoginManager.FriendsLikes
-                            + LoginManager.FriendsLocation
-                            + LoginManager.FriendsNotes
-                            + LoginManager.FriendsPhotos
-                            + LoginManager.FriendsQuestions
-                            + LoginManager.FriendsRelationships
-                            + LoginManager.FriendsRelationshipDetails
-                            + LoginManager.FriendsReligionPolitics
-                            + LoginManager.FriendsStatus
-                            + LoginManager.FriendsSubscriptions
-                            + LoginManager.FriendsVideos
-                            + LoginManager.FriendsWebsite
-                            + LoginManager.FriendsWorkHistory
-        userPermissions: LoginManager.UserAboutMe
-                         + LoginManager.UserActivities
-                         + LoginManager.UserBirthday
-                         + LoginManager.UserEducationHistory
-                         + LoginManager.UserEvents
-                         + LoginManager.UserGroups
-                         + LoginManager.UserHometown
-                         + LoginManager.UserInterests
-                         + LoginManager.UserLikes
-                         + LoginManager.UserLocation
-                         + LoginManager.UserNotes
-                         + LoginManager.UserPhotos
-                         + LoginManager.UserQuestions
-                         + LoginManager.UserRelationships
-                         + LoginManager.UserRelationshipDetails
-                         + LoginManager.UserReligionPolitics
-                         + LoginManager.UserStatus
-                         + LoginManager.UserSubscriptions
-                         + LoginManager.UserVideos
-                         + LoginManager.UserWebsite
-                         + LoginManager.UserWorkHistory
-                         + LoginManager.Email
-        extendedPermissions: LoginManager.ReadFriendList
-                             + LoginManager.ReadInsights
-                             + LoginManager.ReadMailbox
-                             + LoginManager.ReadRequests
-                             + LoginManager.ReadStream
-                             + LoginManager.XmppLogin
-                             + LoginManager.AdsManagement
-                             + LoginManager.CreateEvent
-                             + LoginManager.ManageFriendList
-                             + LoginManager.ManageNotifications
-                             + LoginManager.UserOnlinePresence
-                             + LoginManager.FriendsOnlinePresence
-                             + LoginManager.PublishCheckins
-                             + LoginManager.PublishStream
-                             + LoginManager.RsvpEvent
+    FLabel {
+        id: label
+        anchors.top: header.bottom; anchors.topMargin: Theme.paddingLarge
+        anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
+        anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
+        //: Text indicating that this page asks credentials to connect to Facebook using Friends client
+        //% "Connect to Facebook using Friends client"
+        text: qsTrId("friends_login_indication")
+    }
 
-        Component.onCompleted: login()
-        onUrlRequested: webView.url = url
-        onLoginSucceeded: {
-            tokenManager.token = token
-            container.connected()
+    TextField {
+        id: email
+        anchors.top: label.bottom; anchors.topMargin: Theme.paddingLarge
+        anchors.left: parent.left; anchors.right: parent.right
+        enabled: !container.busy && !loggedIn
+        //: The email field used to connect to Facebook
+        //% "Email"
+        label: qsTrId("friends_login_email")
+        placeholderText: qsTrId("friends_login_email")
+    }
+    TextField {
+        id: password
+        anchors.top: email.bottom
+        anchors.left: parent.left; anchors.right: parent.right
+        enabled: !container.busy && !loggedIn
+        //: The password field used to connect to Facebook
+        //% "Password"
+        label: qsTrId("friends_login_password")
+        placeholderText: qsTrId("friends_login_password")
+        echoMode: TextInput.Password
+    }
+
+    Button {
+        id: connectButton
+        anchors.top: password.bottom; anchors.topMargin: Theme.paddingMedium
+        anchors.horizontalCenter: parent.horizontalCenter
+        enabled: !container.busy && email.text !== "" && password.text !== "" && !loggedIn
+        //: The button used to connect to Facebook
+        //% "Connect"
+        text: qsTrId("friends_login_button_connect")
+        onClicked: loginItem.load()
+    }
+
+    BusyIndicator {
+        visible: container.busy
+        running: visible
+        size: BusyIndicatorSize.Small
+        anchors.right: connectButton.left; anchors.rightMargin: Theme.paddingMedium
+        anchors.verticalCenter: connectButton.verticalCenter
+    }
+
+    FLabel {
+        id: errorLabel
+        anchors.top: connectButton.bottom; anchors.topMargin: Theme.paddingLarge
+        anchors.left: parent.left; anchors.leftMargin: Theme.paddingLarge
+        anchors.right: parent.right; anchors.rightMargin: Theme.paddingLarge
+        color: "red"
+        visible: container.error
+        text: {
+            switch (loginItem.error) {
+            case SocialNetworkError.Network:
+                //: Label informing about a network error
+                //% "Please check your network connection and try again"
+                return qsTrId("friends_login_label_error_network")
+            case SocialNetworkError.SocialNetwork:
+                return loginItem.errorString
+            case SocialNetworkError.No:
+                return ""
+            default:
+                //: Label informing about an internal / unknown error
+                //% "Friends has encountered an internal error. You might need to update Friends"
+                return qsTrId("friends_login_label_error_internal")
+            }
         }
     }
 
-    SilicaWebView {
-        id: webView
-        anchors.top: header.bottom; anchors.bottom: parent.bottom
-        anchors.left: parent.left; anchors.right: parent.right
-        onUrlChanged: loginManager.checkUrl(url)
+    FListButton {
+        anchors.bottom: parent.bottom
+        //: The button used to display more information about the client
+        //% "More information"
+        text: qsTrId("friends_login_button_info")
     }
 }

@@ -31,7 +31,7 @@
 
 import QtQuick 2.0
 import Sailfish.Silica 1.0
-import harbour.friends.social 1.0
+import harbour.friends.microf 1.0
 
 Page {
     id: container
@@ -44,15 +44,15 @@ Page {
         //% "Disconnecting"
         remorse.execute(qsTrId("friends_menu_remorse_disconnect"),
                         function() {
-                            tokenManager.disconnect()
-                            app.performLogin()
+                            pageStack.clear()
+                            pageStack.push(Qt.resolvedUrl("DisconnectPage.qml"))
                         })
     }
     RemorsePopup { id: remorse }
 
     SilicaListView {
         anchors.fill: parent
-        visible: me.status == SocialNetwork.Idle
+        visible: me.status === SocialNetworkStatus.Ready
         model: ListModel {
             ListElement {
                 //: Menu entry to show the Home page, with the user's news feed
@@ -64,91 +64,82 @@ Page {
                 //: Menu entry to show the "me" page, with the user's page
                 //% "Me"
                 text: QT_TRID_NOOP("friends_menu_me")
-                page: "UserPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the friends page, with the user's friends
                 //% "Friends"
                 text: QT_TRID_NOOP("friends_menu_friends")
-                page: "UsersPage.qml"
+                page: "FriendsPage.qml"
             }
             ListElement {
                 //: Menu entry to show the albums page, with the user's albums
                 //% "Albums"
                 text: QT_TRID_NOOP("friends_menu_albums")
-                page: "AlbumsPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the photos page, with the photos where the user has been tagged.
                 //% "Photos"
                 text: QT_TRID_NOOP("friends_menu_photos")
-                page: "PhotosPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the events page, with the events where the user is invited.
                 //% "Events"
                 text: QT_TRID_NOOP("friends_menu_events")
-                page: "EventsPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the groups page, with list of groups where the user is.
                 //% "Groups"
                 text: QT_TRID_NOOP("friends_menu_groups")
-                page: "GroupsPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the pages page, with list of pages the user liked.
                 //% "Pages"
                 text: QT_TRID_NOOP("friends_menu_pages")
-                page: "PagesPage.qml"
+                page: ""
             }
             ListElement {
                 //: Menu entry to show the notifications page, where the user can read notifications.
                 //% "Notifications"
                 text: QT_TRID_NOOP("friends_menu_notifications")
-                page: "NotificationsPage.qml"
+                page: ""
             }
         }
         header: CoverHeader {
             anchors.left: parent.left; anchors.right: parent.right
-            name: me.name
-            coverUrl: me.cover != null ? me.cover.source : ""
+            name: me.object.name !== null ? me.object.name : ""
+            coverUrl: me.object.cover !== null ? me.object.cover : ""
         }
 
         delegate: BackgroundItem {
-            enabled: model.page != ""
+            enabled: model.page !== ""
             Label {
                 anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTrId(model.text)
-                color: model.page != "" ? Theme.primaryColor : Theme.secondaryColor
+                color: model.page !== "" ? Theme.primaryColor : Theme.secondaryColor
             }
             onClicked: {
-                if (model.page == "") {
+                if (model.page === "") {
                     return
                 }
 
                 // Give the illusion that we changed the root page, but that
                 // we are still in the menu
                 pageStack.clear()
-                var properties = {"identifier": facebook.currentUserIdentifier}
-                if (model.page = "UsersPage.qml") {
+                var properties = {"userId": tokenManager.userId}
+                if (model.page === "FriendsPage.qml") {
                     //: Title of the page showing the list of friends
                     //% "Friends"
                     properties.title = qsTrId("friends_friends_title")
-                    properties.identifier = facebook.currentUserIdentifier
-                    properties.connection = Facebook.Friends
-                }
-                if (model.page = "PhotosPage.qml") {
-                    //: Specific title for the photos page, since it can display "Photos of someone" and the album's title. This title translates the "Photos of someone". %1 contains the name of the user who have the photos.
-                    //% "Photos of %1"
-                    properties.name = qsTrId("friends_photos_of_someone").arg(me.firstName)
-                    properties.isUserPhotos = true
                 }
 
-                var page = pageStack.push(Qt.resolvedUrl(model.page), properties)
-                page.load()
+                pageStack.push(Qt.resolvedUrl(model.page), properties)
                 pageStack.navigateForward(PageStackAction.Immediate)
                 pageStack.navigateBack()
             }

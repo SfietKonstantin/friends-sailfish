@@ -30,31 +30,29 @@
  */
 
 import QtQuick 2.0
-import harbour.friends 1.0
 import Sailfish.Silica 1.0
+import harbour.friends.microf 1.0
 
-Image {
-    id: image
-    property string url
-    smooth: true
-    asynchronous: true
-    fillMode: Image.PreserveAspectCrop
-    opacity: 0
-    states: State {
-        name: "visible"; when: image.status === Image.Ready
-        PropertyChanges {
-            target: image
-            opacity: 1
+Page {
+    id: container
+    onStatusChanged: {
+        if (status === PageStatus.Active) {
+            stateIndicator.loadNews()
         }
     }
-    Behavior on opacity {
-        FadeAnimation {}
+
+    Connections {
+        target: me
+        onFinished: stateIndicator.loadNews()
     }
 
-    ImageHelper {
-        image: image
-        cached: true
-        imageManager: ImageManager
-        source: image.url
+    StateIndicator {
+        id: stateIndicator
+        function loadNews() {
+            if (container.status === PageStatus.Active && me.status === SocialNetworkStatus.Ready) {
+                pageStack.replace(Qt.resolvedUrl("NewsPage.qml"))
+            }
+        }
+        item: me
     }
 }

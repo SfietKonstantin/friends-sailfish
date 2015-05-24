@@ -1,3 +1,6 @@
 [submodule "social"]
 	path = social
 	url = https://github.com/SfietKonstantin/nemo-qml-plugin-social.git
+[submodule "microf"]
+	path = microf
+	url = https://github.com/SfietKonstantin/microf.git
