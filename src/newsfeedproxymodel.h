@@ -45,9 +45,9 @@ public:
 signals:
     void filterAdsChanged();
 protected:
-    bool isAutoLoad() const override;
-    QList<QVariantMap> filterData(const QList<QVariantMap> &input) override;
-    QString section(const QVariantMap &object) const override;
+    bool isAutoLoad() const Q_DECL_OVERRIDE;
+    QList<QVariantMap> filterData(const QList<QVariantMap> &input) Q_DECL_OVERRIDE;
+    QString section(const QVariantMap &object) const Q_DECL_OVERRIDE;
 private:
     static QVariantList getActors(const QVariantMap &object);
     static QSet<QString> getNegativeFeedback(const QVariantMap &object);

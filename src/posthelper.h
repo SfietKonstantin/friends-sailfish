@@ -84,7 +84,7 @@ signals:
     void captionChanged();
     void descriptionChanged();
 protected:
-    void performCreationImpl() override;
+    void performCreationImpl() Q_DECL_OVERRIDE;
 private:
     static QVariant getVariantProperty(const QVariant &object, const QString &key);
     static QVariant getVariantProperty(const QVariantMap &object, const QString &key);
