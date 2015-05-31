@@ -34,6 +34,7 @@
 
 static const char *WELCOME_DONE_KEY = "welcome/done";
 static const char *VERSION_KEY = "version/version";
+static const char *FILTERADS_KEY = "newsfeed/filterads";
 
 SettingsManager::SettingsManager(QObject *parent) :
     QObject(parent), m_welcomeDone(false)
@@ -41,6 +42,7 @@ SettingsManager::SettingsManager(QObject *parent) :
     QSettings settings;
     setWelcomeDone(settings.value(WELCOME_DONE_KEY, false).toBool());
     setVersion(settings.value(VERSION_KEY, QString()).toString());
+    setFilterAds(settings.value(FILTERADS_KEY, false).toBool());
 }
 
 bool SettingsManager::welcomeDone() const
@@ -70,5 +72,20 @@ void SettingsManager::setVersion(const QString &version)
         emit versionChanged();
         QSettings settings;
         settings.setValue(VERSION_KEY, version);
+    }
+}
+
+bool SettingsManager::filterAds() const
+{
+    return m_filterAds;
+}
+
+void SettingsManager::setFilterAds(bool filterAds)
+{
+    if (m_filterAds != filterAds) {
+        m_filterAds = filterAds;
+        emit filterAdsChanged();
+        QSettings settings;
+        settings.setValue(FILTERADS_KEY, filterAds);
     }
 }

@@ -32,70 +32,31 @@
 #ifndef FRIENDSPROXYMODEL_H
 #define FRIENDSPROXYMODEL_H
 
-#include <QtCore/QAbstractListModel>
-#include <socialcontentmodel.h>
+#include <abstractproxymodel.h>
 
-class FriendsProxyModel : public QAbstractListModel, public QQmlParserStatus
+class FriendsProxyModel : public AbstractProxyModel
 {
     Q_OBJECT
-    Q_INTERFACES(QQmlParserStatus)
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
     Q_PROPERTY(QString filter READ filter WRITE setFilter NOTIFY filterChanged)
-    Q_PROPERTY(SocialContentModel * model READ model WRITE setModel NOTIFY modelChanged)
-    Q_PROPERTY(SocialNetworkStatus::type status READ status NOTIFY statusChanged)
-    Q_PROPERTY(SocialNetworkError::type error READ error NOTIFY errorChanged)
-    Q_PROPERTY(QString errorMessage READ errorMessage NOTIFY errorMessageChanged)
-    Q_PROPERTY(QString errorCode READ errorCode NOTIFY errorCodeChanged)
 public:
-    enum Roles {
-        ObjectRole = Qt::UserRole + 1,
-        SectionRole
-    };
     explicit FriendsProxyModel(QObject *parent = 0);
-    QHash<int, QByteArray> roleNames() const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
-    void classBegin() override;
-    void componentComplete() override;
-    int count() const;
     QString filter() const;
     void setFilter(const QString &filter);
-    SocialContentModel * model() const;
-    void setModel(SocialContentModel *model);
-    SocialNetworkStatus::type status() const;
-    SocialNetworkError::type error() const;
-    QString errorMessage() const;
-    QString errorCode() const;
-public slots:
-    void load();
 signals:
-    void countChanged();
     void filterChanged();
-    void modelChanged();
-    void statusChanged();
-    void errorChanged();
-    void errorMessageChanged();
-    void errorCodeChanged();
-    void finished(bool ok);
+protected:
+    bool isAutoLoad() const override;
+    QList<QVariantMap> filterData(const QList<QVariantMap> &input) override;
+    QString section(const QVariantMap &object) const override;
 private:
-    static QString getFriendName(const QObject *object);
+    static QString getName(const QVariantMap &object);
     static QString normalizeString(const QString &string);
-    static bool sortObjects(const QObject *left, const QObject *right);
-    void setStatus();
-    void setProperties(bool ok);
-    void clear();
-    void loadData();
-    SocialContentModel *m_model;
-    QList<QObject *>m_data;
-    SocialNetworkStatus::type m_status;
-    SocialNetworkError::type m_error;
-    QString m_errorMessage;
-    QString m_errorCode;
-
+    static bool sortObjects(const QVariantMap &left, const QVariantMap &right);
     QString m_filter;
 
-private slots:
-    void slotFinished(bool ok);
+//private slots:
+//    void slotFinished(bool ok);
+
 };
 
 

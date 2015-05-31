@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Lucien XU <sfietkonstantin@free.fr>
+ * Copyright (C) 2014 Lucien XU <sfietkonstantin@free.fr>
  *
  * You may use this file under the terms of the BSD license as follows:
  *
@@ -29,33 +29,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#ifndef SETTINGSMANAGER_H
-#define SETTINGSMANAGER_H
+#ifndef NEWSFEEDPROXYMODEL_H
+#define NEWSFEEDPROXYMODEL_H
 
-#include <QtCore/QObject>
+#include "abstractproxymodel.h"
 
-class SettingsManager : public QObject
+class NewsFeedProxyModel : public AbstractProxyModel
 {
     Q_OBJECT
-    Q_PROPERTY(bool welcomeDone READ welcomeDone WRITE setWelcomeDone NOTIFY welcomeDoneChanged)
-    Q_PROPERTY(QString version READ version WRITE setVersion NOTIFY versionChanged)
     Q_PROPERTY(bool filterAds READ filterAds WRITE setFilterAds NOTIFY filterAdsChanged)
 public:
-    explicit SettingsManager(QObject *parent = 0);
-    bool welcomeDone() const;
-    void setWelcomeDone(bool welcomeDone);
-    QString version() const;
-    void setVersion(const QString &version);
+    explicit NewsFeedProxyModel(QObject *parent = 0);
     bool filterAds() const;
     void setFilterAds(bool filterAds);
 signals:
-    void welcomeDoneChanged();
-    void versionChanged();
     void filterAdsChanged();
+protected:
+    bool isAutoLoad() const override;
+    QList<QVariantMap> filterData(const QList<QVariantMap> &input) override;
+    QString section(const QVariantMap &object) const override;
 private:
-    bool m_welcomeDone;
-    QString m_version;
-    bool m_filterAds;
+    static QVariantList getActors(const QVariantMap &object);
+    static QSet<QString> getNegativeFeedback(const QVariantMap &object);
+    bool m_filterAd;
 };
 
-#endif // SETTINGSMANAGER_H
+#endif // NEWSFEEDPROXYMODEL_H

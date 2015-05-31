@@ -39,6 +39,7 @@ Item {
     property bool busy: false
     property var item: null
     property var model: null
+    onBusyChanged: console.debug("Busy > "+ busy)
 
     BusyIndicator {
         visible: flickable.busy

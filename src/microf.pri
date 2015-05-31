@@ -8,8 +8,6 @@ HEADERS += \
     ../microf/src/lib/socialnetwork_p.h \
     ../microf/src/lib/socialnetworkstatus.h \
     ../microf/src/lib/socialnetworkerror.h \
-    ../microf/src/lib/socialobject.h \
-    ../microf/src/lib/socialobject_p.h \
     ../microf/src/lib/socialrequest.h \
     ../microf/src/lib/socialrequest_p.h \
     ../microf/src/lib/isocialcontent.h \
@@ -31,17 +29,20 @@ HEADERS += \
     ../microf/src/lib/facebook/facebookconfirmationcontentbuilder.h \
     ../microf/src/lib/facebook/facebookproperty.h \
     ../microf/src/lib/facebook/facebookproperty_p.h \
+    ../microf/src/lib/facebook/facebooklistproperty.h \
     ../microf/src/lib/facebook/facebookitembuilder.h \
+    ../microf/src/lib/facebook/abstractfacebookmodelbuilder.h \
     ../microf/src/lib/facebook/facebookmodelbuilder.h \
     ../microf/src/lib/facebook/facebookfriendlistrequest.h \
     ../microf/src/lib/facebook/facebookusersummaryrequest.h \
+    ../microf/src/lib/facebook/facebooknewsfeedrequest.h \
+    ../microf/src/lib/facebook/facebooknewsfeedmodelbuilder.h \
     ../microf/src/lib/plugin.h
 
 SOURCES += \
     ../microf/src/lib/socialnetwork.cpp \
     ../microf/src/lib/socialnetworkstatus.cpp \
     ../microf/src/lib/socialnetworkerror.cpp \
-    ../microf/src/lib/socialobject.cpp \
     ../microf/src/lib/socialrequest.cpp \
     ../microf/src/lib/socialcontentitem.cpp \
     ../microf/src/lib/socialcontentitembuilder.cpp \
@@ -54,7 +55,11 @@ SOURCES += \
     ../microf/src/lib/facebook/facebooklogoutrequest.cpp \
     ../microf/src/lib/facebook/facebookconfirmationcontentbuilder.cpp \
     ../microf/src/lib/facebook/facebookproperty.cpp \
+    ../microf/src/lib/facebook/facebooklistproperty.cpp \
     ../microf/src/lib/facebook/facebookitembuilder.cpp \
+    ../microf/src/lib/facebook/abstractfacebookmodelbuilder.cpp \
     ../microf/src/lib/facebook/facebookmodelbuilder.cpp \
     ../microf/src/lib/facebook/facebookfriendlistrequest.cpp \
-    ../microf/src/lib/facebook/facebookusersummaryrequest.cpp
+    ../microf/src/lib/facebook/facebookusersummaryrequest.cpp \
+    ../microf/src/lib/facebook/facebooknewsfeedrequest.cpp \
+    ../microf/src/lib/facebook/facebooknewsfeedmodelbuilder.cpp

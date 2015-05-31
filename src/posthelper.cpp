@@ -31,7 +31,6 @@
 
 #include "posthelper.h"
 #include "footerhelper.h"
-#include "objecthelper_p.h"
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QDebug>
@@ -41,39 +40,19 @@
 static const int ELIDE_COUNT = 50;
 
 static const char *ITEM_TEMPLATE = "item----%1";
-static const char *URL_TEMPLATE = "url----%1";
-static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#  ?=&\\+]*)";
-
-bool tagLesser(QObject *tag1, QObject *tag2)
-{
-    return getValue(tag1, "offset").toInt() < getValue(tag2, "offset").toInt();
-}
+//static const char *URL_TEMPLATE = "url----%1";
+//static const char *URL_REGEXP = "((http://|https://|www.)[a-zA-Z0-9_\\.\\-~%/#  ?=&\\+]*)";
 
 PostHelper::PostHelper(QObject *parent)
     : AbstractDisplayHelper(parent)
-    , m_to(0)
-    , m_fancy(true)
-    , m_story(false)
+    , m_fancy(false)
+    , m_fullHeader(true)
     , m_hasContent(false)
     , m_hasFooter(true)
 {
 }
 
-QObject * PostHelper::to() const
-{
-    return m_to;
-}
-
-void PostHelper::setTo(QObject *to)
-{
-    if (m_to != to) {
-        m_to = to;
-        emit toChanged();
-        create();
-    }
-}
-
-bool PostHelper::fancy() const
+bool PostHelper::isFancy() const
 {
     return m_fancy;
 }
@@ -83,13 +62,27 @@ void PostHelper::setFancy(bool fancy)
     if (m_fancy != fancy) {
         m_fancy = fancy;
         emit fancyChanged();
-        create();
     }
+}
+
+bool PostHelper::isFullHeader() const
+{
+    return m_fullHeader;
+}
+
+QString PostHelper::profilePicture() const
+{
+    return m_profilePicture;
 }
 
 QString PostHelper::header() const
 {
     return m_header;
+}
+
+QDateTime PostHelper::timestamp() const
+{
+    return m_timestamp;
 }
 
 QString PostHelper::footer() const
@@ -105,11 +98,6 @@ QString PostHelper::message() const
 QString PostHelper::via() const
 {
     return m_via;
-}
-
-bool PostHelper::isStory() const
-{
-    return m_story;
 }
 
 bool PostHelper::hasContent() const
@@ -137,202 +125,234 @@ QString PostHelper::description() const
     return m_description;
 }
 
-void PostHelper::clearMessageTags()
-{
-    m_messageTags.clear();
-    create();
-}
-
-void PostHelper::addMessageTag(QObject *messageTag)
-{
-    m_messageTags.append(messageTag);
-    create();
-}
-
-void PostHelper::clearStoryTags()
-{
-    m_storyTags.clear();
-    create();
-}
-
-void PostHelper::addStoryTag(QObject *storyTag)
-{
-    m_storyTags.append(storyTag);
-    create();
-}
-
 void PostHelper::performCreationImpl()
 {
-    QString story = getValue(object(), "story").toString();
-    if (!story.isEmpty()) {
-        m_story = true;
-        emit storyChanged();
+    const QVariantList &actors = object().value("actors").toList();
+    QVariant actor;
+    QString name;
+    QString profilePicture;
+    if (!actors.isEmpty()) {
+        actor = actors.first();
+        name = getProperty(actor, "name").trimmed();
+    }
+    // Check if we should have a full header
+    // We do not display full header when we have multiple actors, or when the actor and
+    // the attached post actor is the same
+    bool fullHeader = true;
+    if (actors.count() > 1) {
+        fullHeader = false;
     } else {
-        m_story = false;
-        emit storyChanged();
+        const QVariantList attachedStoryActors = object().value("attachedStoryActors").toList();
+        for (const QVariant &attachedStoryActor : attachedStoryActors) {
+            if (name == getProperty(attachedStoryActor, "name")) {
+                fullHeader = false;
+                break;
+            }
+        }
     }
 
-    performHeaderCreation();
+    if (m_fullHeader != fullHeader) {
+        m_fullHeader = fullHeader;
+        emit fullHeaderChanged();
+    }
 
-    QString message = getValue(object(), !m_story ? "message" : "story").toString();
+    if (fullHeader) {
+        profilePicture = getProperty(actor, "profilePicture");
+    }
+
+    if (m_profilePicture != profilePicture) {
+        m_profilePicture = profilePicture;
+        emit profilePictureChanged();
+    }
+
+    performHeaderCreation(actor.toMap());
+
+    QDateTime timestamp = QDateTime::fromTime_t(getVariantProperty(object(), "timestamp").toUInt());
+    if (m_timestamp != timestamp) {
+        m_timestamp = timestamp;
+        emit timestampChanged();
+    }
+
+    QString message = getProperty(object(), "message").trimmed();
     message.replace("<", "&lt;");
     message.replace(">", "&gt;");
     message.replace("\n", "<br/>");
 
     if (!m_fancy) {
         message = elideText(message, 120);
-    } else {
-        QList<QObject *> tags;
-        if (!m_story) {
-            tags = m_messageTags;
-        } else {
-            tags = m_storyTags;
-        }
-
-        QString remainingMessage = message;
-        message.clear();
-        std::sort(tags.begin(), tags.end(), tagLesser);
-
-        int previousOffset = 0;
-        foreach (QObject *tag, tags) {
-            int offset = getValue(tag, "offset").toInt();
-            int length = getValue(tag, "length").toInt();
-            QString identifier = getValue(tag, "userIdentifier").toString();
-            QString name = getValue(tag, "userName").toString();
-
-            message.append(remainingMessage.left(offset - previousOffset));
-            remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
-            previousOffset = offset + length;
-            message.append(decorate(name, QString(ITEM_TEMPLATE).arg(identifier)));
-        }
-        message.append(remainingMessage);
-
-        QRegularExpression urlRegExp(URL_REGEXP);
-        remainingMessage = message;
-        message.clear();
-
-        QRegularExpressionMatchIterator i = urlRegExp.globalMatch(remainingMessage);
-        int previousIndex = 0;
-        while (i.hasNext()) {
-            QRegularExpressionMatch match = i.next();
-            QString captured = match.captured(1);
-
-
-            QString url = captured;
-            if (!url.startsWith("http://")) {
-                url.prepend("http://");
-            }
-            message.append(remainingMessage.mid(previousIndex, match.capturedStart(1) - previousIndex));
-            previousIndex = match.capturedEnd(1);
-
-            message.append(decorate(captured, QString(URL_TEMPLATE).arg(url)));
-        }
-        message.append(remainingMessage.right(remainingMessage.length() - previousIndex));
     }
+//    } else {
+//        QList<QObject *> tags;
+//        if (!m_story) {
+//            tags = m_messageTags;
+//        } else {
+//            tags = m_storyTags;
+//        }
 
+//        QString remainingMessage = message;
+//        message.clear();
+//        std::sort(tags.begin(), tags.end(), tagLesser);
+
+//        int previousOffset = 0;
+//        foreach (QObject *tag, tags) {
+//            int offset = getValue(tag, "offset").toInt();
+//            int length = getValue(tag, "length").toInt();
+//            QString identifier = getValue(tag, "userIdentifier").toString();
+//            QString name = getValue(tag, "userName").toString();
+
+//            message.append(remainingMessage.left(offset - previousOffset));
+//            remainingMessage = remainingMessage.remove(0, offset + length - previousOffset);
+//            previousOffset = offset + length;
+//            message.append(decorate(name, QString(ITEM_TEMPLATE).arg(identifier)));
+//        }
+//        message.append(remainingMessage);
+
+//        QRegularExpression urlRegExp(URL_REGEXP);
+//        remainingMessage = message;
+//        message.clear();
+
+//        QRegularExpressionMatchIterator i = urlRegExp.globalMatch(remainingMessage);
+//        int previousIndex = 0;
+//        while (i.hasNext()) {
+//            QRegularExpressionMatch match = i.next();
+//            QString captured = match.captured(1);
+
+
+//            QString url = captured;
+//            if (!url.startsWith("http://")) {
+//                url.prepend("http://");
+//            }
+//            message.append(remainingMessage.mid(previousIndex, match.capturedStart(1) - previousIndex));
+//            previousIndex = match.capturedEnd(1);
+
+//            message.append(decorate(captured, QString(URL_TEMPLATE).arg(url)));
+//        }
+//        message.append(remainingMessage.right(remainingMessage.length() - previousIndex));
+//    }
+
+    if (!message.isEmpty()) {
+        message = standardize(message);
+    }
     if (m_message != message) {
         m_message = message;
         emit messageChanged();
     }
 
-    // Has content ?
-    bool newHasContent = !getValue(object(), "picture").isNull() && !getValue(object(), "name").isNull();
-    if (m_hasContent != newHasContent) {
-        m_hasContent = newHasContent;
-        emit hasContentChanged();
-    }
+//    // Has content ?
+//    bool newHasContent = !getValue(object(), "picture").isNull() && !getValue(object(), "name").isNull();
+//    if (m_hasContent != newHasContent) {
+//        m_hasContent = newHasContent;
+//        emit hasContentChanged();
+//    }
 
     // Footer
-    bool hasFooter = true;
-    QVariantMap data = getValue(object(), "data").toMap();
-    if (!data.contains("likes") || !data.contains("comments")) {
-        hasFooter = false;
-    }
+    QVariant likesVariant = getVariantProperty(object(), "likes");
+    bool hasFooter = !likesVariant.isNull();
 
     if (m_hasFooter != hasFooter) {
         m_hasFooter = hasFooter;
         emit hasFooterChanged();
     }
 
-    int likesCount = getValue(object(), "likesCount").toInt();
-    int commentsCount = getValue(object(), "commentsCount").toInt();
-    QString footer = FooterHelper::makeFooter(likesCount, commentsCount);
+    int likes = likesVariant.toInt();
+    int comments = getVariantProperty(object(), "comments").toInt();
+    QString footer = FooterHelper::makeFooter(likes, comments);
 
     if (m_footer != footer) {
         m_footer = footer;
         emit footerChanged();
     }
 
-    // Name / description / content
-    bool havePicture = !getValue(object(), "picture").toUrl().isEmpty();
-    QString name = elideText(getValue(object(), "name").toString(), havePicture ? 30 : 70);
-    QString caption = elideText(getValue(object(), "caption").toString(), havePicture ? 50 : 120);
-    QString description = elideText(getValue(object(), "description").toString(), havePicture ? 50 : 120);
+//    // Name / description / content
+//    bool havePicture = !getValue(object(), "picture").toUrl().isEmpty();
+//    QString name = elideText(getValue(object(), "name").toString(), havePicture ? 30 : 70);
+//    QString caption = elideText(getValue(object(), "caption").toString(), havePicture ? 50 : 120);
+//    QString description = elideText(getValue(object(), "description").toString(), havePicture ? 50 : 120);
 
-    if (m_name != name) {
-        m_name = name;
-        emit nameChanged();
-    }
-    if (m_caption != caption) {
-        m_caption = caption;
-        emit captionChanged();
-    }
-    if (m_description != description) {
-        m_description = description;
-        emit descriptionChanged();
-    }
+//    if (m_name != name) {
+//        m_name = name;
+//        emit nameChanged();
+//    }
+//    if (m_caption != caption) {
+//        m_caption = caption;
+//        emit captionChanged();
+//    }
+//    if (m_description != description) {
+//        m_description = description;
+//        emit descriptionChanged();
+//    }
 
 
-    // Via
-    QString via;
-    QObject *application = getValue(object(), "application").value<QObject *>();
-    QString applicationName;
-    if (application) {
-        applicationName = getValue(application, "objectName").toString();
-    }
-    if (!applicationName.isEmpty()) {
-        //: Translate the "via <appication> footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.
-        //% "Via %1"
-        via = qtTrId("friends_posthelper_via").arg(applicationName);
-    }
-    if (m_via != via) {
-        m_via = via;
-        emit viaChanged();
-    }
-
+//    // Via
+//    QString via;
+//    QObject *application = getValue(object(), "application").value<QObject *>();
+//    QString applicationName;
+//    if (application) {
+//        applicationName = getValue(application, "objectName").toString();
+//    }
+//    if (!applicationName.isEmpty()) {
+//        //: Translate the "via <appication> footer that is used to indicate the application used to post this post. %1 is replaced by the name of the application.
+//        //% "Via %1"
+//        via = qtTrId("friends_posthelper_via").arg(applicationName);
+//    }
+//    if (m_via != via) {
+//        m_via = via;
+//        emit viaChanged();
+//    }
 }
 
-void PostHelper::performHeaderCreation()
+QVariant PostHelper::getVariantProperty(const QVariant &object, const QString &key)
 {
-    // Process from and to
-    QString toIdentifier;
-    QString toName;
-    if (m_to) {
-        toIdentifier = getValue(m_to, "objectIdentifier").toString();
-        toName = getValue(m_to, "objectName").toString();
-    }
-    QString toHeader;
-    if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
-        QString elidedTo = elideText(toName, ELIDE_COUNT);
-        toHeader = decorate(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
-    }
-    QString elidedFrom;
-    QString fromName;
-    QString fromIdentifier;
+    return getVariantProperty(object.toMap(), key);
+}
 
-    QObject *from = getValue(object(), "from").value<QObject *>();
-    fromName = getValue(from, "objectName").toString();
-    fromIdentifier = getValue(from, "objectIdentifier").toString();
-    if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
-        elidedFrom = elideText(fromName, ELIDE_COUNT);
+QVariant PostHelper::getVariantProperty(const QVariantMap &object, const QString &key)
+{
+    return object.value(key);
+}
+
+QString PostHelper::getProperty(const QVariant &object, const QString &key)
+{
+    return getVariantProperty(object.toMap(), key).toString();
+}
+
+QString PostHelper::getProperty(const QVariantMap &object, const QString &key)
+{
+    return getVariantProperty(object, key).toString();
+}
+
+void PostHelper::performHeaderCreation(const QVariantMap &actor)
+{
+    QString header;
+    QString title = getProperty(object(), "title");
+    if (!title.isEmpty()) {
+        header = standardize(title);
     } else {
-        elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
-    }
-    QString header = decorate(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
+        // Process from and to
+        QString toIdentifier = getProperty(object(), "toId");
+        QString toName = getProperty(object(), "toName");
+        QString toHeader;
+        bool toEmpty = toIdentifier.isEmpty() || toName.isEmpty();
+        if (!toEmpty) {
+            QString elidedTo = elideText(toName, ELIDE_COUNT);
+            toHeader = decorate(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
+        }
 
-    if (!toIdentifier.isEmpty() && !toName.isEmpty()) {
-        header.append(" &gt; ");
-        header.append(toHeader);
+        QString fromName = getProperty(actor, "name");
+        QString fromIdentifier = getProperty(actor, "id");
+        QString elidedFrom;
+        if (!toEmpty) {
+            elidedFrom = elideText(fromName, ELIDE_COUNT);
+        } else {
+            elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
+        }
+        header = decorate(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
+
+        if (!toEmpty) {
+            header.append(" &gt; ");
+            header.append(toHeader);
+            header = standardize(header);
+        }
     }
 
     if (m_header != header) {

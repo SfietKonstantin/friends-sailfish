@@ -38,14 +38,14 @@
 class PostHelper : public AbstractDisplayHelper
 {
     Q_OBJECT
-    Q_PROPERTY(QObject * to READ to WRITE setTo NOTIFY toChanged)
-    Q_PROPERTY(bool fancy READ fancy WRITE setFancy NOTIFY fancyChanged)
-
+    Q_PROPERTY(bool fancy READ isFancy WRITE setFancy NOTIFY fancyChanged)
+    Q_PROPERTY(bool fullHeader READ isFullHeader NOTIFY fullHeaderChanged)
+    Q_PROPERTY(QString profilePicture READ profilePicture NOTIFY profilePictureChanged)
     Q_PROPERTY(QString header READ header NOTIFY headerChanged)
+    Q_PROPERTY(QDateTime timestamp READ timestamp NOTIFY timestampChanged)
     Q_PROPERTY(QString footer READ footer NOTIFY footerChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString via READ via NOTIFY viaChanged)
-    Q_PROPERTY(bool story READ isStory NOTIFY storyChanged)
     Q_PROPERTY(bool hasContent READ hasContent NOTIFY hasContentChanged)
     Q_PROPERTY(bool hasFooter READ hasFooter NOTIFY hasFooterChanged)
 
@@ -54,58 +54,59 @@ class PostHelper : public AbstractDisplayHelper
     Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
 public:
     explicit PostHelper(QObject *parent = 0);
-    QObject * to() const;
-    void setTo(QObject *to);
-    bool fancy() const;
-    void setFancy(bool fancy);
 
+    bool isFancy() const;
+    void setFancy(bool fancy);
+    bool isFullHeader() const;
+    QString profilePicture() const;
     QString header() const;
+    QDateTime timestamp() const;
     QString footer() const;
     QString message() const;
     QString via() const;
-    bool isStory() const;
     bool hasContent() const;
     bool hasFooter() const;
     QString name() const;
     QString caption() const;
     QString description() const;
-public slots:
-    void clearMessageTags();
-    void addMessageTag(QObject *messageTag);
-    void clearStoryTags();
-    void addStoryTag(QObject *storyTag);
 signals:
-    void toChanged();
     void fancyChanged();
-    void footerChanged();
+    void fullHeaderChanged();
+    void profilePictureChanged();
+    void timestampChanged();
     void headerChanged();
+    void footerChanged();
     void messageChanged();
     void viaChanged();
-    void storyChanged();
     void hasContentChanged();
     void hasFooterChanged();
     void nameChanged();
     void captionChanged();
     void descriptionChanged();
 protected:
-    void performCreationImpl();
+    void performCreationImpl() override;
 private:
-    void performHeaderCreation();
+    static QVariant getVariantProperty(const QVariant &object, const QString &key);
+    static QVariant getVariantProperty(const QVariantMap &object, const QString &key);
+    static QString getProperty(const QVariant &object, const QString &key);
+    static QString getProperty(const QVariantMap &object, const QString &key);
+    void performHeaderCreation(const QVariantMap &actor);
     static QString elideText(const QString &text, int count);
-    QObject *m_to;
     bool m_fancy;
-    QList<QObject *> m_messageTags;
-    QList<QObject *> m_storyTags;
+    bool m_fullHeader;
+    QString m_profilePicture;
     QString m_header;
     QString m_footer;
     QString m_message;
     QString m_via;
-    bool m_story;
     bool m_hasContent;
     bool m_hasFooter;
     QString m_name;
     QString m_caption;
     QString m_description;
+    QDateTime m_timestamp;
 };
+
+
 
 #endif // POSTHELPER_H

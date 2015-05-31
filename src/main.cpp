@@ -54,11 +54,12 @@
 #include "imagehelper.h"
 #include "imagemanager.h"
 #include "changelogmodel.h"
-#include "threadhelper.h"
-#include "userinfohelper.h"
+//#include "threadhelper.h"
+//#include "userinfohelper.h"
 #include "datehelper.h"
 #include "plugin.h"
 #include "friendsproxymodel.h"
+#include "newsfeedproxymodel.h"
 
 // Login manager headers
 #include "login/loginmanager.h"
@@ -67,42 +68,6 @@
 //#include "imageloader/imageloader.h"
 
 #include "dbus/friendsdbusinterface.h"
-
-// social plugin headers
-//#include "socialnetworkinterface.h"
-//#include "socialnetworkmodelinterface.h"
-//#include "contentiteminterface.h"
-//#include "identifiablecontentiteminterface.h"
-//#include "filterinterface.h"
-////#include "sorterinterface.h"
-////#include "contentitemtypefilterinterface.h"
-
-// facebook implementation headers
-//#include "facebook/facebookinterface.h"
-//#include "facebook/facebookitemfilterinterface.h"
-//#include "facebook/facebookrelateddatafilterinterface.h"
-//#include "facebook/facebookobjectreferenceinterface.h"
-//#include "facebook/facebookalbuminterface.h"
-//#include "facebook/facebookcommentinterface.h"
-//#include "facebook/facebookeventinterface.h"
-//#include "facebook/facebookgroupinterface.h"
-//#include "facebook/facebooknotificationinterface.h"
-//#include "facebook/facebookpageinterface.h"
-//#include "facebook/facebookphotointerface.h"
-//#include "facebook/facebookpostinterface.h"
-//#include "facebook/facebookuserinterface.h"
-//#include "facebook/facebooklikeinterface.h"
-
-// Social extra features
-//#include "socialextra/alphabeticalsorterinterface.h"
-//#include "socialextra/newsfeedfilterinterface.h"
-//#include "socialextra/facebookextrapostinterface.h"
-//#include "socialextra/typesolverinterface.h"
-//#include "socialextra/filterablefacebookrelateddatafilterinterface.h"
-//#include "socialextra/eventfilterinterface.h"
-//#include "socialextra/facebookextraeventinterface.h"
-//#include "socialextra/facebookextrainterface.h"
-//#include "socialextra/commentfilterinterface.h"
 
 static const char *URI = "harbour.friends";
 static const char *URI_MICROF = "harbour.friends.microf";
@@ -155,9 +120,10 @@ void importMisc()
     qmlRegisterSingletonType<ImageManager>(URI, 1, 0, "ImageManager", imagemanager_provider);
     qmlRegisterUncreatableType<QQuickImageBase>(URI, 1, 0, "QQuickImageBase", REASON);
     qmlRegisterType<ChangeLogModel>(URI, 1, 0, "ChangeLogModel");
-    qmlRegisterType<ThreadHelper>(URI, 1, 0, "ThreadHelper");
-    qmlRegisterType<UserInfoHelper>(URI, 1, 0, "UserInfoHelper");
+//    qmlRegisterType<ThreadHelper>(URI, 1, 0, "ThreadHelper");
+//    qmlRegisterType<UserInfoHelper>(URI, 1, 0, "UserInfoHelper");
     qmlRegisterType<FriendsProxyModel>(URI, 1, 0, "FriendsProxyModel");
+    qmlRegisterType<NewsFeedProxyModel>(URI, 1, 0, "NewsFeedProxyModel");
 }
 
 void importMicroF()
@@ -166,7 +132,6 @@ void importMicroF()
     qmlRegisterUncreatableType<SocialNetwork>(URI_MICROF, 1, 0, "SocialNetwork", REASON);
     qmlRegisterUncreatableType<SocialNetworkStatus>(URI_MICROF, 1, 0, "SocialNetworkStatus", REASON);
     qmlRegisterUncreatableType<SocialNetworkError>(URI_MICROF, 1, 0, "SocialNetworkError", REASON);
-    qmlRegisterUncreatableType<SocialObject>(URI_MICROF, 1, 0, "SocialObject", REASON);
     qmlRegisterUncreatableType<SocialRequest>(URI_MICROF, 1, 0, "SocialRequest", REASON);
     qmlRegisterUncreatableType<SocialContentItemBuilder>(URI_MICROF, 1, 0, "SocialContentItemBuilder", REASON);
     qmlRegisterUncreatableType<SocialContentModelBuilder>(URI_MICROF, 1, 0, "SocialContentModelBuilder", REASON);
@@ -178,10 +143,13 @@ void importMicroF()
     qmlRegisterType<FacebookLogoutRequest>(URI_MICROF, 1, 0, "FacebookLogoutRequest");
     qmlRegisterType<FacebookConfirmationContentBuilder>(URI_MICROF, 1, 0, "FacebookConfirmationContentBuilder");
     qmlRegisterType<FacebookProperty>(URI_MICROF, 1, 0, "FacebookProperty");
+    qmlRegisterType<FacebookListProperty>(URI_MICROF, 1, 0, "FacebookListProperty");
     qmlRegisterType<FacebookItemBuilder>(URI_MICROF, 1, 0, "FacebookItemBuilder");
     qmlRegisterType<FacebookModelBuilder>(URI_MICROF, 1, 0, "FacebookModelBuilder");
+    qmlRegisterType<FacebookNewsFeedModelBuilder>(URI_MICROF, 1, 0, "FacebookNewsFeedModelBuilder");
     qmlRegisterType<FacebookFriendListRequest>(URI_MICROF, 1, 0, "FacebookFriendListRequest");
     qmlRegisterType<FacebookUserSummaryRequest>(URI_MICROF, 1, 0, "FacebookUserSummaryRequest");
+    qmlRegisterType<FacebookNewsFeedRequest>(URI_MICROF, 1, 0, "FacebookNewsFeedRequest");
 }
 
 Q_DECL_EXPORT int main(int argc, char *argv[])

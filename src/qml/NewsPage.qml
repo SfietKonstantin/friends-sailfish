@@ -32,8 +32,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
-//import harbour.friends.social 1.0
-//import harbour.friends.social.extra 1.0
+import harbour.friends.microf 1.0
 
 Page {
     id: container
@@ -43,13 +42,149 @@ Page {
         }
     }
 
-    Flickable {
+    StateIndicator {
+        model: model
+    }
+
+    SilicaListView {
+        id: view
         anchors.fill: parent
+        visible: model.status === SocialNetworkStatus.Ready || model.count > 0
+        currentIndex: -1
+        spacing: Theme.paddingMedium
+        model: NewsFeedProxyModel {
+            id: model
+            filterAds: settingsManager.filterAds
+            model: SocialContentModel {
+                socialNetwork: facebook
+                request: FacebookNewsFeedRequest {}
+                builder: FacebookNewsFeedModelBuilder {
+                    properties: [
+                        FacebookListProperty {
+                            path: "node/actors"
+                            name: "actors"
+                            properties: [
+                                FacebookProperty { path: "id"; name: "id" },
+                                FacebookProperty { path: "name"; name: "name" },
+                                FacebookProperty { path: "profile_picture/uri"; name: "profilePicture" }
+                            ]
+                        },
+                        FacebookProperty {
+                            path: "node/to/id"
+                            name: "toId"
+                        },
+                        FacebookProperty {
+                            path: "node/to/name"
+                            name: "toName"
+                        },
+                        FacebookProperty {
+                            path: "node/to/profile_picture/uri"
+                            name: "toProfilePicture"
+                        },
+                        FacebookProperty {
+                            path: "node/creation_time"
+                            name: "timestamp"
+                        },
+                        FacebookProperty {
+                            path: "node/application/name"
+                            name: "application"
+                        },
+                        FacebookProperty {
+                            path: "node/title/text"
+                            name: "title"
+                        },
+                        FacebookProperty {
+                            path: "node/message/text"
+                            name: "message"
+                        },
+                        FacebookListProperty {
+                            path: "node/attachments"
+                            name: "attachments"
+                            properties: [
+                                FacebookProperty { path: "description/text"; name: "description" },
+                                FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                FacebookProperty { path: "media/image/uri"; name: "image" },
+                                FacebookProperty { path: "title"; name: "title" },
+                                FacebookProperty { path: "url"; name: "url" },
+                                FacebookProperty { path: "source/text"; name: "source" }
+                            ]
+                        },
+                        FacebookListProperty {
+                            path: "node/attached_story/actors"
+                            name: "attachedStoryActors"
+                            properties: [
+                                FacebookProperty { path: "id"; name: "id" },
+                                FacebookProperty { path: "name"; name: "name" },
+                                FacebookProperty { path: "profile_picture/uri"; name: "profilePicture" }
+                            ]
+                        },
+                        FacebookListProperty {
+                            path: "node/attached_story/attachments"
+                            name: "attachedStoryAttachments"
+                            properties: [
+                                FacebookProperty { path: "description/text"; name: "description" },
+                                FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                FacebookProperty { path: "media/image/uri"; name: "image" },
+                                FacebookProperty { path: "title"; name: "title" },
+                                FacebookProperty { path: "url"; name: "url" },
+                                FacebookProperty { path: "source/text"; name: "source" }
+                            ]
+                        },
+                        FacebookProperty {
+                            path: "node/attached_story/message/title"
+                            name: "attachedStoryTitle"
+                        },
+                        FacebookProperty {
+                            path: "node/attached_story/message/text"
+                            name: "attachedStoryMessage"
+                        },
+                        FacebookProperty {
+                            path: "node/feedback/likers/count"
+                            name: "likes"
+                        },
+                        FacebookProperty {
+                            path: "node/feedback/top_level_comments/count"
+                            name: "comments"
+                        },
+                        FacebookListProperty {
+                            path: "node/negative_feedback_actions/edges"
+                            name: "negativeFeedback"
+                            properties: [
+                                FacebookProperty { path: "node/negative_feedback_action_type"; name: "type" }
+                            ]
+                        }
+                    ]
+                }
+            }
+            Component.onCompleted: load()
+        }
+
+        header: PageHeader {
+            //: Title of the page showing the news feed (or the Home feed)
+            //% "News"
+            title: qsTrId("friends_news_title")
+        }
+
+        delegate: PostDelegate {
+            object: model.object
+            fancy: false
+        }
+
+        onAtYEndChanged: {
+            if (atYEnd) {
+                if (model.status == SocialNetworkStatus.Ready || model.status == SocialNetworkStatus.Error) {
+                    model.loadNext()
+                }
+            }
+        }
+
+        VerticalScrollDecorator {}
+
         ViewPlaceholder {
-            enabled: true
-            //: Text saying that the feature is under developement
-            //% "Under developement"
-            text: qsTrId("friends_under_dev")
+            enabled: model.status === SocialNetworkStatus.Idle && model.count == 0
+            //: Text shown on the news page placeholder, where there is no news to be displayed
+            //% "No news"
+            text: qsTrId("friends_news_placeholder")
         }
     }
 }

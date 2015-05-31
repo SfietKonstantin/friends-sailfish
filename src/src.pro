@@ -26,13 +26,15 @@ HEADERS += cachehelper_p.h \
     imagehelper.h \
     imagemanager.h \
     changelogmodel.h \
-    threadhelper.h \
+#    threadhelper.h \
     objecthelper_p.h \
     abstractdisplayhelper.h \
-    userinfohelper.h \
+#    userinfohelper.h \
     datehelper.h \
     defines_p.h \
-    friendsproxymodel.h
+    abstractproxymodel.h \
+    friendsproxymodel.h \
+    newsfeedproxymodel.h
 
 SOURCES += main.cpp \
     tokenmanager.cpp \
@@ -43,11 +45,13 @@ SOURCES += main.cpp \
     imagehelper.cpp \
     imagemanager.cpp \
     changelogmodel.cpp \
-    threadhelper.cpp \
+#    threadhelper.cpp \
     abstractdisplayhelper.cpp \
-    userinfohelper.cpp \
+#    userinfohelper.cpp \
     datehelper.cpp \
-    friendsproxymodel.cpp
+    abstractproxymodel.cpp \
+    friendsproxymodel.cpp \
+    newsfeedproxymodel.cpp
 
 OTHER_FILES += qml/friends.qml \
     qml/UiConstants.js \

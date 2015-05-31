@@ -32,19 +32,14 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
-import harbour.friends.social 1.0
-
 
 Item {
     id: container
-    property alias hasFooter: helper.hasFooter
-    property alias post: helper.object
-    property alias to: helper.to
-    property alias fancy: helper.fancy
-    property bool pushComments: true
     signal clicked()
+    property alias object: helper.object
+    property alias fancy: helper.fancy
     width: parent.width
-    height: background.height + Theme.paddingMedium
+    height: background.height
 
     Rectangle {
         anchors.fill: background
@@ -53,40 +48,11 @@ Item {
 
     BackgroundItem {
         id: background
-
-        function solveLink(link) {
-            var splitted = link.split("----")
-            if (splitted.length !== 2) {
-                return
-            }
-
-            if (splitted[0] == "item") {
-                var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                          {"identifier": splitted[1]})
-                page.load()
-            } else if (splitted[0] == "url") {
-                Qt.openUrlExternally(splitted[1])
-            }
-        }
-
+        enabled: false // TODO
         anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         anchors.verticalCenter: parent.verticalCenter
         height: column.height + 2 * Theme.paddingMedium
-        onClicked: {
-            if (container.pushComments) {
-                var headerProperties = {"post": container.post}
-                var page = pageStack.push(Qt.resolvedUrl("CommentsPage.qml"),
-                                          {"identifier": container.post.identifier,
-                                           "item": container.post,
-                                           "headerComponent": postHeaderComponent,
-                                           "headerProperties": headerProperties})
-                page.load()
-            } else {
-                container.clicked()
-            }
-        }
-        enabled: !container.fancy
     }
 
     Column {
@@ -98,36 +64,27 @@ Item {
 
         PostHelper {
             id: helper
+            primaryColor: Theme.primaryColor
             highlightColor: Theme.highlightColor
-        }
-
-        Component.onCompleted: {
-            // Add the message tags
-            for (var i = 0; i < container.post.messageTags.length; i++) {
-                helper.addMessageTag(container.post.messageTags[i])
-            }
-
-            // Add the story tags
-            for (i = 0; i < container.post.storyTags.length; i++) {
-                helper.addStoryTag(container.post.storyTags[i])
-            }
         }
 
         // Header
         Item {
             anchors.left: parent.left; anchors.right: parent.right
             height: childrenRect.height
-            FacebookPicture {
+            FacebookImage {
                 id: picture
-                identifier: container.post.from.objectIdentifier
-                pictureWidth: Theme.iconSizeMedium
-                pictureHeight: Theme.iconSizeMedium
+                visible: helper.fullHeader
+                width: helper.fullHeader ? Theme.iconSizeMedium : 0
+                height: helper.fullHeader ? Theme.iconSizeMedium : 0
+                url: helper.profilePicture
             }
 
-            Item {
-                anchors.left: picture.right; anchors.leftMargin: Theme.paddingMedium
+            Column {
+                anchors.left: picture.right
+                anchors.leftMargin: helper.fullHeader ? Theme.paddingMedium : 0
                 anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                height: childrenRect.height
+                spacing: Theme.paddingSmall
 
                 Label {
                     id: header
@@ -135,163 +92,162 @@ Item {
                     textFormat: Text.RichText
                     text: helper.header
                     font.pixelSize: Theme.fontSizeSmall
-                    truncationMode: TruncationMode.Fade
-                    onLinkActivated: background.solveLink(link)
+                    wrapMode: Text.WordWrap
+//                    onLinkActivated: background.solveLink(link)
                 }
 
                 Label {
-                    anchors.top: header.bottom; anchors.topMargin: Theme.paddingSmall
                     anchors.left: parent.left; anchors.right: parent.right
-                    text: Format.formatDate(DateHelper.fromString(container.post.createdTime),
-                                            Formatter.DurationElapsed)
+                    visible: helper.fullHeader
+                    text: Format.formatDate(helper.timestamp, Formatter.DurationElapsed)
                     font.pixelSize: Theme.fontSizeExtraSmall
-                    color: Theme.secondaryColor
+                    color: Theme.secondaryHighlightColor
                 }
             }
         }
 
         // Content
         Label {
+            visible: helper.message !== ""
             anchors.left: parent.left; anchors.right: parent.right
             textFormat: Text.RichText
             text: helper.message
             wrapMode: Text.Wrap
             font.pixelSize: Theme.fontSizeSmall
-            onLinkActivated: background.solveLink(link)
         }
 
-        //Images
-        Rectangle {
-            id: imagesContainer
+//        //Images
+//        Rectangle {
+//            id: imagesContainer
 
-            function preprocess(text) {
-                return text.replace(/\n/g, " ")
-            }
+//            function preprocess(text) {
+//                return text.replace(/\n/g, " ")
+//            }
 
-            visible: post.media.length > 0 || post.name.length > 0
-            property real cellWidth: post.media.length <= 1 ? grid.width : grid.width / 3
-            property real cellHeight: post.media.length <= 1 ? grid.width * (small ? 1 : 2 / 3)
-                                                             : grid.width / 3
-            property bool small: false
+//            visible: post.media.length > 0 || post.name.length > 0
+//            property real cellWidth: post.media.length <= 1 ? grid.width : grid.width / 3
+//            property real cellHeight: post.media.length <= 1 ? grid.width * (small ? 1 : 2 / 3)
+//                                                             : grid.width / 3
+//            property bool small: false
 
-            anchors.left: parent.left
-            width: !(small && !attachment.visible) ? parent.width : grid.width + 2 * Theme.paddingMedium
-            color: !imagesContainerMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
-                                                     : Theme.rgba(Theme.highlightBackgroundColor,
-                                                                  Theme.highlightBackgroundOpacity)
-            height: !small ? grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
-                           : Math.max(grid.height, attachment.height) + 2 * Theme.paddingMedium
+//            anchors.left: parent.left
+//            width: !(small && !attachment.visible) ? parent.width : grid.width + 2 * Theme.paddingMedium
+//            color: !imagesContainerMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+//                                                     : Theme.rgba(Theme.highlightBackgroundColor,
+//                                                                  Theme.highlightBackgroundOpacity)
+//            height: !small ? grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
+//                           : Math.max(grid.height, attachment.height) + 2 * Theme.paddingMedium
 
-            MouseArea {
-                id: imagesContainerMouseArea
-                enabled: post.source != "" || post.facebookObjectId != "" || post.objectIdentifier != ""
-                anchors.fill: parent
-                onClicked: {
-                    if (post.source != "") {
-                        Qt.openUrlExternally(post.source)
-                    } else {
-                        var objectId = post.facebookObjectId
-                        var fql = true
-                        if (objectId == "") {
-                            objectId = post.objectIdentifier
-                            fql = false
-                        }
+//            MouseArea {
+//                id: imagesContainerMouseArea
+//                enabled: post.source != "" || post.facebookObjectId != "" || post.objectIdentifier != ""
+//                anchors.fill: parent
+//                onClicked: {
+//                    if (post.source != "") {
+//                        Qt.openUrlExternally(post.source)
+//                    } else {
+//                        var objectId = post.facebookObjectId
+//                        var fql = true
+//                        if (objectId == "") {
+//                            objectId = post.objectIdentifier
+//                            fql = false
+//                        }
 
-                        var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
-                                                  {"identifier": objectId,
-                                                   "type": post.facebookObjectType,
-                                                   "fql": fql})
-                        page.load()
-                    }
-                }
-            }
+//                        var page = pageStack.push(Qt.resolvedUrl("TypeSolverPage.qml"),
+//                                                  {"identifier": objectId,
+//                                                   "type": post.facebookObjectType,
+//                                                   "fql": fql})
+//                        page.load()
+//                    }
+//                }
+//            }
 
 
-            Grid {
-                id: grid
-                visible: post.media.length > 0
-                columns: post.media.length <= 1 ? 1 : 3
-                rows: post.media.length <= 1 ? 1 : 2
-                anchors.left: parent.left
-                anchors.leftMargin: !imagesContainer.small ? 0 : Theme.paddingMedium
-                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
-                width: !imagesContainer.small ? imagesContainer.width : Theme.iconSizeLarge
-                opacity: imagesContainerMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1
+//            Grid {
+//                id: grid
+//                visible: post.media.length > 0
+//                columns: post.media.length <= 1 ? 1 : 3
+//                rows: post.media.length <= 1 ? 1 : 2
+//                anchors.left: parent.left
+//                anchors.leftMargin: !imagesContainer.small ? 0 : Theme.paddingMedium
+//                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
+//                width: !imagesContainer.small ? imagesContainer.width : Theme.iconSizeLarge
+//                opacity: imagesContainerMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1
 
-                Repeater {
-                    model: post.media
-                    delegate: FacebookImage {
-                        id: delegate
-                        function checkSize() {
-                            if (status != Image.Ready) {
-                                return
-                            }
+//                Repeater {
+//                    model: post.media
+//                    delegate: FacebookImage {
+//                        id: delegate
+//                        function checkSize() {
+//                            if (status != Image.Ready) {
+//                                return
+//                            }
 
-                            if (post.media.length <= 1) {
-                                if (sourceSize.width < column.width / 2 || sourceSize.height < column.width / 3) {
-                                    imagesContainer.small = true
-                                }
-                            }
-                        }
+//                            if (post.media.length <= 1) {
+//                                if (sourceSize.width < column.width / 2 || sourceSize.height < column.width / 3) {
+//                                    imagesContainer.small = true
+//                                }
+//                            }
+//                        }
 
-                        url: modelData
-                        onSourceSizeChanged: checkSize()
-                        width: imagesContainer.cellWidth
-                        height: imagesContainer.cellHeight
+//                        url: modelData
+//                        onSourceSizeChanged: checkSize()
+//                        width: imagesContainer.cellWidth
+//                        height: imagesContainer.cellHeight
 
-                        Connections {
-                            target: column
-                            onWidthChanged: delegate.checkSize()
-                        }
-                    }
-                }
-            }
+//                        Connections {
+//                            target: column
+//                            onWidthChanged: delegate.checkSize()
+//                        }
+//                    }
+//                }
+//            }
 
-            Column {
-                id: attachment
-                anchors.top: !imagesContainer.small ? grid.bottom : undefined
-                anchors.topMargin: !imagesContainer.small ? Theme.paddingMedium : 0
-                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
-                anchors.left: !imagesContainer.small ? parent.left : grid.right
-                anchors.right: parent.right
-                spacing: Theme.paddingSmall
-                visible: post.name.length > 0 || post.caption.length > 0 || post.description.length > 0
-                Label {
-                    text: imagesContainer.preprocess(post.name)
-                    visible: post.name.length > 0
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    font.pixelSize: Theme.fontSizeSmall
-                    truncationMode: TruncationMode.Fade
-                }
+//            Column {
+//                id: attachment
+//                anchors.top: !imagesContainer.small ? grid.bottom : undefined
+//                anchors.topMargin: !imagesContainer.small ? Theme.paddingMedium : 0
+//                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
+//                anchors.left: !imagesContainer.small ? parent.left : grid.right
+//                anchors.right: parent.right
+//                spacing: Theme.paddingSmall
+//                visible: post.name.length > 0 || post.caption.length > 0 || post.description.length > 0
+//                Label {
+//                    text: imagesContainer.preprocess(post.name)
+//                    visible: post.name.length > 0
+//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+//                    font.pixelSize: Theme.fontSizeSmall
+//                    truncationMode: TruncationMode.Fade
+//                }
 
-                Label {
-                    text: imagesContainer.preprocess(post.description)
-                    visible: post.description.length > 0
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    truncationMode: TruncationMode.Fade
-                }
+//                Label {
+//                    text: imagesContainer.preprocess(post.description)
+//                    visible: post.description.length > 0
+//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+//                    font.pixelSize: Theme.fontSizeExtraSmall
+//                    truncationMode: TruncationMode.Fade
+//                }
 
-                Label {
-                    text: imagesContainer.preprocess(post.caption)
-                    visible: post.caption.length > 0
-                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-                    font.pixelSize: Theme.fontSizeExtraSmall
-                    truncationMode: TruncationMode.Fade
-                    color: Theme.secondaryColor
-                }
-            }
-        }
+//                Label {
+//                    text: imagesContainer.preprocess(post.caption)
+//                    visible: post.caption.length > 0
+//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+//                    font.pixelSize: Theme.fontSizeExtraSmall
+//                    truncationMode: TruncationMode.Fade
+//                    color: Theme.secondaryColor
+//                }
+//            }
+//        }
 
         // Likes comments
         Label {
             visible: helper.hasFooter
             anchors.left: parent.left; anchors.right: parent.right
             font.pixelSize: Theme.fontSizeExtraSmall
-            color: Theme.secondaryColor
+            color: Theme.secondaryHighlightColor
             text: helper.footer
         }
     }

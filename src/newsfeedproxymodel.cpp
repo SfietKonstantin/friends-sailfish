@@ -29,68 +29,75 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
  */
 
-#include "friendsproxymodel.h"
+#include "newsfeedproxymodel.h"
 #include <QtCore/QMetaProperty>
-#include <QtCore/QRegularExpression>
+#include <QtCore/QSet>
 
-FriendsProxyModel::FriendsProxyModel(QObject *parent)
-    : AbstractProxyModel(parent)
+NewsFeedProxyModel::NewsFeedProxyModel(QObject *parent)
+    : AbstractProxyModel(parent), m_filterAd(false)
 {
 }
 
-QString FriendsProxyModel::filter() const
+bool NewsFeedProxyModel::filterAds() const
 {
-    return m_filter;
+    return m_filterAd;
 }
 
-void FriendsProxyModel::setFilter(const QString &filter)
+void NewsFeedProxyModel::setFilterAds(bool filterAd)
 {
-    if (m_filter != filter) {
-        m_filter = filter;
-        emit filterChanged();
+    if (m_filterAd != filterAd) {
+        m_filterAd = filterAd;
+        emit filterAdsChanged();
         reload();
     }
 }
 
-bool FriendsProxyModel::isAutoLoad() const
+bool NewsFeedProxyModel::isAutoLoad() const
 {
-    return true;
+    return false;
 }
 
-QList<QVariantMap> FriendsProxyModel::filterData(const QList<QVariantMap> &input)
+QList<QVariantMap> NewsFeedProxyModel::filterData(const QList<QVariantMap> &input)
 {
     QList<QVariantMap> data;
-    QString filter = normalizeString(m_filter);
 
     for (const QVariantMap &object : input) {
-        QString name = normalizeString(getName(object));
-        if (name.contains(filter)) {
-            data.append(object);
+        QVariantList actors = getActors(object);
+        if (actors.isEmpty()) {
+            continue;
         }
+        if (filterAds()) {
+            QSet<QString> feedbacks = getNegativeFeedback(object);
+            if (feedbacks.contains("HIDE_ADVERTISER")) {
+                continue;
+            }
+        }
+        data.append(object);
     }
 
-    std::sort(data.begin(), data.end(), sortObjects);
     return data;
 }
 
-QString FriendsProxyModel::section(const QVariantMap &object) const
+QString NewsFeedProxyModel::section(const QVariantMap &object) const
 {
-    return getName(object);
+    Q_UNUSED(object)
+    return QString();
 }
 
-QString FriendsProxyModel::getName(const QVariantMap &object)
+QVariantList NewsFeedProxyModel::getActors(const QVariantMap &object)
 {
-    return object.value("name").toString();
+    return object.value("actors").toList();
 }
 
-QString FriendsProxyModel::normalizeString(const QString &string)
+QSet<QString> NewsFeedProxyModel::getNegativeFeedback(const QVariantMap &object)
 {
-    QString returned = string.trimmed().normalized (QString::NormalizationForm_KD).toLower();
-    returned.remove(QRegularExpression("[^a-z\\s]"));
-    return returned;
-}
-
-bool FriendsProxyModel::sortObjects(const QVariantMap &left, const QVariantMap &right)
-{
-    return getName(left) < getName(right);
+    QVariantList entries = object.value("negativeFeedback").toList();
+    QSet<QString> result;
+    for (const QVariant &entry : entries) {
+        QString type = entry.toMap().value("type").toString();
+        if (!type.isEmpty()) {
+            result.insert(type);
+        }
+    }
+    return result;
 }

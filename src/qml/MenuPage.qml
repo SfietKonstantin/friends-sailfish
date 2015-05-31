@@ -111,8 +111,8 @@ Page {
         }
         header: CoverHeader {
             anchors.left: parent.left; anchors.right: parent.right
-            name: me.object.name !== null ? me.object.name : ""
-            coverUrl: me.object.cover !== null ? me.object.cover : ""
+            name: !me.empty ? me.object.name : ""
+            coverUrl: !me.empty ? me.object.cover : ""
         }
 
         delegate: BackgroundItem {

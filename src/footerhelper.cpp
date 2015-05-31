@@ -42,6 +42,10 @@ QString FooterHelper::makeFooter(int likes, int comments)
     //% "%n likes"
     QString likesString = qtTrId("friends_footer_likes", likes);
 
+    if (comments == 0) {
+        return likesString;
+    }
+
     //: Part of post footer, saying "<number> cpomments". %n is replaced by the number of comments.
     //% "%n comments"
     QString commentsString = qtTrId("friends_footer_comments", comments);

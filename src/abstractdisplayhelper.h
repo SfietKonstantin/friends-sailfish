@@ -33,29 +33,36 @@
 #define ABSTRACTDISPLAYHELPER_H
 
 #include <QtCore/QObject>
+#include <QtCore/QVariantMap>
 
 class AbstractDisplayHelper : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QObject * object READ object WRITE setObject NOTIFY objectChanged)
+    Q_PROPERTY(QVariantMap object READ object WRITE setObject NOTIFY objectChanged)
     Q_PROPERTY(QString userIdentifier READ userIdentifier WRITE setUserIdentifier
                NOTIFY userIdentifierChanged)
+    Q_PROPERTY(QString primaryColor READ primaryColor WRITE setPrimaryColor
+               NOTIFY primaryColorChanged)
     Q_PROPERTY(QString highlightColor READ highlightColor WRITE setHighlightColor
                NOTIFY highlightColorChanged)
 public:
-    explicit AbstractDisplayHelper(QObject *parent = 0);
-    QObject * object() const;
-    void setObject(QObject *object);
+    const QVariantMap & object() const;
+    void setObject(const QVariantMap &object);
     QString userIdentifier() const;
     void setUserIdentifier(const QString &userIdentifier);
+    QString primaryColor() const;
+    void setPrimaryColor(const QString &primaryColor);
     QString highlightColor() const;
     void setHighlightColor(const QString &highlightColor);
 signals:
     void objectChanged();
     void userIdentifierChanged();
+    void primaryColorChanged();
     void highlightColorChanged();
 protected:
+    explicit AbstractDisplayHelper(QObject *parent = 0);
     QString decorate(const QString &text, const QString &url);
+    QString standardize(const QString &text);
     bool event(QEvent *e);
     virtual void performCreationImpl() = 0;
 protected slots:
@@ -63,8 +70,9 @@ protected slots:
 private:
     void performCreation();
 private:
-    QObject *m_object;
+    QVariantMap m_object;
     QString m_userIdentifier;
+    QString m_primaryColor;
     QString m_highlightColor;
 };
 

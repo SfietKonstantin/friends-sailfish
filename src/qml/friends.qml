@@ -63,9 +63,9 @@ ApplicationWindow {
         }
     }
 
-//    SettingsManager {
-//        id: settingsManager
-//    }
+    SettingsManager {
+        id: settingsManager
+    }
 
 //    FacebookExtra {
 //        id: facebook

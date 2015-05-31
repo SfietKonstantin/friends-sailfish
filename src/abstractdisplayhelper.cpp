@@ -33,26 +33,23 @@
 #include <QtCore/QEvent>
 #include <QtCore/QCoreApplication>
 
-static const char *RICH_TEXT = "<a style=\"text-decoration:none; color:%1\" href=\"%2\">%3</a>";
+static const char *LINK_TEXT = "<a style=\"text-decoration:none; color:%1\" href=\"%2\">%3</a>";
+static const char *RICH_TEXT = "<span style=\"color:%1\">%2</span>";
 
 AbstractDisplayHelper::AbstractDisplayHelper(QObject *parent) :
-    QObject(parent), m_object(0)
+    QObject(parent)
 {
 }
 
-QObject * AbstractDisplayHelper::object() const
+const QVariantMap & AbstractDisplayHelper::object() const
 {
     return m_object;
 }
 
-void AbstractDisplayHelper::setObject(QObject *object)
+void AbstractDisplayHelper::setObject(const QVariantMap &object)
 {
     if (m_object != object) {
-        if (m_object) {
-            m_object->disconnect(this);
-        }
         m_object = object;
-        connect(m_object, SIGNAL(loaded(bool)), this, SLOT(create()));
         emit objectChanged();
         create();
     }
@@ -68,6 +65,20 @@ void AbstractDisplayHelper::setUserIdentifier(const QString &userIdentifier)
     if (m_userIdentifier != userIdentifier) {
         m_userIdentifier = userIdentifier;
         emit userIdentifierChanged();
+        create();
+    }
+}
+
+QString AbstractDisplayHelper::primaryColor() const
+{
+    return m_primaryColor;
+}
+
+void AbstractDisplayHelper::setPrimaryColor(const QString &primaryColor)
+{
+    if (m_primaryColor != primaryColor) {
+        m_primaryColor = primaryColor;
+        emit primaryColorChanged();
         create();
     }
 }
@@ -88,7 +99,12 @@ void AbstractDisplayHelper::setHighlightColor(const QString &highlightColor)
 
 QString AbstractDisplayHelper::decorate(const QString &text, const QString &url)
 {
-    return QString(RICH_TEXT).arg(m_highlightColor, url, text);
+    return QString(LINK_TEXT).arg(m_primaryColor, url, text);
+}
+
+QString AbstractDisplayHelper::standardize(const QString &text)
+{
+    return QString(RICH_TEXT).arg(m_highlightColor, text);
 }
 
 bool AbstractDisplayHelper::event(QEvent *e)
@@ -107,7 +123,7 @@ void AbstractDisplayHelper::create()
 
 void AbstractDisplayHelper::performCreation()
 {
-    if (!m_object) {
+    if (m_object.isEmpty()) {
         return;
     }
 
