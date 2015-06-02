@@ -34,6 +34,7 @@
 
 #include "abstractdisplayhelper.h"
 #include <QtCore/QDateTime>
+#include <QtCore/QSize>
 
 class PostHelper : public AbstractDisplayHelper
 {
@@ -48,10 +49,12 @@ class PostHelper : public AbstractDisplayHelper
     Q_PROPERTY(QString via READ via NOTIFY viaChanged)
     Q_PROPERTY(bool hasContent READ hasContent NOTIFY hasContentChanged)
     Q_PROPERTY(bool hasFooter READ hasFooter NOTIFY hasFooterChanged)
-
-    Q_PROPERTY(QString name READ name NOTIFY nameChanged)
-    Q_PROPERTY(QString caption READ caption NOTIFY captionChanged)
-    Q_PROPERTY(QString description READ description NOTIFY descriptionChanged)
+    Q_PROPERTY(QString attachment READ attachment NOTIFY attachmentChanged)
+    Q_PROPERTY(QSize attachmentSize READ attachmentSize NOTIFY attachmentSizeChanged)
+//    Q_PROPERTY(QVariantList attachments READ attachments NOTIFY attachmentsChanged)
+    Q_PROPERTY(QString attachmentTitle READ attachmentTitle NOTIFY attachmentTitleChanged)
+    Q_PROPERTY(QString attachmentDescription READ attachmentDescription NOTIFY attachmentDescriptionChanged)
+    Q_PROPERTY(QString attachmentSource READ attachmentSource NOTIFY attachmentSourceChanged)
 public:
     explicit PostHelper(QObject *parent = 0);
 
@@ -66,9 +69,12 @@ public:
     QString via() const;
     bool hasContent() const;
     bool hasFooter() const;
-    QString name() const;
-    QString caption() const;
-    QString description() const;
+    QString attachment() const;
+    QSize attachmentSize() const;
+    QVariantList attachments() const;
+    QString attachmentTitle() const;
+    QString attachmentDescription() const;
+    QString attachmentSource() const;
 signals:
     void fancyChanged();
     void fullHeaderChanged();
@@ -80,9 +86,12 @@ signals:
     void viaChanged();
     void hasContentChanged();
     void hasFooterChanged();
-    void nameChanged();
-    void captionChanged();
-    void descriptionChanged();
+    void attachmentChanged();
+    void attachmentSizeChanged();
+    void attachmentsChanged();
+    void attachmentTitleChanged();
+    void attachmentDescriptionChanged();
+    void attachmentSourceChanged();
 protected:
     void performCreationImpl() Q_DECL_OVERRIDE;
 private:
@@ -96,15 +105,18 @@ private:
     bool m_fullHeader;
     QString m_profilePicture;
     QString m_header;
+    QDateTime m_timestamp;
     QString m_footer;
     QString m_message;
     QString m_via;
     bool m_hasContent;
     bool m_hasFooter;
-    QString m_name;
-    QString m_caption;
-    QString m_description;
-    QDateTime m_timestamp;
+    QString m_attachment;
+    QSize m_attachmentSize;
+    QVariantList m_attachments;
+    QString m_attachmentTitle;
+    QString m_attachmentDescription;
+    QString m_attachmentSource;
 };
 
 

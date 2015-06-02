@@ -116,32 +116,71 @@ Item {
             font.pixelSize: Theme.fontSizeSmall
         }
 
-//        //Images
-//        Rectangle {
-//            id: imagesContainer
+        // Attachment
+        Rectangle {
+            id: attachmentContainer
 
-//            function preprocess(text) {
-//                return text.replace(/\n/g, " ")
-//            }
+            anchors.left: parent.left; anchors.right: parent.right
+            height: attachment.height + Theme.paddingMedium + (image.visible ? 0 : Theme.paddingMedium)
+            color: !attachmentMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
+                                                : Theme.rgba(Theme.highlightBackgroundColor,
+                                                             Theme.highlightBackgroundOpacity)
+            visible: helper.attachment.length > 0 || helper.attachmentTitle.length > 0
+                     || helper.attachmentDescription.length > 0 || helper.attachmentSource.length > 0
 
-//            visible: post.media.length > 0 || post.name.length > 0
-//            property real cellWidth: post.media.length <= 1 ? grid.width : grid.width / 3
-//            property real cellHeight: post.media.length <= 1 ? grid.width * (small ? 1 : 2 / 3)
-//                                                             : grid.width / 3
-//            property bool small: false
+            Column {
+                id: attachment
+                anchors.top: parent.top
+                anchors.left: parent.left; anchors.right: parent.right
+                spacing: Theme.paddingSmall
+                anchors.topMargin: image.visible ? 0 : Theme.paddingMedium
 
-//            anchors.left: parent.left
-//            width: !(small && !attachment.visible) ? parent.width : grid.width + 2 * Theme.paddingMedium
-//            color: !imagesContainerMouseArea.pressed ? Theme.rgba(Theme.highlightBackgroundColor, 0.2)
-//                                                     : Theme.rgba(Theme.highlightBackgroundColor,
-//                                                                  Theme.highlightBackgroundOpacity)
-//            height: !small ? grid.height + (attachment.visible ? Theme.paddingMedium * 2 + attachment.height : 0)
-//                           : Math.max(grid.height, attachment.height) + 2 * Theme.paddingMedium
+                FacebookImage {
+                    id: image
+                    anchors.left: parent.left; anchors.right: parent.right
+                    visible: helper.attachment.length > 0
+                    height: helper.attachment.length > 0  ? (width / helper.attachmentSize.width * helper.attachmentSize.height ) : 0
+                    source: helper.attachment
+                }
 
-//            MouseArea {
-//                id: imagesContainerMouseArea
+                Label {
+                    text: helper.attachmentTitle
+                    visible: helper.attachmentTitle.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeSmall
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 2
+                    color: Theme.highlightColor
+                }
+
+                Label {
+                    text: helper.attachmentDescription
+                    visible: helper.attachmentDescription.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    wrapMode: Text.WordWrap
+                    maximumLineCount: 3
+                    color: Theme.highlightColor
+                }
+
+                Label {
+                    text: helper.attachmentSource
+                    visible: helper.attachmentSource.length > 0
+                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
+                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
+                    font.pixelSize: Theme.fontSizeExtraSmall
+                    truncationMode: TruncationMode.Fade
+                    color: Theme.secondaryHighlightColor
+                }
+            }
+
+            MouseArea {
+                id: attachmentMouseArea
+                enabled: false
 //                enabled: post.source != "" || post.facebookObjectId != "" || post.objectIdentifier != ""
-//                anchors.fill: parent
+                anchors.fill: parent
 //                onClicked: {
 //                    if (post.source != "") {
 //                        Qt.openUrlExternally(post.source)
@@ -160,87 +199,8 @@ Item {
 //                        page.load()
 //                    }
 //                }
-//            }
-
-
-//            Grid {
-//                id: grid
-//                visible: post.media.length > 0
-//                columns: post.media.length <= 1 ? 1 : 3
-//                rows: post.media.length <= 1 ? 1 : 2
-//                anchors.left: parent.left
-//                anchors.leftMargin: !imagesContainer.small ? 0 : Theme.paddingMedium
-//                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
-//                width: !imagesContainer.small ? imagesContainer.width : Theme.iconSizeLarge
-//                opacity: imagesContainerMouseArea.pressed ? Theme.highlightBackgroundOpacity : 1
-
-//                Repeater {
-//                    model: post.media
-//                    delegate: FacebookImage {
-//                        id: delegate
-//                        function checkSize() {
-//                            if (status != Image.Ready) {
-//                                return
-//                            }
-
-//                            if (post.media.length <= 1) {
-//                                if (sourceSize.width < column.width / 2 || sourceSize.height < column.width / 3) {
-//                                    imagesContainer.small = true
-//                                }
-//                            }
-//                        }
-
-//                        url: modelData
-//                        onSourceSizeChanged: checkSize()
-//                        width: imagesContainer.cellWidth
-//                        height: imagesContainer.cellHeight
-
-//                        Connections {
-//                            target: column
-//                            onWidthChanged: delegate.checkSize()
-//                        }
-//                    }
-//                }
-//            }
-
-//            Column {
-//                id: attachment
-//                anchors.top: !imagesContainer.small ? grid.bottom : undefined
-//                anchors.topMargin: !imagesContainer.small ? Theme.paddingMedium : 0
-//                anchors.verticalCenter: !imagesContainer.small ? undefined : parent.verticalCenter
-//                anchors.left: !imagesContainer.small ? parent.left : grid.right
-//                anchors.right: parent.right
-//                spacing: Theme.paddingSmall
-//                visible: post.name.length > 0 || post.caption.length > 0 || post.description.length > 0
-//                Label {
-//                    text: imagesContainer.preprocess(post.name)
-//                    visible: post.name.length > 0
-//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-//                    font.pixelSize: Theme.fontSizeSmall
-//                    truncationMode: TruncationMode.Fade
-//                }
-
-//                Label {
-//                    text: imagesContainer.preprocess(post.description)
-//                    visible: post.description.length > 0
-//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-//                    font.pixelSize: Theme.fontSizeExtraSmall
-//                    truncationMode: TruncationMode.Fade
-//                }
-
-//                Label {
-//                    text: imagesContainer.preprocess(post.caption)
-//                    visible: post.caption.length > 0
-//                    anchors.left: parent.left; anchors.leftMargin: Theme.paddingMedium
-//                    anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
-//                    font.pixelSize: Theme.fontSizeExtraSmall
-//                    truncationMode: TruncationMode.Fade
-//                    color: Theme.secondaryColor
-//                }
-//            }
-//        }
+            }
+        }
 
         // Likes comments
         Label {

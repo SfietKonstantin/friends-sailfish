@@ -103,10 +103,13 @@ Page {
                             properties: [
                                 FacebookProperty { path: "description/text"; name: "description" },
                                 FacebookProperty { path: "media/__type__/name"; name: "type" },
-                                FacebookProperty { path: "media/image/uri"; name: "image" },
+                                FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
                                 FacebookProperty { path: "title"; name: "title" },
                                 FacebookProperty { path: "url"; name: "url" },
-                                FacebookProperty { path: "source/text"; name: "source" }
+                                FacebookProperty { path: "source/text"; name: "source" },
+                                FacebookProperty { path: "style_list"; name: "style" }
                             ]
                         },
                         FacebookListProperty {
@@ -124,10 +127,13 @@ Page {
                             properties: [
                                 FacebookProperty { path: "description/text"; name: "description" },
                                 FacebookProperty { path: "media/__type__/name"; name: "type" },
-                                FacebookProperty { path: "media/image/uri"; name: "image" },
+                                FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
                                 FacebookProperty { path: "title"; name: "title" },
                                 FacebookProperty { path: "url"; name: "url" },
-                                FacebookProperty { path: "source/text"; name: "source" }
+                                FacebookProperty { path: "source/text"; name: "source" },
+                                FacebookProperty { path: "style_list"; name: "style" }
                             ]
                         },
                         FacebookProperty {

@@ -110,24 +110,39 @@ bool PostHelper::hasFooter() const
     return m_hasFooter;
 }
 
-QString PostHelper::name() const
+QString PostHelper::attachment() const
 {
-    return m_name;
+    return m_attachment;
 }
 
-QString PostHelper::caption() const
+QSize PostHelper::attachmentSize() const
 {
-    return m_caption;
+    return m_attachmentSize;
 }
 
-QString PostHelper::description() const
+QVariantList PostHelper::attachments() const
 {
-    return m_description;
+    return m_attachments;
+}
+
+QString PostHelper::attachmentTitle() const
+{
+    return m_attachmentTitle;
+}
+
+QString PostHelper::attachmentDescription() const
+{
+    return m_attachmentDescription;
+}
+
+QString PostHelper::attachmentSource() const
+{
+    return m_attachmentSource;
 }
 
 void PostHelper::performCreationImpl()
 {
-    const QVariantList &actors = object().value("actors").toList();
+    const QVariantList &actors = getVariantProperty(object(), "actors").toList();
     QVariant actor;
     QString name;
     QString profilePicture;
@@ -238,12 +253,49 @@ void PostHelper::performCreationImpl()
         emit messageChanged();
     }
 
-//    // Has content ?
-//    bool newHasContent = !getValue(object(), "picture").isNull() && !getValue(object(), "name").isNull();
-//    if (m_hasContent != newHasContent) {
-//        m_hasContent = newHasContent;
-//        emit hasContentChanged();
-//    }
+    // Attachments
+    const QVariantList &attachments = getVariantProperty(object(), "attachments").toList();
+    QVariant attachment;
+    if (!attachments.isEmpty()) {
+        attachment = attachments.first();
+    }
+
+
+    // Attachment
+    QString attachmentImage = getProperty(attachment, "image");
+    if (m_attachment != attachmentImage) {
+        m_attachment = attachmentImage;
+        emit attachmentChanged();
+    }
+
+    int attachmentWidth = getVariantProperty(attachment, "width").toInt();
+    int attachmentHeight = getVariantProperty(attachment, "height").toInt();
+    QSize attachmentSize (attachmentWidth, attachmentHeight);
+    if (m_attachmentSize != attachmentSize) {
+        m_attachmentSize = attachmentSize;
+        emit attachmentSizeChanged();
+    }
+
+
+    // Attachment caption
+    QString attachmentTitle = getProperty(attachment, "title");
+    QString attachmentDescription = getProperty(attachment, "description");
+    QString attachmentSource = getProperty(attachment, "source");
+
+    if (m_attachmentTitle != attachmentTitle) {
+        m_attachmentTitle = attachmentTitle;
+        emit attachmentTitleChanged();
+    }
+
+    if (m_attachmentDescription != attachmentDescription) {
+        m_attachmentDescription = attachmentDescription;
+        emit attachmentDescriptionChanged();
+    }
+
+    if (m_attachmentSource != attachmentSource) {
+        m_attachmentSource = attachmentSource;
+        emit attachmentSourceChanged();
+    }
 
     // Footer
     QVariant likesVariant = getVariantProperty(object(), "likes");
