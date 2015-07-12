@@ -53,52 +53,6 @@ SOURCES += main.cpp \
     friendsproxymodel.cpp \
     newsfeedproxymodel.cpp
 
-OTHER_FILES += qml/friends.qml \
-    qml/UiConstants.js \
-    qml/CoverHeader.qml \
-    qml/CoverPage.qml \
-    qml/MenuPage.qml \
-    qml/NewsPage.qml \
-    qml/LoginPage.qml \
-    qml/FacebookImage.qml \
-    qml/FacebookPicture.qml \
-    qml/StateIndicator.qml \
-    qml/AlbumsPage.qml \
-    qml/UserPage.qml \
-    qml/PostDelegate.qml \
-    qml/AboutPage.qml \
-    qml/DevelopersPage.qml \
-    qml/PhotosPage.qml \
-    qml/PhotoPage.qml \
-    qml/SplitSocialPanel.qml \
-    qml/CommentsPage.qml \
-    qml/PostCommentHeaderComponent.qml \
-    qml/WelcomeDialog.qml \
-    qml/SocialButtons.qml \
-    qml/PostDialog.qml \
-    qml/LikesPage.qml \
-    qml/NotificationsPage.qml \
-    qml/TypeSolverPage.qml \
-    qml/ChangeLogPage.qml \
-    qml/UpdatedDialog.qml \
-    qml/ChangeLogView.qml \
-    qml/GroupPage.qml \
-    qml/GroupsPage.qml \
-    qml/PagesPage.qml \
-    qml/PagePage.qml \
-    qml/CoverImage.qml \
-    qml/ThreadsPage.qml \
-    qml/EventsPage.qml \
-    qml/EventPage.qml \
-    qml/UserInfoPage.qml \
-    qml/GroupInfoPage.qml \
-    qml/UsersPage.qml \
-    qml/FLabel.qml \
-    qml/FListButton.qml \
-    qml/WaitingPage.qml \
-    qml/DisconnectPage.qml \
-    qml/FriendsPage.qml
-
 target.path = $$TARGETPATH
 
 desktop.path = /usr/share/applications
@@ -108,10 +62,8 @@ icon.path = /usr/share/icons/hicolor/86x86/apps/
 icon.files = harbour-friends.png
 
 DEFINES *= DEPLOYMENT_PATH=\"\\\"\"$${DEPLOYMENT_PATH}/\"\\\"\"
-qml.path = $$DEPLOYMENT_PATH/qml
-qml.files = $$OTHER_FILES
 
-INSTALLS += target desktop icon qml
+INSTALLS += target desktop icon
 
 CONFIG(desktop):{
 RESOURCES += friends.qrc
@@ -125,3 +77,5 @@ packagesExist(qdeclarative5-boostable) {
 } else {
    warning("qdeclarative-boostable not available; startup times will be slower")
 }
+
+include(qml/qml.pri)

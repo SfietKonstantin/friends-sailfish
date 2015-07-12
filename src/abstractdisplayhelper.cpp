@@ -37,8 +37,20 @@ static const char *LINK_TEXT = "<a style=\"text-decoration:none; color:%1\" href
 static const char *RICH_TEXT = "<span style=\"color:%1\">%2</span>";
 
 AbstractDisplayHelper::AbstractDisplayHelper(QObject *parent) :
-    QObject(parent)
+    QObject(parent), m_componentStatus(NotReady)
 {
+}
+
+void AbstractDisplayHelper::classBegin()
+{
+}
+
+void AbstractDisplayHelper::componentComplete()
+{
+    if (m_componentStatus == NotReadyCreationPending) {
+        performCreationImpl();
+    }
+    m_componentStatus = Ready;
 }
 
 const QVariantMap & AbstractDisplayHelper::object() const
@@ -107,26 +119,16 @@ QString AbstractDisplayHelper::standardize(const QString &text)
     return QString(RICH_TEXT).arg(m_highlightColor, text);
 }
 
-bool AbstractDisplayHelper::event(QEvent *e)
-{
-    if (e->type() == QEvent::User) {
-        performCreation();
-        return true;
-    }
-    return QObject::event(e);
-}
-
 void AbstractDisplayHelper::create()
 {
-    QCoreApplication::instance()->postEvent(this, new QEvent(QEvent::User));
-}
-
-void AbstractDisplayHelper::performCreation()
-{
-    if (m_object.isEmpty()) {
-        return;
+    switch (m_componentStatus) {
+    case NotReady:
+        m_componentStatus = NotReadyCreationPending;
+        break;
+    case Ready:
+        performCreationImpl();
+        break;
+    default:
+        break;
     }
-
-    performCreationImpl();
 }
-

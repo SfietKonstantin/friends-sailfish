@@ -46,9 +46,11 @@ static const char *ITEM_TEMPLATE = "item----%1";
 PostHelper::PostHelper(QObject *parent)
     : AbstractDisplayHelper(parent)
     , m_fancy(false)
+    , m_attachedStory(false)
     , m_fullHeader(true)
-    , m_hasContent(false)
+    , m_hasAttachedStory(false)
     , m_hasFooter(true)
+    , m_layoutType(Unknown)
 {
 }
 
@@ -62,12 +64,32 @@ void PostHelper::setFancy(bool fancy)
     if (m_fancy != fancy) {
         m_fancy = fancy;
         emit fancyChanged();
+        create();
+    }
+}
+
+bool PostHelper::isAttachedStory() const
+{
+    return m_attachedStory;
+}
+
+void PostHelper::setAttachedStory(bool attachedStory)
+{
+    if (m_attachedStory != attachedStory) {
+        m_attachedStory = attachedStory;
+        emit attachedStoryChanged();
+        create();
     }
 }
 
 bool PostHelper::isFullHeader() const
 {
     return m_fullHeader;
+}
+
+bool PostHelper::hasAttachedStory() const
+{
+    return m_hasAttachedStory;
 }
 
 QString PostHelper::profilePicture() const
@@ -100,11 +122,6 @@ QString PostHelper::via() const
     return m_via;
 }
 
-bool PostHelper::hasContent() const
-{
-    return m_hasContent;
-}
-
 bool PostHelper::hasFooter() const
 {
     return m_hasFooter;
@@ -120,9 +137,9 @@ QSize PostHelper::attachmentSize() const
     return m_attachmentSize;
 }
 
-QVariantList PostHelper::attachments() const
+QStringList PostHelper::subAttachments() const
 {
-    return m_attachments;
+    return m_subAttachments;
 }
 
 QString PostHelper::attachmentTitle() const
@@ -140,9 +157,15 @@ QString PostHelper::attachmentSource() const
     return m_attachmentSource;
 }
 
+PostHelper::LayoutType PostHelper::layoutType() const
+{
+    return m_layoutType;
+}
+
 void PostHelper::performCreationImpl()
 {
-    const QVariantList &actors = getVariantProperty(object(), "actors").toList();
+    QString message = getProperty(object(), makeField("message")).trimmed();
+    const QVariantList &actors = getVariantProperty(object(), makeField("actors")).toList();
     QVariant actor;
     QString name;
     QString profilePicture;
@@ -150,6 +173,7 @@ void PostHelper::performCreationImpl()
         actor = actors.first();
         name = getProperty(actor, "name").trimmed();
     }
+    QVariantList relatedActors = getVariantProperty(object(), "attachedStoryActors").toList();
     // Check if we should have a full header
     // We do not display full header when we have multiple actors, or when the actor and
     // the attached post actor is the same
@@ -157,18 +181,27 @@ void PostHelper::performCreationImpl()
     if (actors.count() > 1) {
         fullHeader = false;
     } else {
-        const QVariantList attachedStoryActors = object().value("attachedStoryActors").toList();
-        for (const QVariant &attachedStoryActor : attachedStoryActors) {
-            if (name == getProperty(attachedStoryActor, "name")) {
+        relatedActors.append(getVariantProperty(object(), "attachedStoryWith").toList());
+        for (const QVariant &relatedActor : relatedActors) {
+            if (name == getProperty(relatedActor, "name")) {
                 fullHeader = false;
                 break;
             }
+        }
+        if (!relatedActors.isEmpty() && message.isEmpty()) {
+            fullHeader = false;
         }
     }
 
     if (m_fullHeader != fullHeader) {
         m_fullHeader = fullHeader;
         emit fullHeaderChanged();
+    }
+
+    bool hasAttachedStory = !relatedActors.empty();
+    if (m_hasAttachedStory != hasAttachedStory) {
+        m_hasAttachedStory = hasAttachedStory;
+        emit hasAttachedStoryChanged();
     }
 
     if (fullHeader) {
@@ -188,7 +221,6 @@ void PostHelper::performCreationImpl()
         emit timestampChanged();
     }
 
-    QString message = getProperty(object(), "message").trimmed();
     message.replace("<", "&lt;");
     message.replace(">", "&gt;");
     message.replace("\n", "<br/>");
@@ -254,12 +286,26 @@ void PostHelper::performCreationImpl()
     }
 
     // Attachments
-    const QVariantList &attachments = getVariantProperty(object(), "attachments").toList();
+    const QVariantList &attachments = getVariantProperty(object(), makeField("attachments")).toList();
     QVariant attachment;
     if (!attachments.isEmpty()) {
         attachment = attachments.first();
     }
 
+    // Sub attachments
+    const QVariantList &subAttachmentsVariant = getVariantProperty(attachment, "subattachments").toList();
+    QStringList subAttachments;
+    for (const QVariant &subAttachment : subAttachmentsVariant) {
+        const QVariantMap &subAttachmentMap = subAttachment.toMap();
+        const QString &subAttachmentImage = getProperty(subAttachmentMap, "image");
+        if (!subAttachmentImage.isEmpty()) {
+            subAttachments.append(subAttachmentImage);
+        }
+    }
+
+    if (subAttachmentsVariant.count() == 1) {
+        attachment = subAttachmentsVariant.first().toMap();
+    }
 
     // Attachment
     QString attachmentImage = getProperty(attachment, "image");
@@ -276,6 +322,10 @@ void PostHelper::performCreationImpl()
         emit attachmentSizeChanged();
     }
 
+    if (m_subAttachments != subAttachments) {
+        m_subAttachments = subAttachments;
+        emit subAttachmentsChanged();
+    }
 
     // Attachment caption
     QString attachmentTitle = getProperty(attachment, "title");
@@ -297,6 +347,43 @@ void PostHelper::performCreationImpl()
         emit attachmentSourceChanged();
     }
 
+    // Attachment style
+    QStringList styleList = getVariantProperty(attachment, "style").toStringList();
+    LayoutType layoutType = None;
+    if (!styleList.isEmpty()) {
+        layoutType = Unknown;
+    }
+    for (const QString &style : styleList) {
+        if (style == "album") {
+            if (subAttachmentsVariant.count() == 1) {
+                layoutType = Photo;
+            } else {
+                layoutType = Album;
+            }
+        } else if (style == "photo") {
+            layoutType = Photo;
+        } else if (style.contains("video")) {
+            layoutType = Video;
+        } else if (style.contains("avatar")) {
+            layoutType = Avatar;
+        } else if (style.contains("event")) {
+            layoutType = Event;
+        } else if (style == "share" || style == "fallback") {
+            layoutType = Share;
+        }
+
+        if (layoutType != Unknown) {
+            break;
+        }
+    }
+
+    if (m_layoutType != layoutType) {
+        qDebug() << "Style list:" << styleList
+                 << "Detected:" << layoutType;
+        m_layoutType = layoutType;
+        emit layoutTypeChanged();
+    }
+
     // Footer
     QVariant likesVariant = getVariantProperty(object(), "likes");
     bool hasFooter = !likesVariant.isNull();
@@ -306,13 +393,15 @@ void PostHelper::performCreationImpl()
         emit hasFooterChanged();
     }
 
-    int likes = likesVariant.toInt();
-    int comments = getVariantProperty(object(), "comments").toInt();
-    QString footer = FooterHelper::makeFooter(likes, comments);
+    if (!m_attachedStory) {
+        int likes = likesVariant.toInt();
+        int comments = getVariantProperty(object(), "comments").toInt();
+        QString footer = FooterHelper::makeFooter(likes, comments);
 
-    if (m_footer != footer) {
-        m_footer = footer;
-        emit footerChanged();
+        if (m_footer != footer) {
+            m_footer = footer;
+            emit footerChanged();
+        }
     }
 
 //    // Name / description / content
@@ -365,40 +454,33 @@ QVariant PostHelper::getVariantProperty(const QVariantMap &object, const QString
 
 QString PostHelper::getProperty(const QVariant &object, const QString &key)
 {
-    return getVariantProperty(object.toMap(), key).toString();
+    return getProperty(object.toMap(), key);
 }
 
 QString PostHelper::getProperty(const QVariantMap &object, const QString &key)
 {
-    return getVariantProperty(object, key).toString();
+    return getVariantProperty(object, key).toString().trimmed();
 }
 
 void PostHelper::performHeaderCreation(const QVariantMap &actor)
 {
     QString header;
-    QString title = getProperty(object(), "title");
+    QString title = getProperty(object(), makeField("title"));
     if (!title.isEmpty()) {
         header = standardize(title);
     } else {
         // Process from and to
-        QString toIdentifier = getProperty(object(), "toId");
-        QString toName = getProperty(object(), "toName");
+        QString toIdentifier = getProperty(object(), makeField("toId"));
+        QString toName = getProperty(object(), makeField("toName"));
         QString toHeader;
         bool toEmpty = toIdentifier.isEmpty() || toName.isEmpty();
         if (!toEmpty) {
-            QString elidedTo = elideText(toName, ELIDE_COUNT);
-            toHeader = decorate(elidedTo, QString(ITEM_TEMPLATE).arg(toIdentifier));
+            toHeader = decorate(toName, QString(ITEM_TEMPLATE).arg(toIdentifier));
         }
 
         QString fromName = getProperty(actor, "name");
         QString fromIdentifier = getProperty(actor, "id");
-        QString elidedFrom;
-        if (!toEmpty) {
-            elidedFrom = elideText(fromName, ELIDE_COUNT);
-        } else {
-            elidedFrom = elideText(fromName, 2 * ELIDE_COUNT);
-        }
-        header = decorate(elidedFrom, QString(ITEM_TEMPLATE).arg(fromIdentifier));
+        header = decorate(fromName, QString(ITEM_TEMPLATE).arg(fromIdentifier));
 
         if (!toEmpty) {
             header.append(" &gt; ");
@@ -420,6 +502,18 @@ QString PostHelper::elideText(const QString &text, int count)
         return text;
     }
     QString elidedText = text.left(count - 2);
-    elidedText.append(QString::fromUtf8(" …"));
+    elidedText.append(QString::fromUtf8(" … "));
+    //: Appears at the end of an elided text. Indicates that the user can click to read more.
+    //% "Read more"
+    elidedText.append(qtTrId("friends_posthelper_readmore"));
     return elidedText;
+}
+
+QString PostHelper::makeField(const QString &fieldName)
+{
+    if (!m_attachedStory) {
+        return fieldName;
+    } else {
+        return QString("attachedStory%1%2").arg(QString(fieldName.at(0).toUpper()), fieldName.mid(1));
+    }
 }

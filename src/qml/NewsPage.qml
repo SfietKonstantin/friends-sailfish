@@ -33,6 +33,7 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 import harbour.friends 1.0
 import harbour.friends.microf 1.0
+import "post"
 
 Page {
     id: container
@@ -60,6 +61,10 @@ Page {
                 request: FacebookNewsFeedRequest {}
                 builder: FacebookNewsFeedModelBuilder {
                     properties: [
+                        FacebookProperty {
+                            path: "node/id"
+                            name: "id"
+                        },
                         FacebookListProperty {
                             path: "node/actors"
                             name: "actors"
@@ -98,6 +103,15 @@ Page {
                             name: "message"
                         },
                         FacebookListProperty {
+                            path: "node/with"
+                            name: "with"
+                            properties: [
+                                FacebookProperty { path: "id"; name: "id" },
+                                FacebookProperty { path: "name"; name: "name" },
+                                FacebookProperty { path: "profile_picture/uri"; name: "profilePicture" }
+                            ]
+                        },
+                        FacebookListProperty {
                             path: "node/attachments"
                             name: "attachments"
                             properties: [
@@ -109,7 +123,22 @@ Page {
                                 FacebookProperty { path: "title"; name: "title" },
                                 FacebookProperty { path: "url"; name: "url" },
                                 FacebookProperty { path: "source/text"; name: "source" },
-                                FacebookProperty { path: "style_list"; name: "style" }
+                                FacebookProperty { path: "style_list"; name: "style" },
+                                FacebookListProperty {
+                                    path: "subattachments"
+                                    name: "subattachments"
+                                    properties: [
+                                        FacebookProperty { path: "description/text"; name: "description" },
+                                        FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                        FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                        FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                        FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
+                                        FacebookProperty { path: "title"; name: "title" },
+                                        FacebookProperty { path: "url"; name: "url" },
+                                        FacebookProperty { path: "source/text"; name: "source" },
+                                        FacebookProperty { path: "style_list"; name: "style" }
+                                    ]
+                                }
                             ]
                         },
                         FacebookListProperty {
@@ -133,7 +162,22 @@ Page {
                                 FacebookProperty { path: "title"; name: "title" },
                                 FacebookProperty { path: "url"; name: "url" },
                                 FacebookProperty { path: "source/text"; name: "source" },
-                                FacebookProperty { path: "style_list"; name: "style" }
+                                FacebookProperty { path: "style_list"; name: "style" },
+                                FacebookListProperty {
+                                    path: "subattachments"
+                                    name: "subattachments"
+                                    properties: [
+                                        FacebookProperty { path: "description/text"; name: "description" },
+                                        FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                        FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                        FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                        FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
+                                        FacebookProperty { path: "title"; name: "title" },
+                                        FacebookProperty { path: "url"; name: "url" },
+                                        FacebookProperty { path: "source/text"; name: "source" },
+                                        FacebookProperty { path: "style_list"; name: "style" }
+                                    ]
+                                }
                             ]
                         },
                         FacebookProperty {
@@ -143,6 +187,15 @@ Page {
                         FacebookProperty {
                             path: "node/attached_story/message/text"
                             name: "attachedStoryMessage"
+                        },
+                        FacebookListProperty {
+                            path: "node/attached_story/with"
+                            name: "attachedStoryWith"
+                            properties: [
+                                FacebookProperty { path: "id"; name: "id" },
+                                FacebookProperty { path: "name"; name: "name" },
+                                FacebookProperty { path: "profile_picture/uri"; name: "profilePicture" }
+                            ]
                         },
                         FacebookProperty {
                             path: "node/feedback/likers/count"

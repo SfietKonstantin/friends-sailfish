@@ -11,7 +11,6 @@
         <file>qml/StateIndicator.qml</file>
         <file>qml/AlbumsPage.qml</file>
         <file>qml/UserPage.qml</file>
-        <file>qml/PostDelegate.qml</file>
         <file>qml/AboutPage.qml</file>
         <file>qml/DevelopersPage.qml</file>
         <file>data/sfiet_konstantin.jpg</file>
@@ -50,5 +49,10 @@
         <file>qml/WaitingPage.qml</file>
         <file>qml/DisconnectPage.qml</file>
         <file>qml/FriendsPage.qml</file>
+        <file>qml/post/PostDelegate.qml</file>
+        <file>qml/post/PostHeader.qml</file>
+        <file>qml/post/PostContent.qml</file>
+        <file>qml/post/PostAttachment.qml</file>
+        <file>qml/post/PostAttachedStory.qml</file>
     </qresource>
 </RCC>

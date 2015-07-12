@@ -34,8 +34,9 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QVariantMap>
+#include <QtQml/QQmlParserStatus>
 
-class AbstractDisplayHelper : public QObject
+class AbstractDisplayHelper : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
     Q_PROPERTY(QVariantMap object READ object WRITE setObject NOTIFY objectChanged)
@@ -46,6 +47,8 @@ class AbstractDisplayHelper : public QObject
     Q_PROPERTY(QString highlightColor READ highlightColor WRITE setHighlightColor
                NOTIFY highlightColorChanged)
 public:
+    void classBegin() Q_DECL_OVERRIDE;
+    void componentComplete() Q_DECL_OVERRIDE;
     const QVariantMap & object() const;
     void setObject(const QVariantMap &object);
     QString userIdentifier() const;
@@ -63,13 +66,16 @@ protected:
     explicit AbstractDisplayHelper(QObject *parent = 0);
     QString decorate(const QString &text, const QString &url);
     QString standardize(const QString &text);
-    bool event(QEvent *e);
     virtual void performCreationImpl() = 0;
 protected slots:
     void create();
 private:
-    void performCreation();
-private:
+    enum ComponentStatus {
+        NotReady,
+        NotReadyCreationPending,
+        Ready
+    };
+    ComponentStatus m_componentStatus;
     QVariantMap m_object;
     QString m_userIdentifier;
     QString m_primaryColor;

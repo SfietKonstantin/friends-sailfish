@@ -35,63 +35,83 @@
 #include "abstractdisplayhelper.h"
 #include <QtCore/QDateTime>
 #include <QtCore/QSize>
+#include <QtCore/QStringList>
 
 class PostHelper : public AbstractDisplayHelper
 {
     Q_OBJECT
     Q_PROPERTY(bool fancy READ isFancy WRITE setFancy NOTIFY fancyChanged)
+    Q_PROPERTY(bool attachedStory READ isAttachedStory WRITE setAttachedStory NOTIFY attachedStoryChanged)
     Q_PROPERTY(bool fullHeader READ isFullHeader NOTIFY fullHeaderChanged)
+    Q_PROPERTY(bool hasAttachedStory READ hasAttachedStory NOTIFY hasAttachedStoryChanged)
     Q_PROPERTY(QString profilePicture READ profilePicture NOTIFY profilePictureChanged)
     Q_PROPERTY(QString header READ header NOTIFY headerChanged)
     Q_PROPERTY(QDateTime timestamp READ timestamp NOTIFY timestampChanged)
     Q_PROPERTY(QString footer READ footer NOTIFY footerChanged)
     Q_PROPERTY(QString message READ message NOTIFY messageChanged)
     Q_PROPERTY(QString via READ via NOTIFY viaChanged)
-    Q_PROPERTY(bool hasContent READ hasContent NOTIFY hasContentChanged)
     Q_PROPERTY(bool hasFooter READ hasFooter NOTIFY hasFooterChanged)
     Q_PROPERTY(QString attachment READ attachment NOTIFY attachmentChanged)
     Q_PROPERTY(QSize attachmentSize READ attachmentSize NOTIFY attachmentSizeChanged)
-//    Q_PROPERTY(QVariantList attachments READ attachments NOTIFY attachmentsChanged)
+    Q_PROPERTY(QStringList subAttachments READ subAttachments NOTIFY subAttachmentsChanged)
     Q_PROPERTY(QString attachmentTitle READ attachmentTitle NOTIFY attachmentTitleChanged)
     Q_PROPERTY(QString attachmentDescription READ attachmentDescription NOTIFY attachmentDescriptionChanged)
     Q_PROPERTY(QString attachmentSource READ attachmentSource NOTIFY attachmentSourceChanged)
+    Q_PROPERTY(LayoutType layoutType READ layoutType NOTIFY layoutTypeChanged)
+    Q_ENUMS(LayoutType)
 public:
+    enum LayoutType
+    {
+        Unknown,
+        None,
+        Share,
+        Photo,
+        Album,
+        Video,
+        Avatar,
+        Event
+    };
     explicit PostHelper(QObject *parent = 0);
-
     bool isFancy() const;
     void setFancy(bool fancy);
+    bool isAttachedStory() const;
+    void setAttachedStory(bool attachedStory);
     bool isFullHeader() const;
+    bool hasAttachedStory() const;
     QString profilePicture() const;
     QString header() const;
     QDateTime timestamp() const;
     QString footer() const;
     QString message() const;
     QString via() const;
-    bool hasContent() const;
     bool hasFooter() const;
     QString attachment() const;
     QSize attachmentSize() const;
-    QVariantList attachments() const;
+    QStringList subAttachments() const;
     QString attachmentTitle() const;
     QString attachmentDescription() const;
     QString attachmentSource() const;
+    LayoutType layoutType() const;
 signals:
     void fancyChanged();
+    void attachedStoryChanged();
     void fullHeaderChanged();
+    void hasAttachedStoryChanged();
     void profilePictureChanged();
     void timestampChanged();
     void headerChanged();
     void footerChanged();
     void messageChanged();
     void viaChanged();
-    void hasContentChanged();
     void hasFooterChanged();
     void attachmentChanged();
     void attachmentSizeChanged();
-    void attachmentsChanged();
+    void subAttachmentsChanged();
     void attachmentTitleChanged();
     void attachmentDescriptionChanged();
     void attachmentSourceChanged();
+    void layoutTypeChanged();
+
 protected:
     void performCreationImpl() Q_DECL_OVERRIDE;
 private:
@@ -101,24 +121,25 @@ private:
     static QString getProperty(const QVariantMap &object, const QString &key);
     void performHeaderCreation(const QVariantMap &actor);
     static QString elideText(const QString &text, int count);
+    QString makeField(const QString &fieldName);
     bool m_fancy;
+    bool m_attachedStory;
     bool m_fullHeader;
+    bool m_hasAttachedStory;
     QString m_profilePicture;
     QString m_header;
     QDateTime m_timestamp;
     QString m_footer;
     QString m_message;
     QString m_via;
-    bool m_hasContent;
     bool m_hasFooter;
     QString m_attachment;
     QSize m_attachmentSize;
-    QVariantList m_attachments;
+    QStringList m_subAttachments;
     QString m_attachmentTitle;
     QString m_attachmentDescription;
     QString m_attachmentSource;
+    LayoutType m_layoutType;
 };
-
-
 
 #endif // POSTHELPER_H
