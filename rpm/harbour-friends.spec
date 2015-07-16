@@ -46,7 +46,8 @@ Friends is a simple Facebook client
 # >> build pre
 # << build pre
 
-%qtc_qmake5 
+%qtc_qmake5  \
+    CONFIG+=microfdebug
 
 %qtc_make %{?_smp_mflags}
 

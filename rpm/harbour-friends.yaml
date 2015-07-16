@@ -22,6 +22,8 @@ PkgBR:
 - qt5-qttools
 - qt5-qttools-linguist
 - bash
+QMakeOptions: 
+- CONFIG+=microfdebug
 Requires:
 - sailfishsilica-qt5 >= 0.10.9
 Files:
