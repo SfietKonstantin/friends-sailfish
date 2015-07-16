@@ -98,7 +98,7 @@ Item {
         property bool error: !container.busy && (_itemError || _modelError)
 
         // Currently, the model have higher priority on error
-        property int errorType: _modelError ? model.error : (_itemError ? item.error : SocialNetworkError.No)
+        property int errorType: _modelError ? model.error : (_itemError ? item.error : SocialNetworkError.None)
         onErrorTypeChanged: testError()
 
         anchors.fill: parent

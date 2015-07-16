@@ -39,6 +39,7 @@
 class AbstractDisplayHelper : public QObject, public QQmlParserStatus
 {
     Q_OBJECT
+    Q_INTERFACES(QQmlParserStatus)
     Q_PROPERTY(QVariantMap object READ object WRITE setObject NOTIFY objectChanged)
     Q_PROPERTY(QString userIdentifier READ userIdentifier WRITE setUserIdentifier
                NOTIFY userIdentifierChanged)
