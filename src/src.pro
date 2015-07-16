@@ -1,5 +1,4 @@
 include(microf.pri)
-include(login/login.pri)
 include(dbus/dbus.pri)
 include(../version.pri)
 

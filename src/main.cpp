@@ -61,9 +61,6 @@
 #include "friendsproxymodel.h"
 #include "newsfeedproxymodel.h"
 
-// Login manager headers
-#include "login/loginmanager.h"
-
 // Image loader headers
 //#include "imageloader/imageloader.h"
 
@@ -109,7 +106,6 @@ void importMisc()
     // @uri harbour.friends
     qmlRegisterType<TokenManager>(URI, 1, 0, "TokenManager");
     qmlRegisterType<SettingsManager>(URI, 1, 0, "SettingsManager");
-    qmlRegisterType<QFB::LoginManager>(URI, 1, 0, "LoginManager");
     // qmlRegisterSingletonType<ImageLoader>(URI, 1, 0, "ImageLoader", imageloader_provider);
     qmlRegisterSingletonType<DateHelper>(URI, 1, 0, "DateHelper", datehelper_provider);
     qmlRegisterSingletonType<FooterHelper>(URI, 1, 0, "FooterHelper", footerhelper_provider);
