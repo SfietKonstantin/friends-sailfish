@@ -35,20 +35,21 @@ import ".."
 
 Item {
     id: container
+    property bool fullHeader: true
     property QtObject helper
     anchors.left: parent.left; anchors.right: parent.right
     height: childrenRect.height
     FacebookImage {
         id: picture
-        visible: container.helper.fullHeader
-        width: container.helper.fullHeader ? Theme.iconSizeMedium : 0
-        height: container.helper.fullHeader ? Theme.iconSizeMedium : 0
+        visible: container.fullHeader
+        width: container.fullHeader ? Theme.iconSizeMedium : 0
+        height: container.fullHeader ? Theme.iconSizeMedium : 0
         url: container.helper.profilePicture
     }
 
     Column {
         anchors.left: picture.right
-        anchors.leftMargin: container.helper.fullHeader ? Theme.paddingMedium : 0
+        anchors.leftMargin: container.fullHeader ? Theme.paddingMedium : 0
         anchors.right: parent.right; anchors.rightMargin: Theme.paddingMedium
         spacing: Theme.paddingSmall
 
@@ -64,7 +65,7 @@ Item {
 
         Label {
             anchors.left: parent.left; anchors.right: parent.right
-            visible: container.helper.fullHeader
+            visible: container.fullHeader
             text: Format.formatDate(container.helper.timestamp, Formatter.DurationElapsed)
             font.pixelSize: Theme.fontSizeExtraSmall
             color: Theme.secondaryHighlightColor

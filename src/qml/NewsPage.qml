@@ -180,6 +180,36 @@ Page {
                                 }
                             ]
                         },
+                        FacebookListProperty {
+                            path: "node/attached_story/attached_story/attachments"
+                            name: "attachedStoryAttachedStoryAttachments"
+                            properties: [
+                                FacebookProperty { path: "description/text"; name: "description" },
+                                FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
+                                FacebookProperty { path: "title"; name: "title" },
+                                FacebookProperty { path: "url"; name: "url" },
+                                FacebookProperty { path: "source/text"; name: "source" },
+                                FacebookProperty { path: "style_list"; name: "style" },
+                                FacebookListProperty {
+                                    path: "subattachments"
+                                    name: "subattachments"
+                                    properties: [
+                                        FacebookProperty { path: "description/text"; name: "description" },
+                                        FacebookProperty { path: "media/__type__/name"; name: "type" },
+                                        FacebookProperty { path: "media/imageLargeAspect/uri"; name: "image" },
+                                        FacebookProperty { path: "media/imageLargeAspect/width"; name: "width" },
+                                        FacebookProperty { path: "media/imageLargeAspect/height"; name: "height" },
+                                        FacebookProperty { path: "title"; name: "title" },
+                                        FacebookProperty { path: "url"; name: "url" },
+                                        FacebookProperty { path: "source/text"; name: "source" },
+                                        FacebookProperty { path: "style_list"; name: "style" }
+                                    ]
+                                }
+                            ]
+                        },
                         FacebookProperty {
                             path: "node/attached_story/message/title"
                             name: "attachedStoryTitle"

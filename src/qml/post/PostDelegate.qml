@@ -69,7 +69,10 @@ Item {
         }
 
         // Header
-        PostHeader { helper: helper }
+        PostHeader {
+            helper: helper
+            fullHeader: helper.fullHeader
+        }
 
         // Content
         PostContent { helper: helper }

@@ -64,7 +64,10 @@ Item {
         }
 
         // Header
-        PostHeader { helper: helper }
+        PostHeader {
+            helper: helper
+            fullHeader: true
+        }
 
         // Content
         PostContent { helper: helper }

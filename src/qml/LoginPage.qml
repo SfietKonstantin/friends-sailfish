@@ -52,7 +52,7 @@ Page {
         builder: FacebookLoginContentBuilder {}
         onFinished: {
             if (ok) {
-                if (loginItem.object.machine_id !== null) {
+                if ("machine_id" in loginItem.object) {
                     tokenManager.machineId = loginItem.object.machine_id
                 }
                 tokenManager.userId = loginItem.object.uid

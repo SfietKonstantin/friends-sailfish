@@ -168,7 +168,6 @@ void PostHelper::performCreationImpl()
     const QVariantList &actors = getVariantProperty(object(), makeField("actors")).toList();
     QVariant actor;
     QString name;
-    QString profilePicture;
     if (!actors.isEmpty()) {
         actor = actors.first();
         name = getProperty(actor, "name").trimmed();
@@ -204,10 +203,7 @@ void PostHelper::performCreationImpl()
         emit hasAttachedStoryChanged();
     }
 
-    if (fullHeader) {
-        profilePicture = getProperty(actor, "profilePicture");
-    }
-
+    QString profilePicture = getProperty(actor, "profilePicture");
     if (m_profilePicture != profilePicture) {
         m_profilePicture = profilePicture;
         emit profilePictureChanged();
@@ -290,6 +286,13 @@ void PostHelper::performCreationImpl()
     QVariant attachment;
     if (!attachments.isEmpty()) {
         attachment = attachments.first();
+    } else if (m_attachedStory) {
+        // Only in an attached story:
+        // Try with attached story attachments
+        const QVariantList &attachedStoryAttachments = getVariantProperty(object(), "attachedStoryAttachedStoryAttachments").toList();
+        if (!attachedStoryAttachments.isEmpty()) {
+            attachment = attachedStoryAttachments.first();
+        }
     }
 
     // Sub attachments
@@ -316,7 +319,7 @@ void PostHelper::performCreationImpl()
 
     int attachmentWidth = getVariantProperty(attachment, "width").toInt();
     int attachmentHeight = getVariantProperty(attachment, "height").toInt();
-    QSize attachmentSize (attachmentWidth, attachmentHeight);
+    QSize attachmentSize (attachmentWidth, qMin(attachmentWidth, attachmentHeight));
     if (m_attachmentSize != attachmentSize) {
         m_attachmentSize = attachmentSize;
         emit attachmentSizeChanged();
